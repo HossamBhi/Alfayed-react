@@ -1,4 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+@layer base {
+  html {
+    --color-primary: #5b9d67;
+    --color-primary-light: #d7f9db;
+    --color-primary-dark: #266937;
+    --color-secondary: #70a6ff;
+    --color-background: #f3f4f6;
+    --color-background-card: #ffffff;
+    --color-text: #000000;
+  }
+  
+}
+@import "./darkTheme.css";
+html, body, #root {
+  min-height: 100%;
+}
 body {
+  color: rgb(var(--color-text));
+  /* color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb)); */
+}
+
+.custom-input-container {
+  @apply flex h-[48px] w-full items-center rounded-lg bg-white p-4;
+}
+.custom-input {
+  @apply ml-2 w-full cursor-pointer pl-4 text-sm outline-none;
+}
+
+.login-background {
+  background: #667db6; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #667db6,
+    #0082c8,
+    #0082c8,
+    #667db6
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #667db6,
+    #0082c8,
+    #0082c8,
+    #667db6
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +69,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
