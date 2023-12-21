@@ -1,34 +1,94 @@
 import { Route, Routes } from "react-router-dom";
 import {
-  AiFillHome,
-  AiFillPlusCircle,
-  AiOutlineHome,
-  AiOutlinePlusCircle,
-} from "react-icons/ai";
-import { Home, PagesLayout } from "../pages";
+  Accounts,
+  AddToStock,
+  ClientDetails,
+  Clients,
+  Expenses,
+  ExpensesDetails,
+  FarmDetails,
+  Home,
+  PagesLayout,
+  Products,
+  Stock,
+  Suppliers,
+} from "../pages";
 
-export const PAGES = [
+// export const PAGES = [
+//   {
+//     path: "/",
+//     element: <Home />,
+//     name: "الشاشة الرئيسية",
+//     // ActiveIcon: AiFillHome,
+//     // InactiveIcon: AiOutlineHome,
+//   },
+//   // {
+//   //   path: "/add-template",
+//   //   element: <AddTemplate />,
+//   //   name: "إضافة قالب",
+//   //   ActiveIcon: AiFillPlusCircle,
+//   //   InactiveIcon: AiOutlinePlusCircle,
+//   // },
+// ];
+
+export const ROUTES = [
+  { title: "homepage", path: "/", Page: Home },
   {
-    path: "/",
-    element: <Home />,
-    name: "الشاشة الرئيسية",
-    ActiveIcon: AiFillHome,
-    InactiveIcon: AiOutlineHome,
+    title: "products",
+    path: "/products",
+    Page: Products,
   },
-  // {
-  //   path: "/add-template",
-  //   element: <AddTemplate />,
-  //   name: "إضافة قالب",
-  //   ActiveIcon: AiFillPlusCircle,
-  //   InactiveIcon: AiOutlinePlusCircle,
-  // },
+  {
+    title: "addToStock",
+    path: "/add-to-stock",
+    Page: AddToStock,
+  },
+  {
+    title: "farmsAndFarmers",
+    path: "/suppliers",
+    Page: Suppliers,
+  },
+  {
+    title: "expenses",
+    path: "/expenses",
+    Page: Expenses,
+  },
+  {
+    title: "clients",
+    path: "/clients",
+    Page: Clients,
+  },
+  {
+    title: "stock",
+    path: "/stock",
+    Page: Stock,
+  },
+  {
+    title: "accounts",
+    path: "/accounts",
+    Page: Accounts,
+  },
+  {
+    title: "clientDetails",
+    path: "/client-details",
+    Page: ClientDetails,
+  },
+  {
+    title: "supplierDetails",
+    path: "/farm-details",
+    Page: FarmDetails,
+  },
+  {
+    title: "expensesDetails",
+    path: "/expenses-details",
+    Page: ExpensesDetails,
+  },
 ];
-
 const MainRoutes = () => (
   <PagesLayout>
     <Routes>
-      {PAGES.map((item) => (
-        <Route path={item.path} element={item.element} />
+      {ROUTES.map(({ path, Page }) => (
+        <Route key={path} path={path} element={<Page />} />
       ))}
     </Routes>
   </PagesLayout>

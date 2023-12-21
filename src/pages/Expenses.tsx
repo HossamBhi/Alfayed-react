@@ -39,7 +39,7 @@ const Expenses = () => {
     }
 
     return [
-      ...columns.map((col) =>
+      ...columns.filter(col => col.field != "type").map((col) =>
         col.field === "date"
           ? {
               ...col,

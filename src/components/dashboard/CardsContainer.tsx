@@ -72,7 +72,7 @@ const CardsContainer = ({
         fullWidth
         variant="standard"
       />
-      <div className="relative flex h-[50vh] flex-col overflow-scroll lg:h-[70vh]">
+      <div className="relative flex flex-col overflow-scroll">
         {isLoading ? (
           <div className="flex h-full w-full items-center justify-center">
             <CircularProgress />

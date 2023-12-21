@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
 
 const usePathname = () => {
-  // const location = useLocation();
+  const location = useLocation();
 
-  return "";
+  return location.pathname || "";
 };
 
 export default usePathname;

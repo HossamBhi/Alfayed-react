@@ -31,7 +31,7 @@ const AddToStock = () => {
     farmsName: "",
     farmsID: 0,
     carNumber: "",
-    date: formatDate(new Date()),
+    // date: ,
     productName: "",
     productID: 0,
     number: 0,
@@ -43,16 +43,17 @@ const AddToStock = () => {
     remaining: 0,
     farmsNotes: "",
     total: 0,
-    supplyDate: "2023-12-04T00:00:00",
+    supplyDate: formatDate(new Date()),
     created_Date: null,
     isPercentage: true,
   });
+  // console.log(new Date("2023-12-04T00:00:00"));
 
   const [errors, setErrors] = useState({
     farmsName: false,
     farmsID: false,
     carNumber: false,
-    date: false,
+    // date: false,
     productID: false,
     number: false,
     quantity: false,
@@ -65,7 +66,7 @@ const AddToStock = () => {
     total: false,
     supplyDate: false,
   });
-
+  console.log(values.supplyDate);
   const dispatch = useDispatch();
   const { get } = useApi();
 
@@ -114,7 +115,6 @@ const AddToStock = () => {
 
   const handleChangeValue = useCallback((e: any) => {
     const { id, value } = e.target;
-    console.log({ id, value });
     setValues({ ...values, [id]: value });
   }, []);
   const handleSelectChange = (
@@ -283,9 +283,9 @@ const AddToStock = () => {
           </div>
           <FormControl>
             <CustomInput
-              id="date"
+              id="supplyDate"
               label={t("AddToStock.date")}
-              value={values.date}
+              value={values.supplyDate}
               onChange={handleChangeValue}
               type="date"
             />

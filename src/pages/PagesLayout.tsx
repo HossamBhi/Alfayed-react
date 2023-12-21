@@ -14,7 +14,7 @@ import { LinearProgress } from "@mui/material";
 const PagesLayout = ({ children }: { children: ReactNode }) => {
   const { i18n } = useTranslation();
   const { isLoad } = useSelector((state: RootState) => state.appSettings);
-  const [wait, setWait] = useState(true);
+  const state = useSelector((state: RootState) => state);
   const pathname = usePathname();
   const [isShowMenu, setIsShowMenu] = useState(false);
   const { get } = useApi();
@@ -57,21 +57,11 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      // navigator.serviceWorker.register("/sw.js");
-    }
-
-    setTimeout(() => {
-      setWait(false);
-    }, 100);
-  }, []);
-
   return (
-    <div className="bg-background">
+    <div className="bg-background w-full">
       <div className="flex">
         <SideMenu isShowMenu={isShowMenu} setIsShowMenu={setIsShowMenu} />
-        <div className={`w-full bg-background `}>
+        <div className={`w-full bg-background`}>
           {isLoad && (
             <div className="w-full rounded">
               <LinearProgress className="rounded" />
@@ -79,10 +69,10 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
           )}
 
           <PageHeader {...{ isShowMenu, setIsShowMenu }} />
-          {/* {children} */}
+          {children}
         </div>
       </div>
-      {children}
+      {/* {children} */}
     </div>
   );
 };

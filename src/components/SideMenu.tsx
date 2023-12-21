@@ -6,6 +6,7 @@ import usePathname from "../hooks/usePathname";
 import i18n, { LANGUAGES } from "../langs";
 import { SIDEMENU_LINKS } from "../utils/helper";
 import { CustomButton } from "./common";
+import { NavLink } from "react-router-dom";
 
 export const AppLogo = ({
   className = "",
@@ -63,15 +64,12 @@ const SideMenu = ({
         className={`h-screen w-72 min-w-[40%] flex-col justify-between border-r-[1px] bg-white p-4 pt-2 md:flex md:min-w-[20%] ${
           isShowMenu ? "fixed top-0 z-40" : "hidden"
         }`}
-        // className={`z-40 h-screen w-64 -translate-x-full bg-black-100 transition-transform sm:translate-x-0 ${
-        //   isShowMenu !== false ? "fixed" : "hidden"
-        // }`}
         aria-label="Sidebar"
       >
         {/* <div className="flex fixed w-20 bg-white h-screen flex-col justify-between p-4 border-r-[1px]"> */}
         <div
           // className=" flex flex-col items-center pt-2"
-          className="flex h-full flex-col overflow-y-auto bg-white px-3 py-4"
+          className="flex h-full flex-col overflow-y-auto bg-white py-4"
         >
           {/* <AppLogo className="self-start" /> */}
           {/* <span className="mb-6 w-full border-b-[1px] border-gray-200 p-2"></span> */}
@@ -79,17 +77,12 @@ const SideMenu = ({
             {SIDEMENU_LINKS.map(
               ({ title, url, ActiveIcon, InActiveIcon }, i) => (
                 <li key={url + " " + i}>
-                  <Link
-                    href={url}
-                    // className={`mb-4 flex w-full flex-1 cursor-pointer items-center rounded-sm bg-background px-2 py-1 hover:bg-gray-200 md:px-3 md:py-2 ${
-                    //   pathname === url
-                    //     ? "bg-blue-200 hover:bg-blue-100"
-                    //     : "text-black"
-                    // }`}
+                  <NavLink
+                    to={url}
                     onClick={() => setIsShowMenu(false)}
                     className={`group flex items-center rounded-lg bg-background p-2 text-gray-900 hover:bg-background ${
                       pathname === url
-                        ? "!bg-blue-400 text-white hover:bg-blue-100"
+                        ? "!bg-primary text-white hover:bg-blue-100"
                         : "text-black"
                     }`}
                   >
@@ -106,7 +99,7 @@ const SideMenu = ({
                     <span className="ms-3">{t(`menu.${title}`)}</span>
                     {/* </div> */}
                     {/* </Tooltip> */}
-                  </Link>
+                  </NavLink>
                 </li>
               )
             )}
