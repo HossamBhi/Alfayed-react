@@ -21,22 +21,8 @@ const Suppliers = () => {
   const navigate = useNavigate();
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const { t } = useTranslation();
-  // const { get } = useApi();
-  // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
   const [editData, setEditData] = useState<null | supplierProps>(null);
   const [showEdit, setShowEdit] = useState(false);
-  // useEffect(() => {
-  //   get({ url: SUPPLIERS.getAll }).then((res) => {
-  //     console.log("SUPPLIERS.getAll", { res });
-
-  //     if (!res.status || Array.isArray(res)) {
-  //       setTableData(res);
-  //     } else {
-  //       setTableData([]);
-  //       alert("Error " + res.status + ": " + res.data);
-  //     }
-  //   });
-  // }, []);
 
   const handleRowEdit = (row: supplierProps) => {
     setEditData(row);

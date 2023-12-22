@@ -91,11 +91,11 @@ const AddToStock = () => {
         // setSuppliers(res);
         dispatch(saveSuppliersAction(res));
       } else {
-        alert("Error: get suppliers");
+        // alert("Error: get suppliers");
         // setSuppliers([]);
-        if (!suppliers) {
-          dispatch(saveSuppliersAction([]));
-        }
+        // if (!suppliers) {
+        //   dispatch(saveSuppliersAction([]));
+        // }
       }
     });
     get({ url: PRODUCTS.getAll }).then((res) => {

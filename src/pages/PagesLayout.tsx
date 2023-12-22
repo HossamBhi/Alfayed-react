@@ -14,20 +14,22 @@ import { LinearProgress } from "@mui/material";
 const PagesLayout = ({ children }: { children: ReactNode }) => {
   const { i18n } = useTranslation();
   const { isLoad } = useSelector((state: RootState) => state.appSettings);
-  const state = useSelector((state: RootState) => state);
   const pathname = usePathname();
   const [isShowMenu, setIsShowMenu] = useState(false);
   const { get } = useApi();
   const dispatch = useDispatch();
+  const suppliers = useSelector((state: RootState) => state.suppliers);
+
   useEffect(() => {
     console.log("Call me iam all apis statics");
     get({ url: SUPPLIERS.getAll }).then((res) => {
       console.log("SUPPLIERS.getAll: ", { res });
       if (Array.isArray(res)) {
         dispatch(saveSuppliersAction(res));
-      } else {
-        dispatch(saveSuppliersAction([]));
       }
+      // else  {
+      //   dispatch(saveSuppliersAction([]));
+      // }
     });
     get({ url: EXPENSES.getAll }).then((res) => {
       console.log("EXPENSES.getAll: ", { res });
