@@ -14,7 +14,7 @@ const Provider = () => {
   const { i18n } = useTranslation();
   useLayoutEffect(() => {
     document.body.dir = i18n.dir();
-  }, [i18n]);
+  }, [i18n.dir()]);
   return (
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>

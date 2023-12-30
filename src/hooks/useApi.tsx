@@ -4,7 +4,7 @@ import { RootState } from "../redux/store";
 import { hideLoader, showLoader } from "../redux/appSettings";
 import { APP_LANG } from "../langs";
 import { API_URL } from "../utils/endpoints";
-
+import { useCallback } from "react";
 
 type requestProps = {
   url: string;
@@ -19,7 +19,7 @@ type requestProps = {
 export default () => {
   const logedUser = useSelector(
     (state: RootState) => state.user || { token: "" },
-    shallowEqual,
+    shallowEqual
   );
   const token = logedUser?.token;
   const dispatch = useDispatch();
@@ -108,37 +108,40 @@ export default () => {
       .catch(onCatchError)
       .finally(() => load && dispatch(hideLoader()));
   };
-  const put = async ({
-    url,
-    headers = {},
-    data = {},
-    params = {},
-    removeHost,
-    load = true,
-  }: requestProps) => {
-    // console.log({data: data, url, userId: logedUser?.user.id});
-    // console.log('Call Post Request ' + API_URL + url);
-    // console.log('Post data ', data);
-    // console.log('Post params ', params);
-    if (validateUser()) return;
-    if (load) dispatch(showLoader());
+  const put = useCallback(
+    async ({
+      url,
+      headers = {},
+      data = {},
+      params = {},
+      removeHost,
+      load = true,
+    }: requestProps) => {
+      // console.log({data: data, url, userId: logedUser?.user.id});
+      // console.log('Call Post Request ' + API_URL + url);
+      // console.log('Post data ', data);
+      // console.log('Post params ', params);
+      if (validateUser()) return;
+      if (load) dispatch(showLoader());
 
-    return await axios({
-      url: removeHost ? url : `${API_URL}${url}`,
-      headers: {
-        // 'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-        lang: APP_LANG(),
-        "Content-type": "Application/json",
-        ...headers,
-      },
-      method: "PUT",
-      ...getDataAndParams({ data, params }),
-    })
-      .then(({ data }) => data)
-      .catch(onCatchError)
-      .finally(() => load && dispatch(hideLoader()));
-  };
+      return await axios({
+        url: removeHost ? url : `${API_URL}${url}`,
+        headers: {
+          // 'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+          lang: APP_LANG(),
+          "Content-type": "Application/json",
+          ...headers,
+        },
+        method: "PUT",
+        ...getDataAndParams({ data, params }),
+      })
+        .then(({ data }) => data)
+        .catch(onCatchError)
+        .finally(() => load && dispatch(hideLoader()));
+    },
+    [APP_LANG()]
+  );
   const postFormData = async ({
     url,
     headers = {},

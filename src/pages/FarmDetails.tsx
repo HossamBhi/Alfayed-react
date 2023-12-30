@@ -70,10 +70,24 @@ const FarmDetails = () => {
           (col) =>
             col.field !== "farmsID" &&
             col.field !== "productID" &&
-            col.field !== "created_Date"
+            col.field != "typeId"
+          // &&
+          // col.field !== "created_Date"
         )
         .map((col) =>
           col.field === "supplyDate"
+            ? {
+                ...col,
+                width: 150,
+                type: "date",
+                align: "center",
+                headerAlign: "center",
+                valueFormatter: (params: GridValueFormatterParams) =>
+                  formatDate(params.value),
+                valueGetter: (params: GridValueGetterParams) =>
+                  formatDate(params.value),
+              }
+            : col.field === "created_Date"
             ? {
                 ...col,
                 width: 150,

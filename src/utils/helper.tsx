@@ -2,6 +2,7 @@ import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { BsInboxes, BsInboxesFill } from "react-icons/bs";
 import { FaUserTie } from "react-icons/fa";
 import { GiFarmer, GiFruitTree, GiPayMoney } from "react-icons/gi";
+import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi";
 import { MdAddCircle, MdAddCircleOutline } from "react-icons/md";
 import { RiBankFill, RiBankLine } from "react-icons/ri";
 
@@ -55,11 +56,17 @@ export const SIDEMENU_LINKS = [
     InActiveIcon: RiBankLine,
     ActiveIcon: RiBankFill,
   },
+  {
+    title: "employees",
+    url: "/employees",
+    InActiveIcon: HiOutlineUserGroup,
+    ActiveIcon: HiUserGroup,
+  },
 ];
 
 export const createDataColumns = (
   data: { [key: string]: any },
-  t: (s: string) => void,
+  t: (s: string) => void
 ): {
   field: string;
   headerName: string;

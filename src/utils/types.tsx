@@ -13,6 +13,13 @@ export type supplierProps = {
   date?: Date | string;
 };
 
+export type employeeProps = {
+  id: number;
+  name: string;
+  salary: string;
+  date?: Date | string;
+};
+
 export type supplierDataProps = {
   carNumber: string;
   created_Date: null | Date;

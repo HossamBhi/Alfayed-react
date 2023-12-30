@@ -25,12 +25,28 @@ export const en = {
       "farmsAndFarmers": "Farms And Suppliers",
       "clients": "Clients",
       "expenses": "Expenses",
+      "employees": "Employees",
     },
     "AddFarm": {
       "addFarm": "Add Supplier",
       "editFarm": "Edit Supplier",
       "farmName": "Supplier Name",
       "addSupplier": "Add Supplier"
+    },
+    "AddEmployee": {
+      "addTitle": "Add Employee",
+      "editTitle": "Edit Employee",
+      "name": "Employee Name",
+      "date": "Date",
+      "id": "ID",
+      "salary": "Salary",
+      "created_Date": "Created Date",
+    },
+    "PayEmployee": {
+      "addTitle": "Pay Employee",
+      "totalPay": "Pay Number",
+      "notes": "Note",
+      "pay": "Pay"
     },
     "expenses": {
       "expenseCategroy": "Categroy",
@@ -94,6 +110,7 @@ export const en = {
       "name": "farm Name",
       "carNumber": "Car Number",
       "date": "Date",
+      "created_Date": "Created Date",
       "supplyDate": "Date",
       "product": "Product",
       "number": "Number",
@@ -122,7 +139,6 @@ export const en = {
       "discountFlat": "Flat",
       "discountPercentage": "Percentage",
 
-      "created_Date": "Created Date",
       "expenseName": "Expense Name",
       "expenseRecordNotes": "Note",
       "expenseTypeName": "Type Name",

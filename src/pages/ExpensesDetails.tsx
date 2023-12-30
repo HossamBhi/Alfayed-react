@@ -55,7 +55,8 @@ const ExpensesDetails = () => {
         (col) =>
           col.field !== "farmRecordID" &&
           col.field !== "productID" &&
-          col.field !== "created_Date" &&
+          col.field != "typeId" &&
+          // col.field !== "created_Date" &&
           col.field !== "expenseID"
       )
       .map((col) =>
@@ -69,6 +70,18 @@ const ExpensesDetails = () => {
               valueGetter: (params: GridValueGetterParams) =>
                 formatDate(params.value),
               valueFormatter: (params: GridValueFormatterParams) =>
+                formatDate(params.value),
+            }
+          : col.field === "created_Date"
+          ? {
+              ...col,
+              width: 150,
+              type: "date",
+              align: "center",
+              headerAlign: "center",
+              valueFormatter: (params: GridValueFormatterParams) =>
+                formatDate(params.value),
+              valueGetter: (params: GridValueGetterParams) =>
                 formatDate(params.value),
             }
           : col.field === "expenseRecordNotes"

@@ -12,8 +12,8 @@ interface ExpenseFormProps {
     farmRecordID: 0;
     expenseID: 0;
     expenseName: "";
-    expenseDate: "2023-12-07T17:22:31.679Z";
-    created_Date: "2023-12-07T17:22:31.679Z";
+    expenseDate: Date;
+    created_Date: Date;
     quantity: 0;
     value: 0;
     price: 0;

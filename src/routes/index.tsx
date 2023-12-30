@@ -4,6 +4,8 @@ import {
   AddToStock,
   ClientDetails,
   Clients,
+  EmployeeDetails,
+  Employees,
   Expenses,
   ExpensesDetails,
   FarmDetails,
@@ -82,6 +84,16 @@ export const ROUTES = [
     title: "expensesDetails",
     path: "/expenses-details",
     Page: ExpensesDetails,
+  },
+  {
+    title: "employees",
+    path: "/employees",
+    Page: Employees,
+  },
+  {
+    title: "employeeDetails",
+    path: "/employee-details",
+    Page: EmployeeDetails,
   },
 ];
 const MainRoutes = () => (

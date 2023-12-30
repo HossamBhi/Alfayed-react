@@ -2,19 +2,18 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { CustomButton, CustomInput, CustomSelect } from "../components/common";
 import { AddFarm, AddPropduct } from "../components/popups";
 import { AddExpensesCard } from "../components/stock";
-// import { PRODUCTS } from "@/data";
-import { useApi } from "../hooks";
-import { RootState } from "../redux/store";
-import { saveSuppliersAction } from "../redux/suppliers";
-import { DISCOUNT_TYPES } from "../utils/appDB";
-import { SUPPLIERS, STORE, PRODUCTS } from "../utils/endpoints";
-import { formatDate } from "../utils/helper";
-import { productProps, supplierProps } from "../utils/types";
 import { Autocomplete, CircularProgress, FormControl } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../hooks";
 import usePathname from "../hooks/usePathname";
+import { RootState } from "../redux/store";
+import { saveSuppliersAction } from "../redux/suppliers";
+import { DISCOUNT_TYPES } from "../utils/appDB";
+import { PRODUCTS, SUPPLIERS } from "../utils/endpoints";
+import { formatDate } from "../utils/helper";
+import { productProps, supplierProps } from "../utils/types";
 
 const AddToStock = () => {
   const navigate = useNavigate();
@@ -66,7 +65,7 @@ const AddToStock = () => {
     total: false,
     supplyDate: false,
   });
-  console.log(values.supplyDate);
+  // console.log(values);
   const dispatch = useDispatch();
   const { get } = useApi();
 
@@ -115,17 +114,17 @@ const AddToStock = () => {
 
   const handleChangeValue = useCallback((e: any) => {
     const { id, value } = e.target;
-    setValues({ ...values, [id]: value });
+    setValues((values) => ({ ...values, [id]: value }));
   }, []);
   const handleSelectChange = (
     name: string,
     value: null | (productProps & supplierProps)
   ) => {
-    setValues({
+    setValues((values) => ({
       ...values,
       [name + "ID"]: value?.id || "",
       [name + "Name"]: value?.name || "",
-    });
+    }));
 
     setErrors((v) => ({
       ...v,
@@ -324,10 +323,10 @@ const AddToStock = () => {
               label={t("AddToStock.discountType")}
               onChange={(e, item) => {
                 const { value } = e.target;
-                setValues({
+                setValues((values) => ({
                   ...values,
                   isPercentage: value === 1,
-                });
+                }));
               }}
             />
           </FormControl>

@@ -18,12 +18,13 @@ import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { GiFarmer } from "react-icons/gi";
 
-const ClientDetails = () => {
+const EmployeeDetails = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const [showEdit, setShowEdit] = useState(false);
+  // const [id, setId] = useState<null | string>(null);
   const { get } = useApi();
   const [supplier, setSupplier] = useState<null | supplierProps>(null);
   const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
@@ -31,7 +32,10 @@ const ClientDetails = () => {
   );
 
   useEffect(() => {
+    // const searchQuiry = new URLSearchParams(window.location.search);
+    // const ID = searchQuiry.get("id");
     if (id != null) {
+      // setId(ID);
       get({ url: SUPPLIERS.getRecordWithData, params: { recordId: id } }).then(
         (res) => {
           console.log("farm data get Record With Data", { res });
@@ -102,7 +106,7 @@ const ClientDetails = () => {
                 ...col,
                 width: 120,
                 headerName: t("AddToStock.discountType"),
-                valueGetter: (params: any) => {
+                valueGetter: (params: GridValueGetterParams) => {
                   if (params.value === true) {
                     return t("AddToStock.discountPercentage");
                   }
@@ -177,4 +181,5 @@ const ClientDetails = () => {
     </main>
   );
 };
-export default ClientDetails;
+
+export default EmployeeDetails;

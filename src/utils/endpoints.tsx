@@ -51,3 +51,11 @@ export const PRODUCTS = {
 export const STORE = {
   getAll: "GetStoreProducts",
 };
+
+export const EMPLOYEES = {
+  getAll: "GetAllEmployees",
+  getById: "GetEmployee",
+  add: "AddEmployee",
+  update: "UpdateEmployee",
+  pay: "PayToEmployee",
+};

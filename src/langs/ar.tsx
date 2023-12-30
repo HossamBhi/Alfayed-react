@@ -25,6 +25,7 @@ export const ar = {
       "farmsAndFarmers": "المزارع والموردين",
       "expenses": "المصروفات",
       "clients": "العملاء",
+      "employees": "الموظفين",
     },
     "dashboard": {
       "total": "اجمالي الخزنة",
@@ -37,7 +38,24 @@ export const ar = {
       "addFarm": "أضف المورد",
       "editFarm": "تعديل المورد",
       "farmName": "اسم المورد",
-      "addSupplier": "إضافة مورد"
+      "addSupplier": "إضافة مورد",
+      "created_Date": "تاريخ الإنشاء",
+    },
+    "AddEmployee": {
+      "addTitle": "إضافة موظف",
+      "editTitle": "تعديل الموظف",
+      "name": "اسم الموظف",
+      "date": "تاريخ",
+      "id": "#",
+      "salary": "المرتب",
+      "created_Date": "تاريخ الإنشاء",
+      "pay": "ادفع"
+    },
+    "PayEmployee": {
+      "addTitle": "الدفع للموظف",
+      "totalPay": "اجمال الدفع",
+      "notes": "ملحوظة",
+      "pay": "ادفع"
     },
     "expenses": {
       "expenseCategroy": "الصنف",
@@ -95,6 +113,7 @@ export const ar = {
       "name": "اسم المورد",
       "carNumber": "رقم السياره",
       "date": "التاريخ",
+      "created_Date": "تاريخ الإنشاء",
       "supplyDate": "التاريخ",
       "product": "المنتج",
       "number": "العدد",
@@ -123,7 +142,6 @@ export const ar = {
       "discountFlat": "ثابت",
       "discountPercentage": "نسبة مئوية",
 
-      "created_Date": "تاريخ الإنشاء",
       "expenseName": "اسم المصروف",
       "expenseRecordNotes": "وصف المصروف",
       "expenseTypeName": "نوع المصروف",

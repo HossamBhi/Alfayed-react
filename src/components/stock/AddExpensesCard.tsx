@@ -53,12 +53,24 @@ const AddExpensesCard = ({ farmId }: { farmId: null | number | string }) => {
           (col) =>
             col.field !== "expenseID" &&
             col.field !== "farmRecordID" &&
-            col.field !== "created_Date" &&
+            // col.field !== "created_Date" &&
             col.field !== "expenseID"
           // col.field !== "expenseRecordID"
         )
         .map((col) =>
           col.field === "expenseDate"
+            ? {
+                ...col,
+                width: 150,
+                type: "date",
+                align: "center",
+                headerAlign: "center",
+                valueFormatter: (params: GridValueFormatterParams) =>
+                  formatDate(params.value),
+                valueGetter: (params: GridValueGetterParams) =>
+                  formatDate(params.value),
+              }
+            : col.field === "created_Date"
             ? {
                 ...col,
                 width: 150,
