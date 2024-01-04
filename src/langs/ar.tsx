@@ -49,7 +49,8 @@ export const ar = {
       "id": "#",
       "salary": "المرتب",
       "created_Date": "تاريخ الإنشاء",
-      "pay": "ادفع"
+      "pay": "ادفع",
+      "total": "صافي الحساب",
     },
     "PayEmployee": {
       "addTitle": "الدفع للموظف",

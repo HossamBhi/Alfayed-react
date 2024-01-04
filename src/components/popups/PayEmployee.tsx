@@ -8,6 +8,7 @@ import { useApi } from "../../hooks";
 import { EMPLOYEES } from "../../utils/endpoints";
 import { employeeProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { editEmployeeAction } from "../../redux/employees";
 
 type PayEmployeeProps = {
   onClose?: () => void;
@@ -33,6 +34,7 @@ const PayEmployee = ({
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [notes, setNotes] = useState("");
   const [total, setTotal] = useState(0);
+  const dispatch = useDispatch();
   const handleOnCloseAddProduct = () =>
     onClose ? onClose() : setShowAddProduct(false);
   useEffect(() => {
@@ -53,7 +55,7 @@ const PayEmployee = ({
       console.log("Pay Employee: ", res);
       if (res?.id) {
         setEditData && setEditData(null);
-        // dispatch(editEmployeeAction(res));
+        dispatch(editEmployeeAction(res));
       }
     });
   };

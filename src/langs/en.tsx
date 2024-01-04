@@ -41,6 +41,7 @@ export const en = {
       "id": "ID",
       "salary": "Salary",
       "created_Date": "Created Date",
+      "total": "Total"
     },
     "PayEmployee": {
       "addTitle": "Pay Employee",
