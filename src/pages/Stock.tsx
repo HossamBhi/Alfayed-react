@@ -1,15 +1,17 @@
+import { Tooltip } from "@mui/material";
+import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { BsFillPlusCircleFill, BsFillPlusSquareFill } from "react-icons/bs";
+import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { CustomButton, CustomTable } from "../components/common";
 import { useApi } from "../hooks";
 import { STORE } from "../utils/endpoints";
 import { createDataColumns } from "../utils/helper";
 import { supplierProps } from "../utils/types";
-import { Tooltip } from "@mui/material";
-import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { FaEye } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { TbSquareMinusFilled } from "react-icons/tb";
+import { MdClose } from "react-icons/md";
 
 const Stock = () => {
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ const Stock = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id } = params;
-
+          // TbSquareMinusFilled
           return [
             <Tooltip key={id} title={t("common.show")}>
               <GridActionsCellItem
@@ -64,6 +66,24 @@ const Stock = () => {
                 label={t("common.show")}
                 sx={{ color: "primary.main" }}
                 onClick={() => navigate("/products")}
+              />
+            </Tooltip>,
+            <Tooltip key={"add-to-fridge"} title={t("fridges.addToTitle")}>
+              <GridActionsCellItem
+                icon={<BsFillPlusSquareFill size={16} />}
+                label={t("fridges.addToTitle")}
+                sx={{ color: "primary.main" }}
+                onClick={() => navigate("/add-to-fridge")}
+              />
+            </Tooltip>,
+            <Tooltip key={"zero-stock"} title={t("stock.deleteQuantity")}>
+              <GridActionsCellItem
+                icon={<MdClose size={18} />}
+                label={t("stock.deleteQuantity")}
+                sx={{ color: "error.main" }}
+                onClick={() => {
+                  alert("Delete quantity");
+                }}
               />
             </Tooltip>,
           ];

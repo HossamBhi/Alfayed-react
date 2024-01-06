@@ -54,3 +54,36 @@ export type clientProps = {
   total: string;
   date?: Date | string;
 };
+
+export type accountsProps = {
+  total: string;
+};
+
+export type stockProps = {
+  total: string;
+};
+
+export type fridgeProps = {
+  id: number;
+  name: string;
+  total: string;
+  date?: Date | string;
+};
+
+export type fridgeDataProps = {
+  carNumber: string;
+  created_Date: null | Date;
+  discount: Number;
+  farmsID: Number;
+  farmsName: String;
+  farmsNotes: String;
+  netQuantity: null | number;
+  paied: number;
+  price: number;
+  productID: number;
+  productName: String;
+  quantity: number;
+  remaining: Number;
+  supplyDate: Date;
+  total: number;
+};

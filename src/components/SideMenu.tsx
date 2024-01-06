@@ -61,7 +61,7 @@ const SideMenu = ({
       )}
 
       <aside
-        className={`h-screen w-72 min-w-[40%] flex-col justify-between border-r-[1px] bg-white p-4 pt-2 md:flex md:min-w-[20%] ${
+        className={`relative min-h-screen w-72 min-w-[40%] flex-col justify-between border-r-[1px] bg-white py-2 md:flex md:min-w-[20%] ${
           isShowMenu ? "fixed top-0 z-40" : "hidden"
         }`}
         aria-label="Sidebar"
@@ -69,7 +69,7 @@ const SideMenu = ({
         {/* <div className="flex fixed w-20 bg-white h-screen flex-col justify-between p-4 border-r-[1px]"> */}
         <div
           // className=" flex flex-col items-center pt-2"
-          className="flex h-full flex-col overflow-y-auto bg-white py-4"
+          className="absolute top-0 w-full flex h-full flex-col overflow-y-auto bg-white p-4"
         >
           {/* <AppLogo className="self-start" /> */}
           {/* <span className="mb-6 w-full border-b-[1px] border-gray-200 p-2"></span> */}

@@ -15,33 +15,32 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const Products = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { get } = useApi();
-  const [tableData, setTableData] = useState<null | supplierProps[]>(null);
-  useEffect(() => {
-    get({ url: PRODUCTS.getAllDetails }).then((res) => {
-      console.log("PRODUCTS.getAllDetails", {
-        res,
-        s: !res.status,
-        t: !res.status || Array.isArray(res),
-      });
-      // if (Array.isArray(res)) {
-      if (!res.status || Array.isArray(res)) {
-        setTableData(res);
-      } else {
-        setTableData([]);
-        alert("Error " + res.status + ": " + res.data);
-      }
-    });
-  }, []);
+  // const { get } = useApi();
+  // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
+  const products = useSelector((state: RootState) => state.stock.productsDetails);
+  // useEffect(() => {
+  //   get({ url: PRODUCTS.getAllDetails }).then((res) => {
+  //     console.log("PRODUCTS.getAllDetails", { res });
+  //     // if (Array.isArray(res)) {
+  //     if (!res.status || Array.isArray(res)) {
+  //       setTableData(res);
+  //     } else {
+  //       setTableData([]);
+  //       alert("Error " + res.status + ": " + res.data);
+  //     }
+  //   });
+  // }, []);
 
   const columns: GridColDef[] =
-    !tableData || tableData?.length <= 0
+    !products || products?.length <= 0
       ? []
-      : createDataColumns(tableData[0], (s: string) => t("table." + s));
+      : createDataColumns(products[0], (s: string) => t("table." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -53,7 +52,7 @@ const Products = () => {
         .filter(
           (col) =>
             col.field !== "farmsID" &&
-            col.field != "typeId" &&
+            col.field !== "typeId" &&
             col.field !== "productID"
           // &&
           // col.field !== "created_Date"
@@ -130,7 +129,7 @@ const Products = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={tableData || []}
+          rows={products || []}
           columns={customeColumns as any}
           getRowId={(item) => item.farmRecordID}
         />

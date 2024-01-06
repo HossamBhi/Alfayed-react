@@ -1,60 +1,72 @@
-import { ReactNode, useEffect, useState } from "react";
-import { PageHeader, SideMenu } from "../components";
-import { saveClientsAction } from "../redux/clients";
-import { CLIENT, EXPENSES, SUPPLIERS } from "../utils/endpoints";
-import { saveExpensesAction } from "../redux/expenses";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import usePathname from "../hooks/usePathname";
-import { useApi } from "../hooks";
-import { saveSuppliersAction } from "../redux/suppliers";
 import { LinearProgress } from "@mui/material";
+import { ReactNode, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { PageHeader, SideMenu } from "../components";
+import { useApi } from "../hooks";
+import { saveAccountsAction } from "../redux/accounts";
+import { saveClientsAction } from "../redux/clients";
+import { saveExpensesAction } from "../redux/expenses";
+import { saveFridgesAction } from "../redux/fridges";
+import { saveProductsAction, saveProductsDetailsAction } from "../redux/stock";
+import { RootState } from "../redux/store";
+import { saveSuppliersAction } from "../redux/suppliers";
+import {
+  ACCOUNTS,
+  CLIENT,
+  EXPENSES,
+  FRIDGES,
+  PRODUCTS,
+  SUPPLIERS,
+} from "../utils/endpoints";
 
 const PagesLayout = ({ children }: { children: ReactNode }) => {
-  const { i18n } = useTranslation();
   const { isLoad } = useSelector((state: RootState) => state.appSettings);
-  const pathname = usePathname();
   const [isShowMenu, setIsShowMenu] = useState(false);
   const { get } = useApi();
   const dispatch = useDispatch();
-  const suppliers = useSelector((state: RootState) => state.suppliers);
 
   useEffect(() => {
-    console.log("Call me iam all apis statics");
+    console.log("Call me i am all apis statics");
     get({ url: SUPPLIERS.getAll }).then((res) => {
-      console.log("SUPPLIERS.getAll: ", { res });
+      // console.log("SUPPLIERS.getAll: ", { res });
       if (Array.isArray(res)) {
         dispatch(saveSuppliersAction(res));
       }
-      // else  {
-      //   dispatch(saveSuppliersAction([]));
-      // }
+    });
+    get({ url: FRIDGES.getAll }).then((res) => {
+      console.log("FRIDGES.getAll : ", { res });
+      if (Array.isArray(res)) {
+        dispatch(saveFridgesAction(res));
+      }
     });
     get({ url: EXPENSES.getAll }).then((res) => {
-      console.log("EXPENSES.getAll: ", { res });
+      // console.log("EXPENSES.getAll: ", { res });
       if (Array.isArray(res)) {
-        // setSuppliers(res);
         dispatch(saveExpensesAction(res));
-      } else {
-        // alert("Error: get suppliers");
-        // setSuppliers([]);
-        // if (!suppliers) {
-        dispatch(saveExpensesAction([]));
-        // }
       }
     });
     get({ url: CLIENT.getAll }).then((res) => {
-      console.log("CLIENT.getAll: ", { res });
+      // console.log("CLIENT.getAll: ", { res });
       if (Array.isArray(res)) {
-        // setSuppliers(res);
         dispatch(saveClientsAction(res));
-      } else {
-        // alert("Error: get suppliers");
-        // setSuppliers([]);
-        // if (!suppliers) {
-        dispatch(saveClientsAction([]));
-        // }
+      }
+    });
+    get({ url: PRODUCTS.getAll }).then((res) => {
+      // console.log("PRODUCTS.getAll: ", { res });
+      if (Array.isArray(res)) {
+        dispatch(saveProductsAction(res));
+      }
+    });
+    get({ url: PRODUCTS.getAllDetails }).then((res) => {
+      // console.log("PRODUCTS.getAllDetails: ", { res });
+      if (Array.isArray(res)) {
+        dispatch(saveProductsDetailsAction(res));
+      }
+    });
+    get({ url: ACCOUNTS.getTotal }).then((res) => {
+      // console.log("ACCOUNTS.getTotal: ", { res });
+      if (res.id) {
+        dispatch(saveAccountsAction(res));
       }
     });
   }, []);
@@ -63,9 +75,9 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
     <div className="bg-background w-full">
       <div className="flex">
         <SideMenu isShowMenu={isShowMenu} setIsShowMenu={setIsShowMenu} />
-        <div className={`w-full bg-background`}>
+        <div className={`w-full bg-background relative`}>
           {isLoad && (
-            <div className="w-full rounded">
+            <div className="w-full rounded fixed top-0 z-10">
               <LinearProgress className="rounded" />
             </div>
           )}

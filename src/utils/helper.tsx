@@ -4,7 +4,12 @@ import { FaUserTie } from "react-icons/fa";
 import { GiFarmer, GiFruitTree, GiPayMoney } from "react-icons/gi";
 import { HiOutlineUserGroup, HiUserGroup } from "react-icons/hi";
 import { MdAddCircle, MdAddCircleOutline } from "react-icons/md";
-import { RiBankFill, RiBankLine } from "react-icons/ri";
+import {
+  RiBankFill,
+  RiBankLine,
+  RiFridgeFill,
+  RiFridgeLine,
+} from "react-icons/ri";
 
 export const SIDEMENU_LINKS = [
   {
@@ -18,6 +23,12 @@ export const SIDEMENU_LINKS = [
     url: "/products",
     InActiveIcon: GiFruitTree,
     ActiveIcon: GiFruitTree,
+  },
+  {
+    title: "fridges",
+    url: "/fridges",
+    InActiveIcon: RiFridgeLine,
+    ActiveIcon: RiFridgeFill,
   },
   {
     title: "addToStock",

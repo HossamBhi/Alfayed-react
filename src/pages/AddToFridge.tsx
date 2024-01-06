@@ -11,11 +11,11 @@ import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
 import { saveSuppliersAction } from "../redux/suppliers";
 import { DISCOUNT_TYPES } from "../utils/appDB";
-import { SUPPLIERS } from "../utils/endpoints";
+import { FRIDGES, SUPPLIERS } from "../utils/endpoints";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
 
-const AddToStock = () => {
+const AddToFridge = () => {
   const navigate = useNavigate();
   const pathname = usePathname();
   const [searchParams] = useSearchParams();
@@ -23,7 +23,6 @@ const AddToStock = () => {
   const [isLoad, setIsLoad] = useState(false);
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const { t } = useTranslation();
-  // const [products, setProducts] = useState<productProps[]>([]);
   const products = useSelector((state: RootState) => state.stock.products);
 
   const { post, put } = useApi();
@@ -175,7 +174,7 @@ const AddToStock = () => {
       setIsLoad(true);
       if (id) {
         put({
-          url: SUPPLIERS.updateRecord,
+          url: FRIDGES.updateRecord,
           params: { recordId: id },
           data: {
             ...values,
@@ -193,7 +192,7 @@ const AddToStock = () => {
         });
       } else
         post({
-          url: SUPPLIERS.addRecord,
+          url: FRIDGES.addRecord,
           data: {
             ...values,
             total: calculateTotal,
@@ -215,9 +214,11 @@ const AddToStock = () => {
     <main className="flex min-h-screen flex-col p-4">
       <div className="mb-4 flex flex-col rounded-lg border bg-white p-4">
         <h4 className="col-span-1 mb-4">
-          {id ? t("AddToStock.editProduct") : t("AddToStock.addProduct")}
+          {/* {id ? t("fridges.editProduct") : t("fridges.addProduct")} */}
+          Comming soon!
         </h4>
-        <form
+
+        {/* <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 gap-4 md:grid-cols-3"
         >
@@ -231,18 +232,13 @@ const AddToStock = () => {
               onChange={(e, value) => {
                 handleSelectChange("farms", value);
               }}
-              // value={suppliers?.find((item) => item.id == values.farmsID)}
               value={{ id: values.farmsID, name: values.farmsName } as any}
-              // inputValue={values.farmsName || ""}
               renderInput={(params) => (
                 <CustomInput
                   {...params}
                   error={errors.farmsID}
                   id="farms"
-                  label={t("AddToStock.name")}
-                  // value={
-                  //   suppliers?.find((item) => item.id === values.farmsID)?.name
-                  // }
+                  label={t("fridges.name")}
                 />
               )}
             />
@@ -258,10 +254,6 @@ const AddToStock = () => {
               onChange={(e, value) => {
                 handleSelectChange("product", value as any);
               }}
-              // value={products?.find(
-              //   (item) => item.productID === values.productID
-              // )}
-              // inputValue={values.productName || ""}
               value={
                 {
                   id: values.productID,
@@ -273,7 +265,7 @@ const AddToStock = () => {
                   {...params}
                   error={errors.productID}
                   id="product"
-                  label={t("AddToStock.product")}
+                  label={t("fridges.product")}
                 />
               )}
             />
@@ -282,7 +274,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="supplyDate"
-              label={t("AddToStock.date")}
+              label={t("fridges.date")}
               value={values.supplyDate}
               onChange={handleChangeValue}
               type="date"
@@ -292,7 +284,7 @@ const AddToStock = () => {
             <CustomInput
               type="text"
               id="carNumber"
-              label={t("AddToStock.carNumber")}
+              label={t("fridges.carNumber")}
               value={values.carNumber}
               onChange={handleChangeValue}
             />
@@ -300,7 +292,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="number"
-              label={t("AddToStock.number")}
+              label={t("fridges.number")}
               value={values.number}
               onChange={handleChangeValue}
               type="number"
@@ -309,7 +301,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="quantity"
-              label={t("AddToStock.quantity")}
+              label={t("fridges.quantity")}
               value={values.quantity}
               onChange={handleChangeValue}
               type="number"
@@ -319,7 +311,7 @@ const AddToStock = () => {
             <CustomSelect
               items={DISCOUNT_TYPES()}
               id="discountType"
-              label={t("AddToStock.discountType")}
+              label={t("fridges.discountType")}
               value={
                 values.isPercentage
                   ? DISCOUNT_TYPES()[0].id
@@ -337,7 +329,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="discount"
-              label={t("AddToStock.discount")}
+              label={t("fridges.discount")}
               value={values.discount}
               onChange={handleChangeValue}
               type="number"
@@ -347,7 +339,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="netQuantity"
-              label={t("AddToStock.netQuantity")}
+              label={t("fridges.netQuantity")}
               value={calculateNetQuantity}
               onChange={handleChangeValue}
               type="number"
@@ -357,7 +349,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="price"
-              label={t("AddToStock.price")}
+              label={t("fridges.price")}
               value={values.price}
               onChange={handleChangeValue}
               type="number"
@@ -366,7 +358,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="total"
-              label={t("AddToStock.total")}
+              label={t("fridges.total")}
               value={values.total || calculateTotal}
               onChange={handleChangeValue}
               type="number"
@@ -376,7 +368,7 @@ const AddToStock = () => {
           <FormControl>
             <CustomInput
               id="paied"
-              label={t("AddToStock.payed")}
+              label={t("fridges.payed")}
               value={values.paied}
               onChange={handleChangeValue}
               type="number"
@@ -385,13 +377,12 @@ const AddToStock = () => {
           <FormControl className={`col-span-1 md:col-span-2`}>
             <CustomInput
               id="farmsNotes"
-              label={t("AddToStock.note")}
+              label={t("fridges.note")}
               value={values.farmsNotes}
               onChange={handleChangeValue}
               type="text"
             />
           </FormControl>
-          {/* <div className="col-span-2 md:flex hidden"></div> */}
           {isLoad ? (
             <div className="flex items-center justify-center">
               <CircularProgress />
@@ -405,24 +396,12 @@ const AddToStock = () => {
               >
                 {id ? t("common.edit") : t("common.save")}
               </CustomButton>
-              {/* {id && (
-                <CustomButton
-                  variant="outlined"
-                  onClick={() => {
-                    router.back();
-                  }}
-                >
-                  {t("common.close")}
-                </CustomButton>
-              )} */}
             </>
           )}
-        </form>
+        </form> */}
       </div>
-
-      <AddExpensesCard farmId={id} />
     </main>
   );
 };
 
-export default AddToStock;
+export default AddToFridge;

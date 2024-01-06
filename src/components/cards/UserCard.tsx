@@ -7,7 +7,6 @@ import { FaEdit } from "react-icons/fa";
 interface UserCardProps {
   item: any;
   containerStyle?: ComponentProps<"div">["className"];
-  color?: string;
   onClick?: (item: any) => void;
   onEdit?: (item: any) => void;
   Icon: IconType;
@@ -17,7 +16,6 @@ interface UserCardProps {
 const UserCard = ({
   item,
   containerStyle,
-  color,
   onClick,
   Icon,
   showEdit = false,

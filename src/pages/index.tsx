@@ -1,5 +1,6 @@
 import PayEmployee from "../components/popups/PayEmployee";
 import Accounts from "./Accounts";
+import AddToFridge from "./AddToFridge";
 import AddToStock from "./AddToStock";
 import ClientDetails from "./ClientDetails";
 import Clients from "./Clients";
@@ -8,6 +9,8 @@ import Employees from "./Employees";
 import Expenses from "./Expenses";
 import ExpensesDetails from "./ExpensesDetails";
 import FarmDetails from "./FarmDetails";
+import FridgeDetails from "./FridgeDetails";
+import Fridges from "./Fridges";
 import Home from "./Home";
 import PagesLayout from "./PagesLayout";
 import Products from "./Products";
@@ -16,12 +19,15 @@ import Suppliers from "./Suppliers";
 
 export {
   Accounts,
+  AddToFridge,
   AddToStock,
   ClientDetails,
-  Clients, EmployeeDetails, Employees,
+  Clients,
+  EmployeeDetails,
+  Employees,
   Expenses,
   ExpensesDetails,
-  FarmDetails,
+  FarmDetails, FridgeDetails, Fridges,
   Home,
   PagesLayout,
   PayEmployee,

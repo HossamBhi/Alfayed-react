@@ -1,32 +1,35 @@
-import { useState } from "react";
+import { DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import { CustomButton, CustomDialog, CustomInput } from "../common";
-import { PopupButton } from ".";
-import { productProps } from "../../utils/types";
-import { useApi } from "../../hooks";
-import { PRODUCTS } from "../../utils/endpoints";
-import { DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { addProductAction, editProductAction } from "../../redux/stock";
+import { PopupButton } from ".";
+import { useApi } from "../../hooks";
+import { addSupplierAction, editSupplierAction } from "../../redux/suppliers";
+import { FRIDGES, SUPPLIERS } from "../../utils/endpoints";
+import { supplierProps } from "../../utils/types";
+import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { addFridgeAction, editFridgeAction } from "../../redux/fridges";
 
-type AddPropductProps = {
+type AddFridgeProps = {
   onClose?: () => void;
   show?: boolean;
   hideShowBtn?: boolean;
   editData?: any;
   showButtonTitle?: boolean;
-  setEditData?: (d: productProps) => void;
+  setEditData?: (d: supplierProps) => void;
+  onShowClick?: () => void;
 };
 
-const AddPropduct = ({
+const AddFridge = ({
   onClose,
   show,
   hideShowBtn = false,
   editData,
   showButtonTitle,
   setEditData,
-}: AddPropductProps) => {
+  onShowClick,
+}: AddFridgeProps) => {
   const { post, put } = useApi();
   const { t } = useTranslation();
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -35,58 +38,64 @@ const AddPropduct = ({
     onClose ? onClose() : setShowAddProduct(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setName(editData?.name ? editData?.name : "");
+  }, [editData]);
+
   const callAPI = () => {
     if (editData) {
       put({
-        url: PRODUCTS.update,
+        url: FRIDGES.update,
         data: { name },
         params: { id: editData.id },
       }).then((res) => {
-        console.log("Update PRODUCTS: ", res);
+        console.log("Update FRIDGES: ", res);
         if (res?.id) {
           setEditData && setEditData(res);
-          dispatch(editProductAction(res));
+          dispatch(editFridgeAction(res));
         }
       });
     } else {
-      post({ url: PRODUCTS.add, data: { name } }).then((res) => {
-        console.log("Add PRODUCTS: ", res);
+      post({ url: FRIDGES.add, data: { name } }).then((res) => {
+        console.log("Get FRIDGES:  ", res);
         if (!res.status) {
-          dispatch(addProductAction(res));
-          // if (setProducts && products)
-          //   setProducts && setProducts([res, ...products]);
+          dispatch(addFridgeAction(res));
         }
       });
 
       setName("");
     }
   };
+
   return (
     <div>
       {!hideShowBtn && (
-        <PopupButton onClick={() => setShowAddProduct(true)}>
+        <PopupButton
+          onClick={() =>
+            onShowClick ? onShowClick() : setShowAddProduct(true)
+          }
+        >
           {showButtonTitle && (
             <>
-              <BsFillPlusCircleFill className="ltr:mr-4 rtl:ml-4" />{" "}
-              {t("product.addPropduct")}
+              <BsFillPlusCircleFill className="me-4" />{" "}
+              {t("fridges.addTitle")}
             </>
           )}
         </PopupButton>
       )}
-
       <CustomDialog
         open={show != undefined ? show : showAddProduct}
         onClose={handleOnCloseAddProduct}
       >
         <DialogTitle>
-          {editData ? t("product.editPropduct") : t("product.addPropduct")}
+          {editData ? t("fridges.editTitle") : t("fridges.addTitle")}
         </DialogTitle>
         <DialogContent sx={{ width: "100%" }}>
           <CustomInput
             autoFocus
             margin="dense"
             id="name"
-            label={t("product.productName")}
+            label={t("fridges.name")}
             type="text"
             fullWidth
             value={name}
@@ -111,4 +120,4 @@ const AddPropduct = ({
   );
 };
 
-export default AddPropduct;
+export default AddFridge;

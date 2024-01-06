@@ -4,15 +4,26 @@ import { IconType } from "react-icons";
 import { FaPoundSign, FaUsers } from "react-icons/fa";
 import { FaBoxesStacked } from "react-icons/fa6";
 import { RiFridgeFill } from "react-icons/ri";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type StatisticCardProps = {
-  price: number;
+  price: number | string | null;
   Icon: IconType;
   label: string;
   color: string;
 };
 
 const Statistics = () => {
+  const total = useSelector(
+    (state: RootState) => state.accounts.accounts.total
+  );
+  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const clients = useSelector((state: RootState) => state.clients);
+  // const clients = useSelector(
+  //   (state: RootState) => state.
+  // );
+
   const { t } = useTranslation();
   const StatisticCard = useCallback(
     ({ price, Icon, label, color }: StatisticCardProps) => {
@@ -37,13 +48,13 @@ const Statistics = () => {
   return (
     <div className="grid grid-cols-1 gap-2 p-2 md:gap-4 md:p-4 lg:grid-cols-4">
       <StatisticCard
-        price={100000}
+        price={total}
         label={t("dashboard.total")}
         Icon={FaPoundSign}
         color="green"
       />
       <StatisticCard
-        price={100}
+        price={clients?.length}
         label={t("dashboard.clients")}
         Icon={FaUsers}
         color="blue"

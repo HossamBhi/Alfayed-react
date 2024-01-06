@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import {
   Accounts,
+  AddToFridge,
   AddToStock,
   ClientDetails,
   Clients,
@@ -9,29 +10,14 @@ import {
   Expenses,
   ExpensesDetails,
   FarmDetails,
+  FridgeDetails,
+  Fridges,
   Home,
   PagesLayout,
   Products,
   Stock,
   Suppliers,
 } from "../pages";
-
-// export const PAGES = [
-//   {
-//     path: "/",
-//     element: <Home />,
-//     name: "الشاشة الرئيسية",
-//     // ActiveIcon: AiFillHome,
-//     // InactiveIcon: AiOutlineHome,
-//   },
-//   // {
-//   //   path: "/add-template",
-//   //   element: <AddTemplate />,
-//   //   name: "إضافة قالب",
-//   //   ActiveIcon: AiFillPlusCircle,
-//   //   InactiveIcon: AiOutlinePlusCircle,
-//   // },
-// ];
 
 export const ROUTES = [
   { title: "homepage", path: "/", Page: Home },
@@ -44,6 +30,11 @@ export const ROUTES = [
     title: "addToStock",
     path: "/add-to-stock",
     Page: AddToStock,
+  },
+  {
+    title: "addToFridge",
+    path: "/add-to-fridge",
+    Page: AddToFridge,
   },
   {
     title: "farmsAndFarmers",
@@ -94,6 +85,16 @@ export const ROUTES = [
     title: "employeeDetails",
     path: "/employee-details",
     Page: EmployeeDetails,
+  },
+  {
+    title: "fridges",
+    path: "/fridges",
+    Page: Fridges,
+  },
+  {
+    title: "fridgeDetails",
+    path: "/fridge-details",
+    Page: FridgeDetails,
   },
 ];
 const MainRoutes = () => (

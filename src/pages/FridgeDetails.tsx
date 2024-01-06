@@ -2,6 +2,7 @@ import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
   GridColDef,
+  GridRenderCellParams,
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
@@ -12,14 +13,15 @@ import { GiFarmer } from "react-icons/gi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
-import { AddFarm } from "../components/popups";
+import { AddFarm, AddFridge } from "../components/popups";
 import PayEmployee from "../components/popups/PayEmployee";
 import { useApi } from "../hooks";
-import { SUPPLIERS } from "../utils/endpoints";
+import { FRIDGES } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
-import { supplierDataProps, supplierProps } from "../utils/types";
+import { fridgeDataProps, fridgeProps } from "../utils/types";
+import { RiFridgeFill } from "react-icons/ri";
 
-const FarmDetails = () => {
+const FridgeDetails = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
@@ -27,25 +29,21 @@ const FarmDetails = () => {
   const [showEdit, setShowEdit] = useState(false);
   // const [id, setId] = useState<null | string>(null);
   const { get } = useApi();
-  const [supplier, setSupplier] = useState<null | supplierProps>(null);
-  const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
+  const [details, setDetails] = useState<null | fridgeProps>(null);
+  const [detailsData, setDetailsData] = useState<null | fridgeDataProps[]>(
     null
   );
 
   useEffect(() => {
-    // const searchQuiry = new URLSearchParams(window.location.search);
-    // const ID = searchQuiry.get("id");
     if (id != null) {
-      // setId(ID);
-      get({ url: SUPPLIERS.getRecordWithData, params: { recordId: id } }).then(
+      get({ url: FRIDGES.getRecordWithData, params: { fridgeId: id } }).then(
         (res) => {
-          console.log("farm data get Record With Data", { res });
-          // if (Array.isArray(res)) {
+          console.log("fridge data get Record With Data", { res });
           if (!res.status) {
-            setSupplier(res);
-            setSupplierData(res.farmRecords);
+            setDetails(res);
+            setDetailsData(res.fridgeRecords);
           } else {
-            setSupplierData([]);
+            setDetailsData([]);
             alert("Error " + res.status + ": " + res.data);
           }
         }
@@ -54,11 +52,9 @@ const FarmDetails = () => {
   }, [id]);
 
   const columns: GridColDef[] =
-    !supplierData || supplierData?.length <= 0
+    !detailsData || detailsData?.length <= 0
       ? []
-      : createDataColumns(supplierData[0], (s: string) =>
-          t("supplierTable." + s)
-        );
+      : createDataColumns(detailsData[0], (s: string) => t("fridges." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -69,8 +65,10 @@ const FarmDetails = () => {
       ...columns
         .filter(
           (col) =>
-            col.field !== "farmsID" &&
+            col.field !== "fridgeID" &&
             col.field !== "productID" &&
+            col.field !== "action" &&
+            col.field !== "description" &&
             col.field != "typeId"
           // &&
           // col.field !== "created_Date"
@@ -100,19 +98,26 @@ const FarmDetails = () => {
                 valueGetter: (params: GridValueGetterParams) =>
                   formatDate(params.value),
               }
-            : col.field === "farmsNotes"
+            : col.field === "notes"
             ? { ...col, width: 200 }
-            : col.field === "isPercentage"
+            : col.field === "actionName"
             ? {
                 ...col,
                 width: 120,
-                headerName: t("AddToStock.discountType"),
-                valueGetter: (params: GridValueGetterParams) => {
-                  if (params.value === true) {
-                    return t("AddToStock.discountPercentage");
-                  }
-                  return t("AddToStock.discountFlat");
+                headerName: t("fridges.actionName"),
+                renderCell: (props: GridRenderCellParams<any, Date>) => {
+                  const { row, value } = props;
+                  console.log({ props });
+
+                  return (
+                    <p
+                      className={`py-1 px-4 rounded-md text-white ${
+                        row.action === 1 ? "bg-primary" : "bg-blue-700"
+                      }`}
+                    >{`${value}`}</p>
+                  );
                 },
+                
               }
             : col
         ),
@@ -123,14 +128,13 @@ const FarmDetails = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id } = params;
-
           return [
             <Tooltip key={id} title={t("common.edit")}>
               <GridActionsCellItem
                 icon={<FaRegEdit size={16} />}
                 label="Edit"
                 sx={{ color: "primary.main" }}
-                onClick={() => navigate("/add-to-stock?id=" + id)}
+                onClick={() => navigate("/add-to-fridge?id=" + id)}
               />
             </Tooltip>,
           ];
@@ -139,7 +143,7 @@ const FarmDetails = () => {
     ];
   }, [columns]);
 
-  if (id === null || !supplier || !supplierData) {
+  if (id === null || !details || !detailsData) {
     return (
       <main className="flex min-h-screen flex-col">
         {/* <LinearProgress
@@ -155,10 +159,10 @@ const FarmDetails = () => {
       <div className="m-0">
         {id != null && (
           <UserCard
-            item={supplier}
+            item={details}
             containerStyle={"bg-white hover:bg-white mt-0"}
             showEdit
-            Icon={GiFarmer}
+            Icon={RiFridgeFill}
             onEdit={() => setShowEdit(true)}
             onClick={() => setShowEdit(true)}
           />
@@ -172,10 +176,10 @@ const FarmDetails = () => {
           // onClose={() => setShowPay(false)}
           // onShowClick={() => setShowPay(true)}
         /> */}
-        <AddFarm
+        <AddFridge
           hideShowBtn={true}
-          editData={supplier}
-          setEditData={(data) => setSupplier(data)}
+          editData={details}
+          setEditData={(data) => setDetails(data)}
           show={showEdit}
           onClose={() => setShowEdit(false)}
         />
@@ -183,13 +187,13 @@ const FarmDetails = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={supplierData || []}
+          rows={detailsData || []}
           columns={customeColumns as any}
-          getRowId={(item) => item.farmRecordID}
+          getRowId={(item) => item.fridgeRecordID}
         />
       </div>
     </main>
   );
 };
 
-export default FarmDetails;
+export default FridgeDetails;

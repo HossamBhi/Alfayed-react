@@ -13,6 +13,7 @@ export const SUPPLIERS = {
   updateRecord: "UpdateFarmRecord",
   getTotalRemaining: "GetTotalRemaining",
   getRecordWithData: "GetFarmRecordWithData",
+  pay: "PayToFarm"
 };
 
 export const CLIENT = {
@@ -52,10 +53,30 @@ export const STORE = {
   getAll: "GetStoreProducts",
 };
 
+export const ACCOUNTS = {
+  getTotal: "GetTotalbalance",
+  addBalance: "AddBalanceToSafe"
+};
+
 export const EMPLOYEES = {
   getAll: "GetAllEmployees",
   getById: "GetEmployee",
   add: "AddEmployee",
   update: "UpdateEmployee",
   pay: "PayToEmployee",
+};
+
+export const FRIDGES = {
+  getAll: "GetAllFridges",
+  getById: "GetFridgeById",
+  add: "AddFridge",
+  update: "UpdateFridge",
+  getDetails: "GetAllFridgeRecords",
+  addRecord: "AddFridgeRecord",
+  getAllRecords: "GetAllFarmRecords",
+  getRecord: "GetFridgeRecord",
+  updateRecord: "UpdateFridgeRecord",
+  getTotalRemaining: "GetTotalRemaining",
+  getRecordWithData: "GetFridgeRecordsWithData",
+  pay: "PayToFridge"
 };

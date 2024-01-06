@@ -7,6 +7,9 @@ import clients from "./clients";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import employees from "./employees";
+import accounts from "./accounts";
+import fridges from "./fridges";
+import stock from "./stock";
 
 const persistConfig = {
   key: "root",
@@ -21,6 +24,9 @@ const rootReducers = combineReducers({
   expenses,
   clients,
   employees,
+  accounts,
+  fridges,
+  stock,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);
