@@ -20,9 +20,8 @@ const Statistics = () => {
   );
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const clients = useSelector((state: RootState) => state.clients);
-  // const clients = useSelector(
-  //   (state: RootState) => state.
-  // );
+  const products = useSelector((state: RootState) => state.stock.products);
+  const fridges = useSelector((state: RootState) => state.fridges.fridges);
 
   const { t } = useTranslation();
   const StatisticCard = useCallback(
@@ -60,13 +59,13 @@ const Statistics = () => {
         color="blue"
       />
       <StatisticCard
-        price={10}
+        price={products.length}
         label={t("dashboard.products")}
         Icon={FaBoxesStacked}
         color="purple"
       />
       <StatisticCard
-        price={5}
+        price={fridges.length}
         label={t("dashboard.fridge")}
         Icon={RiFridgeFill}
         color="blue"
