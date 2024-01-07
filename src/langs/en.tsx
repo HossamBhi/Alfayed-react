@@ -44,6 +44,13 @@ export const en = {
       "created_Date": "Created Date",
       "total": "Total"
     },
+    "payForm": {
+      "addTitle": "Pay",
+      "totalPay": "Total pay",
+      "notes": "Notes",
+      "pay": "Pay",
+      "payTo": "Pay to "
+    },
     "PayEmployee": {
       "addTitle": "Pay Employee",
       "totalPay": "Pay Number",
@@ -142,6 +149,7 @@ export const en = {
       "productName": "Product Name",
     },
     "table": {
+      "description": "Description",
       "name": "farm Name",
       "carNumber": "Car Number",
       "date": "Date",
@@ -186,6 +194,7 @@ export const en = {
       "farmRecordID": "#",
     },
     "supplierTable": {
+      "description": "Description",
       "farmsName": "farm Name",
       "carNumber": "Car Number",
       "supplyDate": "Date",

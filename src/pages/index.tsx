@@ -1,4 +1,3 @@
-import PayEmployee from "../components/popups/PayEmployee";
 import Accounts from "./Accounts";
 import AddToFridge from "./AddToFridge";
 import AddToStock from "./AddToStock";
@@ -27,12 +26,12 @@ export {
   Employees,
   Expenses,
   ExpensesDetails,
-  FarmDetails, FridgeDetails, Fridges,
+  FarmDetails,
+  FridgeDetails,
+  Fridges,
   Home,
   PagesLayout,
-  PayEmployee,
   Products,
   Stock,
-  Suppliers
+  Suppliers,
 };
-

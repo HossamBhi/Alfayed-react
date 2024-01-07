@@ -6,7 +6,7 @@ import {
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { CustomTable } from "../components/common";
-import { AddFridge } from "../components/popups";
+import { AddFridge, PayForm } from "../components/popups";
 import { RootState } from "../redux/store";
 import { createDataColumns, formatDate } from "../utils/helper";
 import { fridgeProps } from "../utils/types";
@@ -14,8 +14,10 @@ import { fridgeProps } from "../utils/types";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaRegEdit } from "react-icons/fa";
+import { MdOutlineAttachMoney } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { profileEnums } from "../utils/enums";
 
 const Fridges = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const Fridges = () => {
   const { t } = useTranslation();
   const [editData, setEditData] = useState<null | fridgeProps>(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [showPay, setShowPay] = useState(false);
 
   const handleRowEdit = (row: fridgeProps) => {
     setEditData(row);
@@ -82,6 +85,17 @@ const Fridges = () => {
                 onClick={() => navigate("/fridge-details?id=" + id)}
               />
             </Tooltip>,
+            <Tooltip key={"Pay"} title={t("payForm.pay")}>
+              <GridActionsCellItem
+                icon={<MdOutlineAttachMoney size={16} />}
+                label="pay"
+                sx={{ color: "primary.main" }}
+                onClick={() => {
+                  setEditData(row);
+                  setShowPay(true);
+                }}
+              />
+            </Tooltip>,
           ];
         },
       },
@@ -100,7 +114,15 @@ const Fridges = () => {
           onShowClick={() => setShowEdit(true)}
         />
       </div>
-
+      <PayForm
+        hideShowBtn
+        editData={editData}
+        setEditData={(data) => setEditData(data)}
+        show={showPay}
+        onClose={() => setShowPay(false)}
+        onShowClick={() => setShowPay(true)}
+        type={profileEnums.fridges}
+      />
       <div className="grid grid-cols-1">
         <CustomTable
           rows={fridges || []}

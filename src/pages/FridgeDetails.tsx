@@ -9,17 +9,15 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
-import { GiFarmer } from "react-icons/gi";
+import { RiFridgeFill } from "react-icons/ri";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
-import { AddFarm, AddFridge } from "../components/popups";
-import PayEmployee from "../components/popups/PayEmployee";
+import { AddFridge } from "../components/popups";
 import { useApi } from "../hooks";
 import { FRIDGES } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
 import { fridgeDataProps, fridgeProps } from "../utils/types";
-import { RiFridgeFill } from "react-icons/ri";
 
 const FridgeDetails = () => {
   const navigate = useNavigate();
@@ -107,8 +105,6 @@ const FridgeDetails = () => {
                 headerName: t("fridges.actionName"),
                 renderCell: (props: GridRenderCellParams<any, Date>) => {
                   const { row, value } = props;
-                  console.log({ props });
-
                   return (
                     <p
                       className={`py-1 px-4 rounded-md text-white ${
@@ -117,7 +113,6 @@ const FridgeDetails = () => {
                     >{`${value}`}</p>
                   );
                 },
-                
               }
             : col
         ),

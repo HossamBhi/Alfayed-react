@@ -2,6 +2,7 @@ import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
   GridColDef,
+  GridRenderCellParams,
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
@@ -13,7 +14,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
 import { AddFarm } from "../components/popups";
-import PayEmployee from "../components/popups/PayEmployee";
 import { useApi } from "../hooks";
 import { SUPPLIERS } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
@@ -112,6 +112,23 @@ const FarmDetails = () => {
                     return t("AddToStock.discountPercentage");
                   }
                   return t("AddToStock.discountFlat");
+                },
+              }
+            : col.field === "description"
+            ? {
+                ...col,
+                width: 120,
+                headerName: t("supplierTable.description"),
+                renderCell: (props: GridRenderCellParams<any, Date>) => {
+                  const { row } = props;
+                  
+                  return (
+                    <p
+                      className={`py-1 px-4 rounded-md text-white ${
+                        row.productID ? "bg-primary" : "bg-blue-700"
+                      }`}
+                    >{`${row.productID ? "نقله" : "دفعه"}`}</p>
+                  );
                 },
               }
             : col

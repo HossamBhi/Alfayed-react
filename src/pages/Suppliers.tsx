@@ -1,5 +1,5 @@
 import { CustomTable } from "../components/common";
-import { AddFarm } from "../components/popups";
+import { AddFarm, PayForm } from "../components/popups";
 import { RootState } from "../redux/store";
 import { createDataColumns, formatDate } from "../utils/helper";
 import { supplierProps } from "../utils/types";
@@ -14,8 +14,10 @@ import {
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaRegEdit } from "react-icons/fa";
+import { MdOutlineAttachMoney } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { profileEnums } from "../utils/enums";
 
 const Suppliers = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const Suppliers = () => {
   const { t } = useTranslation();
   const [editData, setEditData] = useState<null | supplierProps>(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [showPay, setShowPay] = useState(false);
 
   const handleRowEdit = (row: supplierProps) => {
     setEditData(row);
@@ -82,6 +85,17 @@ const Suppliers = () => {
                 onClick={() => navigate("/farm-details?id=" + id)}
               />
             </Tooltip>,
+            <Tooltip key={"Pay"} title={t("payForm.pay")}>
+              <GridActionsCellItem
+                icon={<MdOutlineAttachMoney size={16} />}
+                label="pay"
+                sx={{ color: "primary.main" }}
+                onClick={() => {
+                  setEditData(row);
+                  setShowPay(true);
+                }}
+              />
+            </Tooltip>,
           ];
         },
       },
@@ -100,7 +114,15 @@ const Suppliers = () => {
           onShowClick={() => setShowEdit(true)}
         />
       </div>
-
+      <PayForm
+        hideShowBtn
+        editData={editData}
+        setEditData={(data) => setEditData(data)}
+        show={showPay}
+        onClose={() => setShowPay(false)}
+        onShowClick={() => setShowPay(true)}
+        type={profileEnums.suppliers}
+      />
       <div className="grid grid-cols-1">
         <CustomTable
           rows={suppliers || []}

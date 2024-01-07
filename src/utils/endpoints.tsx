@@ -22,6 +22,7 @@ export const CLIENT = {
   update: "UpdateClient",
   getById: "GetClientById",
   addTransaction: "AddTransaction",
+  pay: "PayToClient",
 };
 
 export const EXPENSES = {
@@ -33,7 +34,8 @@ export const EXPENSES = {
   getRecordById: "GetExpenseRecordById",
   updateRecord: "UpdateExpenseRecord",
   getExpensesForFarmRecord: "GetExpensesForFarmRecord",
-  getExpensesWithData: "/GetExpensesWithData",
+  getExpensesWithData: "GetExpensesWithData",
+  pay: "PayToExpense",
 };
 export const EXPENSES_TYPE = {
   getAll: "GetAllExpensetypes",
@@ -55,7 +57,8 @@ export const STORE = {
 
 export const ACCOUNTS = {
   getTotal: "GetTotalbalance",
-  addBalance: "AddBalanceToSafe"
+  addBalance: "AddBalanceToSafe",
+  getAll: "GetRecords"
 };
 
 export const EMPLOYEES = {

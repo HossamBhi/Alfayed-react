@@ -6,21 +6,21 @@ import {
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { CustomTable } from "../components/common";
-import { AddEmployee } from "../components/popups";
+import { AddEmployee, PayForm } from "../components/popups";
 import { RootState } from "../redux/store";
 import { createDataColumns, formatDate } from "../utils/helper";
 import { employeeProps } from "../utils/types";
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaEye, FaRegEdit } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { MdOutlineAttachMoney } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../hooks";
 import { saveEmployeesAction } from "../redux/employees";
 import { EMPLOYEES } from "../utils/endpoints";
-import PayEmployee from "../components/popups/PayEmployee";
-import { MdOutlineAttachMoney } from "react-icons/md";
+import { profileEnums } from "../utils/enums";
 
 const Employees = () => {
   const navigate = useNavigate();
@@ -140,13 +140,14 @@ const Employees = () => {
           onClose={() => setShowEdit(false)}
           onShowClick={() => setShowEdit(true)}
         />
-        <PayEmployee
+        <PayForm
           hideShowBtn
           editData={editData}
           setEditData={(data) => setEditData(data)}
           show={showPay}
           onClose={() => setShowPay(false)}
           onShowClick={() => setShowPay(true)}
+          type={profileEnums.employees}
         />
       </div>
 

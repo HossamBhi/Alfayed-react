@@ -30,9 +30,9 @@ export const ar = {
     },
     "dashboard": {
       "total": "اجمالي الخزنة",
-      "products": "منتجات",
+      "products": "المنتجات",
       "clients": "العملاء",
-      "fridge": "محطة",
+      "fridge": "المحطات",
       "expenses": "المصروفات",
     },
     "AddFarm": {
@@ -52,6 +52,13 @@ export const ar = {
       "created_Date": "تاريخ الإنشاء",
       "pay": "ادفع",
       "total": "صافي الحساب",
+    },
+    "payForm": {
+      "addTitle": "الدفع",
+      "totalPay": "اجمال الدفع",
+      "notes": "ملحوظة",
+      "pay": "ادفع",
+      "payTo": "ادفع ل"
     },
     "PayEmployee": {
       "addTitle": "الدفع للموظف",
@@ -150,6 +157,7 @@ export const ar = {
       "expenseRecordID": "#"
     },
     "table": {
+      "description": "البيان",
       "name": "اسم المورد",
       "carNumber": "رقم السياره",
       "date": "التاريخ",
@@ -194,6 +202,7 @@ export const ar = {
       "farmRecordID": "#",
     },
     "supplierTable": {
+      "description": "البيان",
       "farmsName": "اسم المورد",
       "carNumber": "رقم السياره",
       "supplyDate": "التاريخ",

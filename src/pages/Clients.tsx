@@ -1,8 +1,3 @@
-import { CustomTable } from "../components/common";
-import AddClient from "../components/popups/AddClient";
-import { RootState } from "../redux/store";
-import { createDataColumns, formatDate } from "../utils/helper";
-import { clientProps, supplierProps } from "../utils/types";
 import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
@@ -13,8 +8,16 @@ import {
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaRegEdit } from "react-icons/fa";
+import { MdOutlineAttachMoney } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { CustomTable } from "../components/common";
+import { PayForm } from "../components/popups";
+import AddClient from "../components/popups/AddClient";
+import { RootState } from "../redux/store";
+import { profileEnums } from "../utils/enums";
+import { createDataColumns, formatDate } from "../utils/helper";
+import { clientProps, supplierProps } from "../utils/types";
 
 const Clients = () => {
   const navigate = useNavigate();
@@ -22,6 +25,7 @@ const Clients = () => {
   const { t } = useTranslation();
   const [editData, setEditData] = useState<null | clientProps>(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [showPay, setShowPay] = useState(false);
 
   const handleRowEdit = (row: supplierProps) => {
     setEditData(row);
@@ -80,6 +84,17 @@ const Clients = () => {
                 onClick={() => navigate("/client-detials?id=" + id)}
               />
             </Tooltip>,
+            <Tooltip key={"Pay"} title={t("payForm.pay")}>
+              <GridActionsCellItem
+                icon={<MdOutlineAttachMoney size={16} />}
+                label="pay"
+                sx={{ color: "primary.main" }}
+                onClick={() => {
+                  setEditData(row);
+                  setShowPay(true);
+                }}
+              />
+            </Tooltip>,
           ];
         },
       },
@@ -98,7 +113,15 @@ const Clients = () => {
           onShowClick={() => setShowEdit(true)}
         />
       </div>
-
+      <PayForm
+        hideShowBtn
+        editData={editData}
+        setEditData={(data) => setEditData(data)}
+        show={showPay}
+        onClose={() => setShowPay(false)}
+        onShowClick={() => setShowPay(true)}
+        type={profileEnums.clients}
+      />
       <div className="grid grid-cols-1">
         <CustomTable
           rows={clients || []}
