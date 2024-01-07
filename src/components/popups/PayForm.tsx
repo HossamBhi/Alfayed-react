@@ -90,7 +90,10 @@ const PayForm = ({
         url: getProparAPI().pay,
         data: {
           id: editData.id,
-          trasactionTypeID: trasactionsEnums.pay,
+          trasactionTypeID:
+            type === profileEnums.clients
+              ? trasactionsEnums.income
+              : trasactionsEnums.pay,
           total,
           notes,
         },
