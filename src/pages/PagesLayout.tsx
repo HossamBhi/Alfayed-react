@@ -3,7 +3,6 @@ import { ReactNode, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PageHeader, SideMenu } from "../components";
 import { useApi } from "../hooks";
-import { saveAccountsAction } from "../redux/accounts";
 import { saveClientsAction } from "../redux/clients";
 import { saveExpensesAction } from "../redux/expenses";
 import { saveFridgesAction } from "../redux/fridges";
@@ -18,11 +17,13 @@ import {
   PRODUCTS,
   SUPPLIERS,
 } from "../utils/endpoints";
+import { saveTotalAction, saveTransactionsAction } from "../redux/accounts";
+import { getTrasactionsEnums } from "../utils/enums";
 
 const PagesLayout = ({ children }: { children: ReactNode }) => {
   const { isLoad } = useSelector((state: RootState) => state.appSettings);
   const [isShowMenu, setIsShowMenu] = useState(false);
-  const { get } = useApi();
+  const { get, post } = useApi();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -66,7 +67,16 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
     get({ url: ACCOUNTS.getTotal }).then((res) => {
       // console.log("ACCOUNTS.getTotal: ", { res });
       if (res.id) {
-        dispatch(saveAccountsAction(res));
+        dispatch(saveTotalAction(res));
+      }
+    });
+    post({
+      url: ACCOUNTS.getAll,
+      params: { recordType: getTrasactionsEnums.all },
+    }).then((res) => {
+      console.log("ACCOUNTS.getAll: ", { res });
+      if (Array.isArray(res)) {
+        dispatch(saveTransactionsAction(res));
       }
     });
   }, []);

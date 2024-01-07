@@ -15,10 +15,8 @@ type StatisticCardProps = {
 };
 
 const Statistics = () => {
-  const total = useSelector(
-    (state: RootState) => state.accounts.accounts.total
-  );
-  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const total = useSelector((state: RootState) => state.accounts.total);
+  // const suppliers = useSelector((state: RootState) => state.suppliers);
   const clients = useSelector((state: RootState) => state.clients);
   const products = useSelector((state: RootState) => state.stock.products);
   const fridges = useSelector((state: RootState) => state.fridges.fridges);

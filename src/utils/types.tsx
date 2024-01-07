@@ -1,3 +1,5 @@
+import { trasactionsEnums } from "./enums";
+
 export type productProps = {
   id: number;
   name: string;
@@ -86,4 +88,24 @@ export type fridgeDataProps = {
   remaining: Number;
   supplyDate: Date;
   total: number;
+};
+
+export type transactionProps = {
+  clientID: null;
+  clientName: string;
+  date: Date;
+  empID: number;
+  empName: string;
+  expenseID: null;
+  expenseName: string;
+  farmID: null;
+  farmName: string;
+  fridgeID: null;
+  fridgeName: string;
+  id: number;
+  notes: string;
+  safeID: number;
+  total: string | number;
+  type: string;
+  typeID: trasactionsEnums;
 };

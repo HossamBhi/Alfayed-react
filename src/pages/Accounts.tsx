@@ -9,12 +9,18 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../redux/store";
 
 const Accounts = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { get } = useApi();
+  const transactions = useSelector(
+    (state: RootState) => state.accounts.transactions
+  );
+  console.log(transactions);
+  // const { get } = useApi();
   // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
   // useEffect(() => {
   //   get({ url: STORE.getAll }).then((res) => {
@@ -29,49 +35,50 @@ const Accounts = () => {
   //   });
   // }, []);
 
-  // const columns: GridColDef[] =
-  //   !tableData || tableData?.length <= 0
-  //     ? []
-  //     : createDataColumns(tableData[0], (s: string) => t("table." + s));
+  const columns: GridColDef[] =
+    !transactions || transactions?.length <= 0
+      ? []
+      : createDataColumns(transactions[0], (s: string) => t("table." + s));
 
-  // const customeColumns = useMemo(() => {
-  //   if (columns?.length <= 0) {
-  //     return [];
-  //   }
+  const customeColumns = useMemo(() => {
+    if (columns?.length <= 0) {
+      return [];
+    }
 
-  //   return [
-  //     ...columns
-  //       .filter((col) => col.field !== "productID" && col.field !== "notes")
-  //       .map((col) =>
-  //         col.field === "productName"
-  //           ? { ...col, width: 200 }
-  //           : col.field === "quantity"
-  //           ? { ...col, width: 200 }
-  //           : col
-  //       ),
-  //     {
-  //       field: "action",
-  //       headerName: t("table.actions"),
-  //       width: 150,
-  //       type: "actions",
-  //       getActions: (params: any) => {
-  //         const { id } = params;
+    return [
+      ...columns
+        .filter((col) => !["safeID"].includes(col.field))
+        // col.field !== "productID" && col.field !== "notes")
+        .map((col) =>
+          col.field === "productName"
+            ? { ...col, width: 200 }
+            : col.field === "quantity"
+            ? { ...col, width: 200 }
+            : col
+        ),
+      {
+        field: "action",
+        headerName: t("table.actions"),
+        width: 150,
+        type: "actions",
+        getActions: (params: any) => {
+          const { id } = params;
 
-  //         return [
-  //           <Tooltip key={id} title={t("common.show")}>
-  //             <GridActionsCellItem
-  //               icon={<FaEye size={16} />}
-  //               label={t("common.show")}
-  //               sx={{ color: "primary.main" }}
-  //               onClick={() => navigate("/products")}
-  //             />
-  //           </Tooltip>,
-  //         ];
-  //       },
-  //     },
-  //   ];
-  // }, [columns]);
-
+          return [
+            <Tooltip key={id} title={t("common.show")}>
+              <GridActionsCellItem
+                icon={<FaEye size={16} />}
+                label={t("common.show")}
+                sx={{ color: "primary.main" }}
+                onClick={() => navigate("/products")}
+              />
+            </Tooltip>,
+          ];
+        },
+      },
+    ];
+  }, [columns]);
+  console.log({ transactions });
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-2">
       <div className="bg-background-card p-4 rounded-md border"></div>
@@ -84,13 +91,25 @@ const Accounts = () => {
         </CustomButton>
       </div> */}
 
-      {/* <div className="grid grid-cols-1">
+      <div className="grid grid-cols-1">
         <CustomTable
-          rows={tableData || []}
+          columnVisibilityModel={{
+            action: false,
+            clientName: false,
+            clientID: false,
+            empID: false,
+            expenseID: false,
+            farmID: false,
+            fridgeID: false,
+            id: false,
+            type: false,
+            typeID: false,
+          }}
+          rows={transactions || []}
           columns={customeColumns as any}
-          getRowId={(item) => item.productID}
+          getRowId={(item) => item.id}
         />
-      </div> */}
+      </div>
     </main>
   );
 };

@@ -15,3 +15,12 @@ export enum fridgeTransactionEnums {
   in = 1,
   out,
 }
+
+export enum getTrasactionsEnums {
+  all = 0,
+  supplier,
+  expense,
+  fridge,
+  client,
+  employee,
+}

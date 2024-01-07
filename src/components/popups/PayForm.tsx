@@ -108,7 +108,7 @@ const PayForm = ({
       handleOnCloseAddProduct();
     }
   };
-  console.log({ editData });
+  
   return (
     <div>
       {!hideShowBtn && (
