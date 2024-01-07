@@ -19,7 +19,7 @@ const Accounts = () => {
   const transactions = useSelector(
     (state: RootState) => state.accounts.transactions
   );
-  console.log(transactions);
+  // console.log(transactions);
   // const { get } = useApi();
   // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
   // useEffect(() => {
@@ -78,7 +78,7 @@ const Accounts = () => {
       },
     ];
   }, [columns]);
-  console.log({ transactions });
+  
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-2">
       <div className="bg-background-card p-4 rounded-md border"></div>

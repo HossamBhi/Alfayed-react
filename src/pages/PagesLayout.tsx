@@ -67,7 +67,7 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
     get({ url: ACCOUNTS.getTotal }).then((res) => {
       // console.log("ACCOUNTS.getTotal: ", { res });
       if (res.id) {
-        dispatch(saveTotalAction(res));
+        dispatch(saveTotalAction(res.total));
       }
     });
     post({
