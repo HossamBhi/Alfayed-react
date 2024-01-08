@@ -72,6 +72,9 @@ export const en = {
       "clients": "Clients",    
     },
     "fridges": {
+      "actionType": "Transaction type",
+      "in": "In",
+      "out": "out",
       "fridges": "Fridges",
       "addTitle": "Add Fridge",
       "addToTitle": "Add to fridge",

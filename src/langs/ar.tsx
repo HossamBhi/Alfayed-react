@@ -81,6 +81,9 @@ export const ar = {
       "clientName": "اسم العميل",
     },
     "fridges": {
+      "actionType": "نوع النقله",
+      "in": "دخول",
+      "out": "خروج",
       "created_Date": "تاريخ الإنشاء",
       "expenseName": "اسم المصروف",
       "expenseRecordNotes": "وصف المصروف",

@@ -1,17 +1,16 @@
 import { Autocomplete, CircularProgress, FormControl } from "@mui/material";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CustomButton, CustomInput, CustomSelect } from "../components/common";
-import { AddFarm, AddPropduct } from "../components/popups";
-import { AddExpensesCard } from "../components/stock";
+import { AddFridge, AddPropduct } from "../components/popups";
 import { useApi } from "../hooks";
 import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
-import { saveSuppliersAction } from "../redux/suppliers";
-import { DISCOUNT_TYPES } from "../utils/appDB";
-import { FRIDGES, SUPPLIERS } from "../utils/endpoints";
+import { FRIDGE_TRANSACTION_TYPES } from "../utils/appDB";
+import { FRIDGES } from "../utils/endpoints";
+import { fridgeTransactionEnums } from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
 
@@ -21,38 +20,33 @@ const AddToFridge = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const [isLoad, setIsLoad] = useState(false);
-  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const fridges = useSelector((state: RootState) => state.fridges.fridges);
   const { t } = useTranslation();
   const products = useSelector((state: RootState) => state.stock.products);
 
   const { post, put } = useApi();
   const [values, setValues] = useState({
-    farmsName: "",
-    farmsID: 0,
-    carNumber: "",
-    // date: ,
+    fridgeID: 0,
+    fridgeName: "",
     productName: "",
     productID: "",
     number: "",
-    quantity: "",
-    discount: 0,
-    netQuantity: 0,
-    price: 0,
-    paied: 0,
-    remaining: 0,
-    farmsNotes: "",
-    total: 0,
+    action: fridgeTransactionEnums.in,
     supplyDate: formatDate(new Date()),
-    created_Date: null,
-    isPercentage: true,
+    quantity: "",
+    total: "",
+    price: "",
+    payed: "",
+    typeId: "",
+    notes: "",
+    carNumber: "",
   });
   // console.log(new Date("2023-12-04T00:00:00"));
 
   const [errors, setErrors] = useState({
     farmsName: false,
-    farmsID: false,
+    fridgeID: false,
     carNumber: false,
-    // date: false,
     productID: false,
     number: false,
     quantity: false,
@@ -64,39 +58,36 @@ const AddToFridge = () => {
     farmsNotes: false,
     total: false,
     supplyDate: false,
+    fridgeName: false,
+    productName: false,
   });
   // console.log(values);
   const dispatch = useDispatch();
   const { get } = useApi();
 
   useEffect(() => {
-    // const searchQuiry = new URLSearchParams(window.location.search);
-    // const ID = searchQuiry.get("id");
     if (id != null) {
-      // setId(ID);
-      get({ url: SUPPLIERS.getRecord, params: { recordId: id } }).then(
-        (res) => {
-          console.log("SUPPLIERS.getRecord: ", { res });
+      get({ url: FRIDGES.getRecord, params: { recordId: id } }).then((res) => {
+        console.log("FRIDGES.getRecord: ", { res });
 
-          if (res?.farmsID) {
-            setValues({ ...values, ...res });
-          }
+        if (res?.fridgeID) {
+          setValues({ ...values, ...res });
         }
-      );
+      });
     }
-    get({ url: SUPPLIERS.getAll }).then((res) => {
-      console.log("SUPPLIERS.getAll: ", { res });
-      if (Array.isArray(res)) {
-        // setSuppliers(res);
-        dispatch(saveSuppliersAction(res));
-      } else {
-        // alert("Error: get suppliers");
-        // setSuppliers([]);
-        // if (!suppliers) {
-        //   dispatch(saveSuppliersAction([]));
-        // }
-      }
-    });
+    // get({ url: SUPPLIERS.getAll }).then((res) => {
+    //   console.log("SUPPLIERS.getAll: ", { res });
+    //   if (Array.isArray(res)) {
+    //     // setSuppliers(res);
+    //     dispatch(saveSuppliersAction(res));
+    //   } else {
+    //     // alert("Error: get fridges");
+    //     // setSuppliers([]);
+    //     // if (!fridges) {
+    //     //   dispatch(saveSuppliersAction([]));
+    //     // }
+    //   }
+    // });
     // get({ url: PRODUCTS.getAll }).then((res) => {
     //   console.log("PRODUCTS.getAll: ", { res });
     //   if (Array.isArray(res)) {
@@ -128,28 +119,14 @@ const AddToFridge = () => {
       [name + "ID"]: value?.id ? false : true,
     }));
   };
-  const calculateNetQuantity: number = useMemo(() => {
-    const { quantity, discount, isPercentage } = values;
-    if (discount <= 0) return Number(quantity);
-    if (isPercentage)
-      return Number(
-        (Number(quantity) * (1 - Number(discount / 100))).toFixed(2)
-      );
-    else return Number((Number(quantity) - discount).toFixed(2));
-  }, [values.discount, values.quantity, values.isPercentage]);
 
-  const calculateTotal = useMemo(() => {
-    const { price } = values;
-
-    return (price * (calculateNetQuantity || 1)).toFixed(2);
-  }, [calculateNetQuantity, values.price]);
   const isValid = () => {
     let isTrue = true;
-    if (!values.farmsID) {
-      setErrors((v) => ({ ...v, farmsID: true }));
+    if (!values.fridgeID) {
+      setErrors((v) => ({ ...v, fridgeID: true }));
       isTrue = false;
     } else {
-      setErrors((v) => ({ ...v, farmsID: false }));
+      setErrors((v) => ({ ...v, fridgeID: false }));
     }
     if (!values.productID) {
       setErrors((v) => ({ ...v, productID: true }));
@@ -178,11 +155,9 @@ const AddToFridge = () => {
           params: { recordId: id },
           data: {
             ...values,
-            total: calculateTotal,
-            netQuantity: calculateNetQuantity,
           },
         }).then((res) => {
-          console.log("SUPPLIERS.addRecord: ", { res });
+          console.log("FRIDGES.addRecord: ", { res });
           if (res.farmRecordID) {
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
@@ -195,11 +170,9 @@ const AddToFridge = () => {
           url: FRIDGES.addRecord,
           data: {
             ...values,
-            total: calculateTotal,
-            netQuantity: calculateNetQuantity,
           },
         }).then((res) => {
-          console.log("SUPPLIERS.addRecord: ", { res });
+          console.log("FRIDGES.addRecord: ", { res });
           if (res.farmRecordID) {
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
@@ -213,12 +186,11 @@ const AddToFridge = () => {
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="mb-4 flex flex-col rounded-lg border bg-white p-4">
-        <h4 className="col-span-1 mb-4">
-          {/* {id ? t("fridges.editProduct") : t("fridges.addProduct")} */}
-          Comming soon!
-        </h4>
+        {/* <h4 className="col-span-1 mb-4">
+          {id ? t("fridges.editProduct") : t("fridges.addProduct")}
+        </h4> */}
 
-        {/* <form
+        <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 gap-4 md:grid-cols-3"
         >
@@ -226,23 +198,23 @@ const AddToFridge = () => {
             <Autocomplete
               className="flex-1"
               clearOnEscape
-              options={suppliers || []}
+              options={fridges || []}
               getOptionLabel={(item) => item.name}
-              id="farms"
+              id="fridge"
               onChange={(e, value) => {
-                handleSelectChange("farms", value);
+                handleSelectChange("fridge", value);
               }}
-              value={{ id: values.farmsID, name: values.farmsName } as any}
+              value={{ id: values.fridgeID, name: values.fridgeName } as any}
               renderInput={(params) => (
                 <CustomInput
                   {...params}
-                  error={errors.farmsID}
-                  id="farms"
+                  error={errors.fridgeID}
+                  id="fridge"
                   label={t("fridges.name")}
                 />
               )}
             />
-            <AddFarm showButtonTitle />
+            <AddFridge showButtonTitle />
           </div>
           <div className="col-span-1 flex flex-row items-center justify-between gap-2 rounded-md border ltr:pr-1 rtl:pl-1 md:col-span-2">
             <Autocomplete
@@ -281,12 +253,25 @@ const AddToFridge = () => {
             />
           </FormControl>
           <FormControl>
-            <CustomInput
-              type="text"
-              id="carNumber"
-              label={t("fridges.carNumber")}
-              value={values.carNumber}
-              onChange={handleChangeValue}
+            <CustomSelect
+              items={FRIDGE_TRANSACTION_TYPES()}
+              id="actionType"
+              label={t("fridges.actionType")}
+              value={
+                values.action
+                  ? FRIDGE_TRANSACTION_TYPES()[0].id
+                  : FRIDGE_TRANSACTION_TYPES()[1].id
+              }
+              onChange={(e, item) => {
+                const { value } = e.target;
+                setValues((values) => ({
+                  ...values,
+                  action:
+                    value === 1
+                      ? fridgeTransactionEnums.in
+                      : fridgeTransactionEnums.out,
+                }));
+              }}
             />
           </FormControl>
           <FormControl>
@@ -307,26 +292,8 @@ const AddToFridge = () => {
               type="number"
             />
           </FormControl>
-          <FormControl>
-            <CustomSelect
-              items={DISCOUNT_TYPES()}
-              id="discountType"
-              label={t("fridges.discountType")}
-              value={
-                values.isPercentage
-                  ? DISCOUNT_TYPES()[0].id
-                  : DISCOUNT_TYPES()[1].id
-              }
-              onChange={(e, item) => {
-                const { value } = e.target;
-                setValues((values) => ({
-                  ...values,
-                  isPercentage: value === 1,
-                }));
-              }}
-            />
-          </FormControl>
-          <FormControl>
+
+          {/* <FormControl>
             <CustomInput
               id="discount"
               label={t("fridges.discount")}
@@ -334,18 +301,8 @@ const AddToFridge = () => {
               onChange={handleChangeValue}
               type="number"
             />
-          </FormControl>
+          </FormControl> */}
 
-          <FormControl>
-            <CustomInput
-              id="netQuantity"
-              label={t("fridges.netQuantity")}
-              value={calculateNetQuantity}
-              onChange={handleChangeValue}
-              type="number"
-              disabled
-            />
-          </FormControl>
           <FormControl>
             <CustomInput
               id="price"
@@ -359,30 +316,39 @@ const AddToFridge = () => {
             <CustomInput
               id="total"
               label={t("fridges.total")}
-              value={values.total || calculateTotal}
+              value={values.total}
               onChange={handleChangeValue}
               type="number"
-              disabled
             />
           </FormControl>
           <FormControl>
             <CustomInput
-              id="paied"
+              id="payed"
               label={t("fridges.payed")}
-              value={values.paied}
+              value={values.payed}
               onChange={handleChangeValue}
               type="number"
             />
           </FormControl>
+          <FormControl>
+            <CustomInput
+              type="text"
+              id="carNumber"
+              label={t("fridges.carNumber")}
+              value={values.carNumber}
+              onChange={handleChangeValue}
+            />
+          </FormControl>
           <FormControl className={`col-span-1 md:col-span-2`}>
             <CustomInput
-              id="farmsNotes"
-              label={t("fridges.note")}
-              value={values.farmsNotes}
+              id="notes"
+              label={t("fridges.notes")}
+              value={values.notes}
               onChange={handleChangeValue}
               type="text"
             />
           </FormControl>
+          <FormControl className={`col-span-1 md:col-span-2`}></FormControl>
           {isLoad ? (
             <div className="flex items-center justify-center">
               <CircularProgress />
@@ -398,7 +364,7 @@ const AddToFridge = () => {
               </CustomButton>
             </>
           )}
-        </form> */}
+        </form>
       </div>
     </main>
   );

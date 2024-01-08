@@ -21,3 +21,8 @@ export const DISCOUNT_TYPES = () => [
   { id: 1, name: t("AddToStock.discountPercentage") },
   { id: 2, name: t("AddToStock.discountFlat") },
 ];
+
+export const FRIDGE_TRANSACTION_TYPES = () => [
+  { id: 1, name: t("fridges.in") },
+  { id: 2, name: t("fridges.out") },
+];
