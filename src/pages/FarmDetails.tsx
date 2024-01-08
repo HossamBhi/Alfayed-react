@@ -52,7 +52,7 @@ const FarmDetails = () => {
       );
     }
   }, [id]);
-
+  console.log({ supplierData });
   const columns: GridColDef[] =
     !supplierData || supplierData?.length <= 0
       ? []
@@ -66,81 +66,74 @@ const FarmDetails = () => {
     }
 
     return [
-      ...columns
-        .filter(
-          (col) =>
-            col.field !== "farmsID" &&
-            col.field !== "productID" &&
-            col.field != "typeId"
-          // &&
-          // col.field !== "created_Date"
-        )
-        .map((col) =>
-          col.field === "supplyDate"
-            ? {
-                ...col,
-                width: 150,
-                type: "date",
-                align: "center",
-                headerAlign: "center",
-                valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
-                valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
-              }
-            : col.field === "created_Date"
-            ? {
-                ...col,
-                width: 150,
-                type: "date",
-                align: "center",
-                headerAlign: "center",
-                valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
-                valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
-              }
-            : col.field === "farmsNotes"
-            ? { ...col, width: 200 }
-            : col.field === "isPercentage"
-            ? {
-                ...col,
-                width: 120,
-                headerName: t("AddToStock.discountType"),
-                valueGetter: (params: GridValueGetterParams) => {
-                  if (params.value === true) {
-                    return t("AddToStock.discountPercentage");
-                  }
+      ...columns.map((col) =>
+        col.field === "supplyDate"
+          ? {
+              ...col,
+              width: 150,
+              type: "dateTime",
+              align: "center",
+              headerAlign: "center",
+              valueFormatter: (params: GridValueFormatterParams) =>
+                formatDate(params.value),
+              valueGetter: (params: GridValueGetterParams) =>
+                formatDate(params.value),
+            }
+          : col.field === "created_Date"
+          ? {
+              ...col,
+              width: 150,
+              type: "date",
+              align: "center",
+              headerAlign: "center",
+              valueFormatter: (params: GridValueFormatterParams) =>
+                formatDate(params.value),
+              valueGetter: (params: GridValueGetterParams) =>
+                formatDate(params.value),
+            }
+          : col.field === "farmsNotes"
+          ? { ...col, width: 200 }
+          : col.field === "isPercentage"
+          ? {
+              ...col,
+              width: 120,
+              headerName: t("AddToStock.discountType"),
+              valueGetter: (params: GridValueGetterParams) => {
+                if (params.value === true) {
+                  return t("AddToStock.discountPercentage");
+                } else if (params.value === false)
                   return t("AddToStock.discountFlat");
-                },
-              }
-            : col.field === "description"
-            ? {
-                ...col,
-                width: 120,
-                headerName: t("supplierTable.description"),
-                renderCell: (props: GridRenderCellParams<any, Date>) => {
-                  const { row } = props;
-                  
-                  return (
-                    <p
-                      className={`py-1 px-4 rounded-md text-white ${
-                        row.productID ? "bg-primary" : "bg-blue-700"
-                      }`}
-                    >{`${row.productID ? "نقله" : "دفعه"}`}</p>
-                  );
-                },
-              }
-            : col
-        ),
+                return "";
+              },
+            }
+          : col.field === "description"
+          ? {
+              ...col,
+              width: 120,
+              headerName: t("supplierTable.description"),
+              renderCell: (props: GridRenderCellParams<any, Date>) => {
+                const { row } = props;
+
+                return (
+                  <p
+                    className={`py-1 px-4 rounded-md text-white ${
+                      row.productID ? "bg-primary" : "bg-blue-700"
+                    }`}
+                  >{`${row.productID ? "نقله" : "دفعه"}`}</p>
+                );
+              },
+            }
+          : col
+      ),
       {
         field: "action",
         headerName: t("table.actions"),
         width: 150,
         type: "actions",
         getActions: (params: any) => {
-          const { id } = params;
+          const { id, row } = params;
 
+          if (row.description === "Pay") return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>
               <GridActionsCellItem
@@ -180,15 +173,6 @@ const FarmDetails = () => {
             onClick={() => setShowEdit(true)}
           />
         )}
-        {/* <PayEmployee
-          showButtonTitle
-          // hideShowBtn
-          // editData={editData}
-          // setEditData={(data) => setEditData(data)}
-          // show={showPay}
-          // onClose={() => setShowPay(false)}
-          // onShowClick={() => setShowPay(true)}
-        /> */}
         <AddFarm
           hideShowBtn={true}
           editData={supplier}
@@ -200,9 +184,15 @@ const FarmDetails = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          columnVisibilityModel={{
+            farmsName: false,
+            farmsID: false,
+            productID: false,
+            typeId: false,
+          }}
           rows={supplierData || []}
           columns={customeColumns as any}
-          getRowId={(item) => item.farmRecordID}
+          getRowId={(item) => item.farmRecordID + " " + item.description}
         />
       </div>
     </main>
