@@ -1,40 +1,44 @@
 import { Tooltip } from "@mui/material";
 import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { BsFillPlusCircleFill, BsFillPlusSquareFill } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CustomButton, CustomTable } from "../components/common";
 import { useApi } from "../hooks";
+import { editStockAction, saveStockAction } from "../redux/stock";
+import { RootState } from "../redux/store";
 import { STORE } from "../utils/endpoints";
 import { createDataColumns } from "../utils/helper";
-import { supplierProps } from "../utils/types";
-import { TbSquareMinusFilled } from "react-icons/tb";
-import { MdClose } from "react-icons/md";
 
 const Stock = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { get } = useApi();
-  const [tableData, setTableData] = useState<null | supplierProps[]>(null);
+  const { get, post } = useApi();
+  const dispatch = useDispatch();
+  // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
+  const stock = useSelector((state: RootState) => state.stock.stock);
   useEffect(() => {
     get({ url: STORE.getAll }).then((res) => {
       console.log("STORE.getAll", { res });
       // if (Array.isArray(res)) {
       if (!res.status || Array.isArray(res)) {
-        setTableData(res);
+        // setTableData(res);
+        dispatch(saveStockAction(res));
       } else {
-        setTableData([]);
+        // setTableData([]);
         alert("Error " + res.status + ": " + res.data);
       }
     });
   }, []);
 
   const columns: GridColDef[] =
-    !tableData || tableData?.length <= 0
+    !stock || stock?.length <= 0
       ? []
-      : createDataColumns(tableData[0], (s: string) => t("table." + s));
+      : createDataColumns(stock[0], (s: string) => t("table." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -43,7 +47,7 @@ const Stock = () => {
 
     return [
       ...columns
-        .filter((col) => col.field !== "productID" && col.field !== "notes")
+        .filter((col) => col.field !== "notes")
         .map((col) =>
           col.field === "productName"
             ? { ...col, width: 200 }
@@ -82,7 +86,15 @@ const Stock = () => {
                 label={t("stock.deleteQuantity")}
                 sx={{ color: "error.main" }}
                 onClick={() => {
-                  alert("Delete quantity");
+                  // alert("Delete quantity");
+                  post({ url: STORE.setProductQtyToZero, params: { id } }).then(
+                    (res) => {
+                      console.log({ res });
+                      if (res.productID) {
+                        dispatch(editStockAction(res));
+                      }
+                    }
+                  );
                 }}
               />
             </Tooltip>,
@@ -105,7 +117,10 @@ const Stock = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={tableData || []}
+          columnVisibilityModel={{
+            productID: true,
+          }}
+          rows={stock || []}
           columns={customeColumns as any}
           getRowId={(item) => item.productID}
         />

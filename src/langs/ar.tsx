@@ -157,6 +157,7 @@ export const ar = {
       "expenseRecordID": "#"
     },
     "table": {
+      "productID": "#",
       "description": "البيان",
       "name": "اسم المورد",
       "carNumber": "رقم السياره",

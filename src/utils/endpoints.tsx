@@ -53,6 +53,7 @@ export const PRODUCTS = {
 
 export const STORE = {
   getAll: "GetStoreProducts",
+  setProductQtyToZero: "SetProductQtyToZero"
 };
 
 export const ACCOUNTS = {

@@ -149,6 +149,7 @@ export const en = {
       "productName": "Product Name",
     },
     "table": {
+      "productID": "ID",
       "description": "Description",
       "name": "farm Name",
       "carNumber": "Car Number",

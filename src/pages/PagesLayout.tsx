@@ -6,7 +6,11 @@ import { useApi } from "../hooks";
 import { saveClientsAction } from "../redux/clients";
 import { saveExpensesAction } from "../redux/expenses";
 import { saveFridgesAction } from "../redux/fridges";
-import { saveProductsAction, saveProductsDetailsAction } from "../redux/stock";
+import {
+  saveProductsAction,
+  saveProductsDetailsAction,
+  saveStockAction,
+} from "../redux/stock";
 import { RootState } from "../redux/store";
 import { saveSuppliersAction } from "../redux/suppliers";
 import {
@@ -15,6 +19,7 @@ import {
   EXPENSES,
   FRIDGES,
   PRODUCTS,
+  STORE,
   SUPPLIERS,
 } from "../utils/endpoints";
 import { saveTotalAction, saveTransactionsAction } from "../redux/accounts";
@@ -70,11 +75,17 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
         dispatch(saveTotalAction(res.total));
       }
     });
+    get({ url: STORE.getAll }).then((res) => {
+      // console.log("STORE.getAll", { res });
+      if (Array.isArray(res)) {
+        dispatch(saveStockAction(res));
+      }
+    });
     post({
       url: ACCOUNTS.getAll,
       params: { recordType: getTrasactionsEnums.all },
     }).then((res) => {
-      console.log("ACCOUNTS.getAll: ", { res });
+      // console.log("ACCOUNTS.getAll: ", { res });
       if (Array.isArray(res)) {
         dispatch(saveTransactionsAction(res));
       }

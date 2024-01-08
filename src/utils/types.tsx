@@ -1,7 +1,7 @@
 import { trasactionsEnums } from "./enums";
 
 export type productProps = {
-  id: number;
+  productID: number;
   name: string;
   productUnitPrice: number;
   productNote: string;
@@ -62,7 +62,10 @@ export type accountsProps = {
 };
 
 export type stockProps = {
-  total: string;
+  notes: string;
+  productID: number;
+  productName: string;
+  quantity: number;
 };
 
 export type fridgeProps = {
