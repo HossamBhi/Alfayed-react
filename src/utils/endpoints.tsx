@@ -13,7 +13,7 @@ export const SUPPLIERS = {
   updateRecord: "UpdateFarmRecord",
   getTotalRemaining: "GetTotalRemaining",
   getRecordWithData: "GetFarmRecordWithData",
-  pay: "PayToFarm"
+  pay: "PayToFarm",
 };
 
 export const CLIENT = {
@@ -22,7 +22,10 @@ export const CLIENT = {
   update: "UpdateClient",
   getById: "GetClientById",
   addTransaction: "AddTransaction",
-  pay: "PayToClient",
+  // updateRecord: "UpdateFarmRecord",
+  getRecordWithData: "GetTransactionsWithClientData",
+  getRecord: "GetTransactionRecordByID",
+  pay: "CollectMoneyFromClient",
 };
 
 export const EXPENSES = {
@@ -53,13 +56,13 @@ export const PRODUCTS = {
 
 export const STORE = {
   getAll: "GetStoreProducts",
-  setProductQtyToZero: "SetProductQtyToZero"
+  setProductQtyToZero: "SetProductQtyToZero",
 };
 
 export const ACCOUNTS = {
   getTotal: "GetTotalbalance",
   addBalance: "AddBalanceToSafe",
-  getAll: "GetRecords"
+  getAll: "GetRecords",
 };
 
 export const EMPLOYEES = {
@@ -82,5 +85,5 @@ export const FRIDGES = {
   updateRecord: "UpdateFridgeRecord",
   getTotalRemaining: "GetTotalRemaining",
   getRecordWithData: "GetFridgeRecordsWithData",
-  pay: "PayToFridge"
+  pay: "PayToFridge",
 };

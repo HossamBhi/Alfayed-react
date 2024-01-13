@@ -41,7 +41,6 @@ const AddToFridge = () => {
     notes: "",
     carNumber: "",
   });
-  // console.log(new Date("2023-12-04T00:00:00"));
 
   const [errors, setErrors] = useState({
     farmsName: false,
@@ -61,13 +60,12 @@ const AddToFridge = () => {
     fridgeName: false,
     productName: false,
   });
-  // console.log(values);
+
   const dispatch = useDispatch();
   const { get } = useApi();
-
   useEffect(() => {
     if (id != null) {
-      get({ url: FRIDGES.getRecord, params: { recordId: id } }).then((res) => {
+      get({ url: FRIDGES.getRecord, params: { id } }).then((res) => {
         console.log("FRIDGES.getRecord: ", { res });
 
         if (res?.fridgeID) {
@@ -75,29 +73,6 @@ const AddToFridge = () => {
         }
       });
     }
-    // get({ url: SUPPLIERS.getAll }).then((res) => {
-    //   console.log("SUPPLIERS.getAll: ", { res });
-    //   if (Array.isArray(res)) {
-    //     // setSuppliers(res);
-    //     dispatch(saveSuppliersAction(res));
-    //   } else {
-    //     // alert("Error: get fridges");
-    //     // setSuppliers([]);
-    //     // if (!fridges) {
-    //     //   dispatch(saveSuppliersAction([]));
-    //     // }
-    //   }
-    // });
-    // get({ url: PRODUCTS.getAll }).then((res) => {
-    //   console.log("PRODUCTS.getAll: ", { res });
-    //   if (Array.isArray(res)) {
-    //     setProducts(res);
-    //   } else {
-    //     alert("Error: get Products");
-    //     setProducts([]);
-
-    //   }
-    // });
   }, [id]);
 
   const handleChangeValue = useCallback((e: any) => {
@@ -204,7 +179,12 @@ const AddToFridge = () => {
               onChange={(e, value) => {
                 handleSelectChange("fridge", value);
               }}
-              value={{ id: values.fridgeID, name: values.fridgeName } as any}
+              value={
+                {
+                  id: values.fridgeID || searchParams.get("fridgeID"),
+                  name: values.fridgeName || searchParams.get("fridgeName"),
+                } as any
+              }
               renderInput={(params) => (
                 <CustomInput
                   {...params}
@@ -247,7 +227,7 @@ const AddToFridge = () => {
             <CustomInput
               id="supplyDate"
               label={t("fridges.date")}
-              value={values.supplyDate}
+              value={formatDate(new Date(values.supplyDate))}
               onChange={handleChangeValue}
               type="date"
             />

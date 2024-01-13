@@ -8,12 +8,13 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
 import { RiFridgeFill } from "react-icons/ri";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
-import { AddFridge } from "../components/popups";
+import { AddFridge, PopupButton } from "../components/popups";
 import { useApi } from "../hooks";
 import { FRIDGES } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
@@ -33,7 +34,7 @@ const FridgeDetails = () => {
   );
 
   useEffect(() => {
-    if (id != null) {
+    if (id !== null) {
       get({ url: FRIDGES.getRecordWithData, params: { fridgeId: id } }).then(
         (res) => {
           console.log("fridge data get Record With Data", { res });
@@ -67,7 +68,7 @@ const FridgeDetails = () => {
             col.field !== "productID" &&
             col.field !== "action" &&
             col.field !== "description" &&
-            col.field != "typeId"
+            col.field !== "typeId"
           // &&
           // col.field !== "created_Date"
         )
@@ -110,7 +111,13 @@ const FridgeDetails = () => {
                       className={`py-1 px-4 rounded-md text-white ${
                         row.action === 1 ? "bg-primary" : "bg-blue-700"
                       }`}
-                    >{`${value}`}</p>
+                    >{`${
+                      row.action === 1
+                        ? t("fridges.in")
+                        : row.action === 2
+                        ? t("fridges.out")
+                        : t("payForm.payType1")
+                    } `}</p>
                   );
                 },
               }
@@ -122,7 +129,8 @@ const FridgeDetails = () => {
         width: 150,
         type: "actions",
         getActions: (params: any) => {
-          const { id } = params;
+          const { row, id } = params;
+          if (row.action === null) return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>
               <GridActionsCellItem
@@ -152,7 +160,7 @@ const FridgeDetails = () => {
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="m-0">
-        {id != null && (
+        {id !== null && (
           <UserCard
             item={details}
             containerStyle={"bg-white hover:bg-white mt-0"}
@@ -162,15 +170,18 @@ const FridgeDetails = () => {
             onClick={() => setShowEdit(true)}
           />
         )}
-        {/* <PayEmployee
-          showButtonTitle
-          // hideShowBtn
-          // editData={editData}
-          // setEditData={(data) => setEditData(data)}
-          // show={showPay}
-          // onClose={() => setShowPay(false)}
-          // onShowClick={() => setShowPay(true)}
-        /> */}
+        <div className="flex flex-1 justify-end w-full">
+          <PopupButton
+            className="!mb-2"
+            onClick={() =>
+              navigate(
+                `/add-to-fridge?fridgeID=${id}&fridgeName=${details.name}`
+              )
+            }
+          >
+            <BsFillPlusCircleFill className="me-4" /> {t("fridges.addToTitle")}
+          </PopupButton>
+        </div>
         <AddFridge
           hideShowBtn={true}
           editData={details}

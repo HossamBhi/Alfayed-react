@@ -32,7 +32,6 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("Call me i am all apis statics");
     get({ url: SUPPLIERS.getAll }).then((res) => {
       // console.log("SUPPLIERS.getAll: ", { res });
       if (Array.isArray(res)) {
@@ -40,7 +39,7 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
       }
     });
     get({ url: FRIDGES.getAll }).then((res) => {
-      console.log("FRIDGES.getAll : ", { res });
+      // console.log("FRIDGES.getAll : ", { res });
       if (Array.isArray(res)) {
         dispatch(saveFridgesAction(res));
       }

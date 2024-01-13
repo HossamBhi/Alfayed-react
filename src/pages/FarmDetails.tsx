@@ -119,7 +119,7 @@ const FarmDetails = () => {
                     className={`py-1 px-4 rounded-md text-white ${
                       row.productID ? "bg-primary" : "bg-blue-700"
                     }`}
-                  >{`${row.productID ? "نقله" : "دفعه"}`}</p>
+                  >{`${row.productID ? t("payForm.payType2") : t("payForm.payType1")}`}</p>
                 );
               },
             }

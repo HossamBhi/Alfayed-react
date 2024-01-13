@@ -58,7 +58,9 @@ export const ar = {
       "totalPay": "اجمال الدفع",
       "notes": "ملحوظة",
       "pay": "ادفع",
-      "payTo": "ادفع ل"
+      "payTo": "ادفع ل",
+      "payType1": "دفعه",
+      "payType2": "نقله"
     },
     "PayEmployee": {
       "addTitle": "الدفع للموظف",
@@ -97,7 +99,7 @@ export const ar = {
       "editTitle": "تعديل المحطة",
       "name": "اسم المحطة",
       "fridgeName": "اسم المحطة",
-      "fridgeRecordID": "بطاقة تعريف",
+      "fridgeRecordID": "#",
       "description": "وصف",
       "supplyDate": "تاريخ",
       "notes": "ملحوظه",
@@ -203,7 +205,7 @@ export const ar = {
       "actions": "الأوامر",
       "farmsNotes": "ملحوظة",
       "farmsName": "اسم المورد",
-      "farmRecordID": "#",
+      "farmRecordID": "#"
     },
     "supplierTable": {
       "description": "البيان",

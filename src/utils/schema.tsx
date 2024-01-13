@@ -21,9 +21,10 @@ export const lightTheme = createTheme(
       text: { primary: "#000", secondary: "#8D8D8D" },
     },
 
-    direction: i18n.dir(),
+    direction: "rtl",
+    // direction: i18n.dir(),
   },
-  arSD,
+  arSD
 );
 
 export const darkTheme = createTheme({
@@ -36,7 +37,7 @@ export const darkTheme = createTheme({
     },
     text: { primary: "#000", secondary: "#8D8D8D" },
   },
-  direction: i18n.dir(),
+  direction: "rtl",
 });
 
 // Create rtl cache
