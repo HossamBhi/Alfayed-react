@@ -28,7 +28,7 @@ const expenses = createSlice({
         return state;
       }
       const findIndex = state?.expenses?.findIndex(
-        (item: expenseProps) => item.id == payload.id,
+        (item: expenseProps) => item.id === payload.id,
       );
       state.expenses[findIndex] = payload;
     },

@@ -1,11 +1,3 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { UserCard } from "../components/cards";
-import { CustomTable } from "../components/common";
-import { AddFarm } from "../components/popups";
-import { useApi } from "../hooks";
-import { SUPPLIERS } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
-import { supplierDataProps, supplierProps } from "../utils/types";
 import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
@@ -17,6 +9,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { GiFarmer } from "react-icons/gi";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { UserCard } from "../components/cards";
+import { CustomTable } from "../components/common";
+import { AddFarm } from "../components/popups";
+import { useApi } from "../hooks";
+import { CLIENT } from "../utils/endpoints";
+import { createDataColumns, formatDate } from "../utils/helper";
+import { supplierDataProps, supplierProps } from "../utils/types";
 
 const ClientDetails = () => {
   const navigate = useNavigate();
@@ -31,10 +31,10 @@ const ClientDetails = () => {
   );
 
   useEffect(() => {
-    if (id != null) {
-      get({ url: SUPPLIERS.getRecordWithData, params: { recordId: id } }).then(
+    if (id !== null) {
+      get({ url: CLIENT.getRecordWithData, params: { clientID: id } }).then(
         (res) => {
-          console.log("farm data get Record With Data", { res });
+          console.log("CLIENT.getRecordWithData", { res });
           // if (Array.isArray(res)) {
           if (!res.status) {
             setSupplier(res);
@@ -65,7 +65,7 @@ const ClientDetails = () => {
         .filter(
           (col) =>
             col.field !== "farmsID" &&
-            col.field != "typeId" &&
+            col.field !== "typeId" &&
             col.field !== "productID"
           // &&
           // col.field !== "created_Date"
@@ -148,7 +148,7 @@ const ClientDetails = () => {
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="m-0">
-        {id != null && (
+        {id !== null && (
           <UserCard
             item={supplier}
             containerStyle={"bg-white hover:bg-white mt-0"}

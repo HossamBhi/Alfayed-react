@@ -1,12 +1,12 @@
-import { Box, Link, useTheme } from "@mui/material";
+import { Box, Link, Tooltip, useTheme } from "@mui/material";
 import { ComponentProps, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCanadianMapleLeaf } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 import usePathname from "../hooks/usePathname";
-import i18n, { LANGUAGES } from "../langs";
+import i18n from "../langs";
 import { SIDEMENU_LINKS } from "../utils/helper";
 import { CustomButton } from "./common";
-import { NavLink } from "react-router-dom";
 
 export const AppLogo = ({
   className = "",
@@ -61,57 +61,47 @@ const SideMenu = ({
       )}
 
       <aside
-        className={`relative min-h-screen w-72 min-w-[40%] flex-col justify-between border-r-[1px] bg-white py-2 md:flex md:min-w-[20%] ${
+        className={`fixed md:relative min-h-screen  min-w-[50%] md:min-w-[80px] flex-col justify-between border-r-[1px] bg-white py-2 md:flex ${
           isShowMenu ? "fixed top-0 z-40" : "hidden"
         }`}
         aria-label="Sidebar"
       >
-        {/* <div className="flex fixed w-20 bg-white h-screen flex-col justify-between p-4 border-r-[1px]"> */}
-        <div
-          // className=" flex flex-col items-center pt-2"
-          className="absolute top-0 w-full flex h-full flex-col overflow-y-auto bg-white p-4"
-        >
-          {/* <AppLogo className="self-start" /> */}
-          {/* <span className="mb-6 w-full border-b-[1px] border-gray-200 p-2"></span> */}
+        <div className="absolute top-0 w-full flex h-full flex-col overflow-y-auto bg-white p-4">
           <ul className="space-y-2 font-medium">
             {SIDEMENU_LINKS.map(
               ({ title, url, ActiveIcon, InActiveIcon }, i) => (
                 <li key={url + " " + i}>
-                  <NavLink
-                    to={url}
-                    onClick={() => setIsShowMenu(false)}
-                    className={`group flex items-center rounded-lg bg-background p-2 text-gray-900 hover:bg-background ${
-                      pathname === url
-                        ? "!bg-primary text-white hover:bg-blue-100"
-                        : "text-black"
-                    }`}
-                  >
-                    {/* <Tooltip title={t(`menu.${title}`)}> */}
-                    {/* <div> */}
-                    {pathname === url ? (
-                      <ActiveIcon
-                        className="text-[16px] md:text-[24px]"
-                        // color={primary.main}
-                      />
-                    ) : (
-                      <InActiveIcon className="text-[16px] md:text-[20px]" />
-                    )}
-                    <span className="ms-3">{t(`menu.${title}`)}</span>
-                    {/* </div> */}
-                    {/* </Tooltip> */}
-                  </NavLink>
+                  <Tooltip title={t(`menu.${title}`)}>
+                    <NavLink
+                      to={url}
+                      onClick={() => setIsShowMenu(false)}
+                      className={`group flex justify-start md:justify-center items-center rounded-lg bg-background p-2 text-gray-900 hover:bg-background ${
+                        pathname === url
+                          ? "!bg-primary text-white hover:bg-blue-100"
+                          : "text-black"
+                      }`}
+                    >
+                      {pathname === url ? (
+                        <ActiveIcon className="text-[16px] md:text-[24px]" />
+                      ) : (
+                        <InActiveIcon className="text-[16px] md:text-[20px]" />
+                      )}
+                      <span className="ms-3 inline-block md:hidden">
+                        {t(`menu.${title}`)}
+                      </span>
+                    </NavLink>
+                  </Tooltip>
                 </li>
               )
             )}
           </ul>
-          <CustomButton
-            // leftIcon={<HiOutlineLanguage />}
+          {/* <CustomButton
             onClick={handleChangeLanugage}
             className={`!mt-4 inline-block cursor-pointer rounded-lg bg-background p-3 text-sm font-bold hover:bg-blue-100`}
           >
             {LANGUAGES.find((lang) => lang.code === i18n.language)?.label ||
               LANGUAGES[0].label}
-          </CustomButton>
+          </CustomButton> */}
           {/* <CustomButton
             onClick={() => {
               changeTheme(theme);
@@ -119,6 +109,13 @@ const SideMenu = ({
             className={`!mt-4 w-fit cursor-pointer rounded-lg bg-background p-3 text-sm font-bold hover:bg-blue-100`}
           >
             <MdDarkMode size="24" />
+          </CustomButton> */}
+          {/* <CustomButton
+            onClick={() =>}
+            className={`!mt-4 inline-block cursor-pointer rounded-lg bg-background p-3 text-sm font-bold hover:bg-blue-100`}
+          >
+            {LANGUAGES.find((lang) => lang.code === i18n.language)?.label ||
+              LANGUAGES[0].label}
           </CustomButton> */}
         </div>
       </aside>

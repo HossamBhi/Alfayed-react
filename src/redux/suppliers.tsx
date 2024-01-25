@@ -22,7 +22,7 @@ const suppliers = createSlice({
         return state;
       }
       const findIndex = state?.findIndex(
-        (item: supplierProps) => item.id == payload.id,
+        (item: supplierProps) => item.id === payload.id,
       );
       state[findIndex] = payload;
     },

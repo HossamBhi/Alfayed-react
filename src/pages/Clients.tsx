@@ -18,6 +18,7 @@ import { RootState } from "../redux/store";
 import { profileEnums } from "../utils/enums";
 import { createDataColumns, formatDate } from "../utils/helper";
 import { clientProps, supplierProps } from "../utils/types";
+import { BsSendPlusFill } from "react-icons/bs";
 
 const Clients = () => {
   const navigate = useNavigate();
@@ -68,33 +69,49 @@ const Clients = () => {
         getActions: (params: any) => {
           const { id, row } = params;
           return [
-            <Tooltip key={1} title={t("common.edit")}>
-              <GridActionsCellItem
-                icon={<FaRegEdit size={16} />}
-                label="Edit"
-                sx={{ color: "primary.main" }}
-                onClick={() => handleRowEdit(row)}
-              />
-            </Tooltip>,
-            <Tooltip key={2} title={t("common.show")}>
-              <GridActionsCellItem
-                icon={<FaEye size={16} />}
-                label="show"
-                sx={{ color: "primary.main" }}
-                onClick={() => navigate("/client-detials?id=" + id)}
-              />
-            </Tooltip>,
-            <Tooltip key={"Pay"} title={t("payForm.pay")}>
-              <GridActionsCellItem
-                icon={<MdOutlineAttachMoney size={16} />}
-                label="pay"
-                sx={{ color: "primary.main" }}
-                onClick={() => {
-                  setEditData(row);
-                  setShowPay(true);
-                }}
-              />
-            </Tooltip>,
+            <div className="w-full flex flex-col">
+              <Tooltip key={1} title={t("common.edit")}>
+                <GridActionsCellItem
+                  icon={<FaRegEdit size={16} />}
+                  label="Edit"
+                  sx={{ color: "primary.main" }}
+                  onClick={() => handleRowEdit(row)}
+                />
+              </Tooltip>
+              <Tooltip key={2} title={t("common.show")}>
+                <GridActionsCellItem
+                  icon={<FaEye size={16} />}
+                  label="show"
+                  sx={{ color: "primary.main" }}
+                  onClick={() => navigate("/client-detials?id=" + id)}
+                />
+              </Tooltip>
+            </div>,
+            <div className="w-full flex flex-col">
+              <Tooltip key={"Pay"} title={t("payForm.pay")}>
+                <GridActionsCellItem
+                  icon={<MdOutlineAttachMoney size={16} />}
+                  label="pay"
+                  sx={{ color: "primary.main" }}
+                  onClick={() => {
+                    setEditData(row);
+                    setShowPay(true);
+                  }}
+                />
+              </Tooltip>
+              <Tooltip key={"send"} title={t("client.sendTo")}>
+                <GridActionsCellItem
+                  icon={<BsSendPlusFill size={16} />}
+                  label="send"
+                  sx={{ color: "primary.main" }}
+                  onClick={() =>
+                    navigate(
+                      `/send-to-client?clientID=${id}&clientName=${row.name}`
+                    )
+                  }
+                />
+              </Tooltip>
+            </div>,
           ];
         },
       },

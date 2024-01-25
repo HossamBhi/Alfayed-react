@@ -2,6 +2,7 @@ import { trasactionsEnums } from "./enums";
 
 export type productProps = {
   productID: number;
+  id?: number
   name: string;
   productUnitPrice: number;
   productNote: string;
