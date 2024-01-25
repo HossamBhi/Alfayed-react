@@ -1,6 +1,10 @@
 export const DOMAIN = "https://alfayedfarm.somee.com";
 export const API_URL = DOMAIN + "/";
 
+export const AUTH = {
+  login: "Login"
+}
+
 export const SUPPLIERS = {
   getAll: "GetAllFarms",
   getById: "GetFarmById",
@@ -21,8 +25,8 @@ export const CLIENT = {
   add: "AddClient",
   update: "UpdateClient",
   getById: "GetClientById",
-  addTransaction: "AddTransaction",
-  // updateRecord: "UpdateFarmRecord",
+  addRecord: "AddTransaction",
+  updateRecord: "UpdateFarmRecord",
   getRecordWithData: "GetTransactionsWithClientData",
   getRecord: "GetTransactionRecordByID",
   pay: "CollectMoneyFromClient",

@@ -11,12 +11,15 @@ import FarmDetails from "./FarmDetails";
 import FridgeDetails from "./FridgeDetails";
 import Fridges from "./Fridges";
 import Home from "./Home";
+import Login from "./Login";
 import PagesLayout from "./PagesLayout";
 import Products from "./Products";
+import SendToClient from "./SendToClient";
 import Stock from "./Stock";
 import Suppliers from "./Suppliers";
 
 export {
+  Login,
   Accounts,
   AddToFridge,
   AddToStock,
@@ -32,6 +35,8 @@ export {
   Home,
   PagesLayout,
   Products,
+  SendToClient,
   Stock,
-  Suppliers,
+  Suppliers
 };
+

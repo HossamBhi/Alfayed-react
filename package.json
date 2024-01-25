@@ -26,6 +26,7 @@
     "react-redux": "^9.0.4",
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.4",
     "redux-persist": "^6.0.0",
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.1.1",

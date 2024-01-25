@@ -17,7 +17,8 @@ const PageHeader = ({
   // const profile = useSelector((state: RootState) => state.user);
 
   const title = SIDEMENU_LINKS.find((item) => item.url === pathname)?.title;
-  if (pathname.includes("/login")) {
+
+  if (pathname.includes("/login") || (!isShowMenu && !title )) {
     // if (pathname.includes("/login") || !title) {
     return <></>;
   }
