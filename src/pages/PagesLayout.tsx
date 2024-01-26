@@ -93,8 +93,8 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
         params: { recordType: getTrasactionsEnums.all },
       }).then((res) => {
         // console.log("ACCOUNTS.getAll: ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveTransactionsAction(res));
+        if (Array.isArray(res?.responseValue)) {
+          dispatch(saveTransactionsAction(res.responseValue));
         }
       });
     } else {

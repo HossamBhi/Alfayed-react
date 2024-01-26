@@ -13,6 +13,7 @@ import { RootState } from "../redux/store";
 import { CLIENT } from "../utils/endpoints";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
+import { trasactionsEnums } from "../utils/enums";
 
 const SendToClient = () => {
   const navigate = useNavigate();
@@ -173,6 +174,7 @@ const SendToClient = () => {
             ...values,
             total: calculateTotal,
             carCapacity: calculateNetQuantity,
+            typeId: trasactionsEnums.income,
           },
         }).then((res) => {
           console.log("CLIENT.addRecord: ", {
@@ -181,6 +183,7 @@ const SendToClient = () => {
               ...values,
               total: calculateTotal,
               carCapacity: calculateNetQuantity,
+              typeId: trasactionsEnums.income,
             },
           });
           if (res.id) {
@@ -307,8 +310,15 @@ const SendToClient = () => {
             <>
               <CustomButton
                 variant="contained"
-                color={id ? "secondary" : "primary"}
+                color={
+                  values.productList?.length < 1
+                    ? ("action" as any)
+                    : id
+                    ? "secondary"
+                    : "primary"
+                }
                 onClick={handleSubmit}
+                disabled={values.productList?.length < 1}
               >
                 {id ? t("common.edit") : t("common.save")}
               </CustomButton>
@@ -329,7 +339,7 @@ const SendToClient = () => {
       <CarProducts
         productList={values.productList}
         setProductList={(list: productListProps) => {
-          console.log({ list, productList: values.productList });
+          // console.log({ list, productList: values.productList });
           setValues((vals: any) => {
             return {
               ...vals,
