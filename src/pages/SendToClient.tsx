@@ -29,13 +29,12 @@ const SendToClient = () => {
     clientID: string | number;
     clientName: string;
     driverName: "";
-    deliveredToDriver: "";
+    deliveredToDriver: number;
     date: string;
-    price: "";
     typeId: 0;
     total: 0;
     carCapacity: 0;
-    payed: "";
+    payed: number;
     notes: "";
     payDate: string;
     productList: productListProps[];
@@ -43,13 +42,12 @@ const SendToClient = () => {
     clientID: searchParams.get("clientID") || 0,
     clientName: searchParams.get("clientName") || "",
     driverName: "",
-    deliveredToDriver: "",
+    deliveredToDriver: 0,
     date: formatDate(new Date()),
-    price: "",
     typeId: 0,
     total: 0,
     carCapacity: 0,
-    payed: "",
+    payed: 0,
     notes: "",
     payDate: formatDate(new Date()),
     productList: [
@@ -175,6 +173,8 @@ const SendToClient = () => {
             total: calculateTotal,
             carCapacity: calculateNetQuantity,
             typeId: trasactionsEnums.income,
+            payed: values.payed || 0,
+            deliveredToDriver: values.deliveredToDriver || 0,
           },
         }).then((res) => {
           console.log("CLIENT.addRecord: ", {

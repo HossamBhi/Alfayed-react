@@ -84,7 +84,7 @@ const Clients = () => {
                   icon={<FaEye size={16} />}
                   label="show"
                   sx={{ color: "primary.main" }}
-                  onClick={() => navigate("/client-detials?id=" + id)}
+                  onClick={() => navigate("/client-details?id=" + id)}
                 />
               </Tooltip>
             </>,

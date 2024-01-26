@@ -111,6 +111,7 @@ export const ar = {
       "carCapacity": "اجمالي الوزن",
       "deliveredToDriver": "واصل السائق",
       "payDate": "تاريخ الدفع",
+      "createdDate": "تاريخ الإنشاء",
       "price": "السعر",
       "paied": "مدفوع",
       "remaining": "متبقي",

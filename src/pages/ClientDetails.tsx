@@ -2,21 +2,22 @@ import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
   GridColDef,
+  GridRenderCellParams,
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaRegEdit } from "react-icons/fa";
-import { GiFarmer } from "react-icons/gi";
+import { FaEye, FaRegEdit, FaUserTie } from "react-icons/fa";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
-import { AddFarm } from "../components/popups";
+import AddClient from "../components/popups/AddClient";
 import { useApi } from "../hooks";
 import { CLIENT } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
-import { supplierDataProps, supplierProps } from "../utils/types";
+import { clientProps } from "../utils/types";
 
 const ClientDetails = () => {
   const navigate = useNavigate();
@@ -24,24 +25,24 @@ const ClientDetails = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const [showEdit, setShowEdit] = useState(false);
+  // const [id, setId] = useState<null | string>(null);
   const { get } = useApi();
-  const [supplier, setSupplier] = useState<null | supplierProps>(null);
-  const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
-    null
-  );
+  const [client, setClient] = useState<null | clientProps>(null);
+  const [clientData, setClientData] = useState<null | any[]>(null);
 
   useEffect(() => {
-    if (id !== null) {
+    if (id != null) {
       get({ url: CLIENT.getRecordWithData, params: { clientID: id } }).then(
-        (res) => {
+        (res: any) => {
           console.log("CLIENT.getRecordWithData", { res });
           // if (Array.isArray(res)) {
           if (!res.status) {
-            setSupplier(res);
-            setSupplierData(res.farmRecords);
+            setClient(res);
+            setClientData(res.transactionsList);
           } else {
-            setSupplierData([]);
-            alert("Error " + res.status + ": " + res.data);
+            setClientData([]);
+            toast.error("Error " + res.status + ": " + res.data);
+            // alert("Error " + res.status + ": " + res.data);
           }
         }
       );
@@ -49,12 +50,10 @@ const ClientDetails = () => {
   }, [id]);
 
   const columns: GridColDef[] =
-    !supplierData || supplierData?.length <= 0
+    !clientData || clientData?.length <= 0
       ? []
-      : createDataColumns(supplierData[0], (s: string) =>
-          t("supplierTable." + s)
-        );
-
+      : createDataColumns(clientData[0], (s: string) => t("client." + s));
+  console.log(client);
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
       return [];
@@ -64,14 +63,10 @@ const ClientDetails = () => {
       ...columns
         .filter(
           (col) =>
-            col.field !== "farmsID" &&
-            col.field !== "typeId" &&
-            col.field !== "productID"
-          // &&
-          // col.field !== "created_Date"
+            !["clientID", "clientName", "productList"].includes(col.field)
         )
         .map((col) =>
-          col.field === "supplyDate"
+          ["createdDate", "date", "payDate"].includes(col.field)
             ? {
                 ...col,
                 width: 150,
@@ -83,30 +78,18 @@ const ClientDetails = () => {
                 valueGetter: (params: GridValueGetterParams) =>
                   formatDate(params.value),
               }
-            : col.field === "created_Date"
-            ? {
-                ...col,
-                width: 150,
-                type: "date",
-                align: "center",
-                headerAlign: "center",
-                valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
-                valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
-              }
-            : col.field === "farmsNotes"
-            ? { ...col, width: 200 }
-            : col.field === "isPercentage"
+            : col.field === "typeId"
             ? {
                 ...col,
                 width: 120,
-                headerName: t("AddToStock.discountType"),
-                valueGetter: (params: any) => {
-                  if (params.value === true) {
-                    return t("AddToStock.discountPercentage");
-                  }
-                  return t("AddToStock.discountFlat");
+                headerName: t("supplierTable.description"),
+                renderCell: (props: GridRenderCellParams<any, Date>) => {
+                  const { row } = props;
+                  return (
+                    <p
+                      className={`py-1 px-4 rounded-md text-white ${"bg-blue-700"}`}
+                    >{`${t("payForm.payType1")}`}</p>
+                  );
                 },
               }
             : col
@@ -117,15 +100,27 @@ const ClientDetails = () => {
         width: 150,
         type: "actions",
         getActions: (params: any) => {
-          const { id } = params;
-
+          const { id, row } = params;
+          if (row.description === "Pay") return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>
               <GridActionsCellItem
                 icon={<FaRegEdit size={16} />}
                 label="Edit"
                 sx={{ color: "primary.main" }}
-                onClick={() => navigate("/add-to-stock?id=" + id)}
+                onClick={() =>
+                  navigate(
+                    `/send-to-client?clientID=${row.clientID}&clientName=${row.clientName}&id=${id}`
+                  )
+                }
+              />
+            </Tooltip>,
+            <Tooltip key={2} title={t("common.show")}>
+              <GridActionsCellItem
+                icon={<FaEye size={16} />}
+                label="show"
+                sx={{ color: "primary.main" }}
+                onClick={() => toast.info("قريبا")}
               />
             </Tooltip>,
           ];
@@ -134,7 +129,7 @@ const ClientDetails = () => {
     ];
   }, [columns]);
 
-  if (id === null || !supplier || !supplierData) {
+  if (id === null || !client || !clientData) {
     return (
       <main className="flex min-h-screen flex-col">
         {/* <LinearProgress
@@ -148,20 +143,20 @@ const ClientDetails = () => {
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="m-0">
-        {id !== null && (
+        {id != null && (
           <UserCard
-            item={supplier}
+            item={client}
             containerStyle={"bg-white hover:bg-white mt-0"}
             showEdit
-            Icon={GiFarmer}
+            Icon={FaUserTie}
             onEdit={() => setShowEdit(true)}
             onClick={() => setShowEdit(true)}
           />
         )}
-        <AddFarm
+        <AddClient
           hideShowBtn={true}
-          editData={supplier}
-          setEditData={(data) => setSupplier(data)}
+          editData={client}
+          setEditData={(data) => setClient(data)}
           show={showEdit}
           onClose={() => setShowEdit(false)}
         />
@@ -169,12 +164,13 @@ const ClientDetails = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={supplierData || []}
+          rows={clientData || []}
           columns={customeColumns as any}
-          getRowId={(item) => item.farmRecordID}
+          getRowId={(item) => item.id}
         />
       </div>
     </main>
   );
 };
+
 export default ClientDetails;
