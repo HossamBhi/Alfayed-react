@@ -83,14 +83,11 @@ const ClientDetails = () => {
                 ...col,
                 width: 120,
                 headerName: t("supplierTable.description"),
-                renderCell: (props: GridRenderCellParams<any, Date>) => {
-                  const { row } = props;
-                  return (
-                    <p
-                      className={`py-1 px-4 rounded-md text-white ${"bg-blue-700"}`}
-                    >{`${t("payForm.payType1")}`}</p>
-                  );
-                },
+                renderCell: (props: GridRenderCellParams<any, Date>) => (
+                  <p
+                    className={`py-1 px-4 rounded-md text-white ${"bg-green-700"}`}
+                  >{`${t("payForm.payType3")}`}</p>
+                ),
               }
             : col
         ),

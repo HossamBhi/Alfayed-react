@@ -81,7 +81,8 @@ export const ar = {
       "pay": "ادفع",
       "payTo": "ادفع ل",
       "payType1": "دفعه",
-      "payType2": "نقله"
+      "payType2": "نقله",
+      "payType3": "تحصيل"
     },
     "PayEmployee": {
       "addTitle": "الدفع للموظف",
