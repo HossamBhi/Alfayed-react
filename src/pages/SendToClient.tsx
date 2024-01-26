@@ -22,7 +22,6 @@ const SendToClient = () => {
   const [isLoad, setIsLoad] = useState(false);
   const clients = useSelector((state: RootState) => state.clients);
   const { t } = useTranslation();
-  const products = useSelector((state: RootState) => state.stock.products);
 
   const { post, put } = useApi();
   const [values, setValues] = useState<{
@@ -67,7 +66,7 @@ const SendToClient = () => {
       // },
     ],
   });
-  console.log({ pr: values.productList });
+  // console.log({ pr: values.productList });
   const [errors, setErrors] = useState({ clientID: false, productID: false });
   const dispatch = useDispatch();
   const { get } = useApi();
@@ -106,14 +105,13 @@ const SendToClient = () => {
   };
 
   const calculateNetQuantity: string = useMemo(() => {
-    const { carCapacity, productList } = values;
+    const { productList } = values;
 
-    return (
-      Number(carCapacity) +
-      productList.reduce((prev, curr) => {
+    return productList
+      .reduce((prev, curr) => {
         return prev + Number(curr.quantity);
       }, 0)
-    ).toFixed(2);
+      .toFixed(2);
   }, [values.productList]);
 
   const calculateTotal = useMemo(() => {
@@ -135,12 +133,6 @@ const SendToClient = () => {
     } else {
       setErrors((v) => ({ ...v, clientID: false }));
     }
-    // if (!values.productID) {
-    //   setErrors((v) => ({ ...v, productID: true }));
-    //   isTrue = false;
-    // } else {
-    //   setErrors((v) => ({ ...v, productID: false }));
-    // }
 
     return isTrue;
   };
@@ -180,14 +172,19 @@ const SendToClient = () => {
           data: {
             ...values,
             total: calculateTotal,
-            netQuantity: calculateNetQuantity,
+            carCapacity: calculateNetQuantity,
           },
         }).then((res) => {
-          console.log("CLIENT.addRecord: ", { res });
-          if (res.farmRecordID) {
-            navigate(
-              pathname + "?" + createQueryString("id", res.farmRecordID)
-            );
+          console.log("CLIENT.addRecord: ", {
+            res,
+            requestData: {
+              ...values,
+              total: calculateTotal,
+              carCapacity: calculateNetQuantity,
+            },
+          });
+          if (res.id) {
+            navigate(pathname + "?" + createQueryString("id", res.id));
           }
           setIsLoad(false);
         });

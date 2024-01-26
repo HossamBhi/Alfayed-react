@@ -69,7 +69,8 @@ const Clients = () => {
         getActions: (params: any) => {
           const { id, row } = params;
           return [
-            <div className="w-full flex flex-col">
+            // <div className="w-full flex flex-col">
+            <>
               <Tooltip key={1} title={t("common.edit")}>
                 <GridActionsCellItem
                   icon={<FaRegEdit size={16} />}
@@ -86,8 +87,10 @@ const Clients = () => {
                   onClick={() => navigate("/client-detials?id=" + id)}
                 />
               </Tooltip>
-            </div>,
-            <div className="w-full flex flex-col">
+            </>,
+            // </div>
+            // <div className="w-full flex flex-col">
+            <>
               <Tooltip key={"Pay"} title={t("payForm.pay")}>
                 <GridActionsCellItem
                   icon={<MdOutlineAttachMoney size={16} />}
@@ -111,7 +114,8 @@ const Clients = () => {
                   }
                 />
               </Tooltip>
-            </div>,
+            </>,
+            // </div>
           ];
         },
       },

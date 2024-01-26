@@ -20,6 +20,9 @@ import {
   Stock,
   Suppliers,
 } from "../pages";
+import usePathname from "../hooks/usePathname";
+import { useEffect } from "react";
+import { t } from "i18next";
 
 export const ROUTES = [
   { title: "homepage", path: "/", Page: Home },
@@ -47,16 +50,24 @@ export const ROUTES = [
     path: "/expenses-details",
     Page: ExpensesDetails,
   },
-  { title: "", path: "/login", Page: Login },
+  { title: "login", path: "/login", Page: Login },
 ];
-const MainRoutes = () => (
-  <PagesLayout>
-    <Routes>
-      {ROUTES.map(({ path, Page }) => (
-        <Route key={path} path={path} element={<Page />} />
-      ))}
-    </Routes>
-  </PagesLayout>
-);
+const MainRoutes = () => {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const title = ROUTES.find((item) => item.path.includes(pathname))?.title;
+    document.title = title ? t("routes." + title) : "Alfayed";
+  }, [pathname]);
+  return (
+    <PagesLayout>
+      <Routes>
+        {ROUTES.map(({ path, Page }) => (
+          <Route key={path} path={path} element={<Page />} />
+        ))}
+      </Routes>
+    </PagesLayout>
+  );
+};
 
 export default MainRoutes;

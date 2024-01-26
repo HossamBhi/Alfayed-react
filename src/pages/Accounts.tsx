@@ -1,23 +1,49 @@
-import { CustomButton, CustomTable } from "../components/common";
-import { useApi } from "../hooks";
-import { STORE } from "../utils/endpoints";
-import { createDataColumns } from "../utils/helper";
-import { supplierProps } from "../utils/types";
-import { Tooltip } from "@mui/material";
-import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
+import {
+  GridColDef,
+  GridValueFormatterParams,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { FaEye } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {
+  CustomButton,
+  CustomTable,
+  DatePickerRange,
+} from "../components/common";
 import { RootState } from "../redux/store";
+import { getTrasactionsEnums } from "../utils/enums";
+import { createDataColumns, formatDate } from "../utils/helper";
+
+const filter = [
+  { id: getTrasactionsEnums.all, label: "الكل" },
+  { id: getTrasactionsEnums.supplier, label: "الموردين" },
+  { id: getTrasactionsEnums.expense, label: "المصروفات" },
+  { id: getTrasactionsEnums.client, label: "العملاء" },
+  { id: getTrasactionsEnums.fridge, label: "المحطات" },
+  { id: getTrasactionsEnums.employee, label: "الموظفين" },
+];
 
 const Accounts = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const total = useSelector((state: RootState) => state.accounts.total);
   const transactions = useSelector(
     (state: RootState) => state.accounts.transactions
+  );
+  const [visibleColumns, setVisibleColumns] = useState({
+    action: false,
+    clientName: false,
+    clientID: false,
+    empID: false,
+    expenseID: false,
+    farmID: false,
+    fridgeID: false,
+    id: false,
+    // type: false,
+    typeID: false,
+  });
+  const [detailsType, setDetailsType] = useState<getTrasactionsEnums>(
+    getTrasactionsEnums.all
   );
   // console.log(transactions);
   // const { get } = useApi();
@@ -48,64 +74,95 @@ const Accounts = () => {
     return [
       ...columns
         .filter((col) => !["safeID"].includes(col.field))
-        // col.field !== "productID" && col.field !== "notes")
         .map((col) =>
-          col.field === "productName"
+          col.field === "date"
+            ? {
+                ...col,
+                width: 150,
+                type: "date",
+                align: "center",
+                headerAlign: "center",
+                valueFormatter: (params: GridValueFormatterParams) =>
+                  formatDate(params.value),
+                valueGetter: (params: GridValueGetterParams) =>
+                  formatDate(params.value),
+              }
+            : ["notes"].includes(col.field)
             ? { ...col, width: 200 }
-            : col.field === "quantity"
-            ? { ...col, width: 200 }
-            : col
+            : { ...col, width: 120 }
         ),
-      {
-        field: "action",
-        headerName: t("table.actions"),
-        width: 150,
-        type: "actions",
-        getActions: (params: any) => {
-          const { id } = params;
+      // {
+      //   field: "action",
+      //   headerName: t("table.actions"),
+      //   width: 150,
+      //   type: "actions",
+      //   getActions: (params: any) => {
+      //     const { id } = params;
 
-          return [
-            <Tooltip key={id} title={t("common.show")}>
-              <GridActionsCellItem
-                icon={<FaEye size={16} />}
-                label={t("common.show")}
-                sx={{ color: "primary.main" }}
-                onClick={() => navigate("/products")}
-              />
-            </Tooltip>,
-          ];
-        },
-      },
+      //     return [
+      //       <Tooltip key={id} title={t("common.show")}>
+      //         <GridActionsCellItem
+      //           icon={<FaEye size={16} />}
+      //           label={t("common.show")}
+      //           sx={{ color: "primary.main" }}
+      //           onClick={() => navigate("/products")}
+      //         />
+      //       </Tooltip>,
+      //     ];
+      //   },
+      // },
     ];
   }, [columns]);
-  
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-2">
-      <div className="bg-background-card p-4 rounded-md border"></div>
-      {/* <div className="mb-4">
-        <CustomButton
-          variant="contained"
-          onClick={() => navigate("/add-to-stock")}
-        >
-          <BsFillPlusCircleFill className="me-4" /> {t("menu.addToStock")}
-        </CustomButton>
-      </div> */}
+      <div className="bg-background-card flex items-center justify-between rounded-lg px-2 py-2 md:px-4 md:py-4">
+        <div className="flex w-full justify-between items-center">
+          <p className="text-md text-gray-600 md:text-xl">
+            {t("dashboard.total")}
+          </p>
+          <p className={`text-lg font-bold md:text-2xl text-green-600 pb-2`}>
+            {String(total)}
+          </p>
+        </div>
+      </div>
+      <div className="bg-background-card p-4 rounded-md border my-2">
+        <h2 className="mb-2">تصنيف حسب</h2>
+        <div className="gap-2 flex flex-wrap">
+          {filter.map((item) => (
+            <CustomButton
+              onClick={() => setDetailsType(item.id)}
+              key={item.id}
+              variant={detailsType === item.id ? "contained" : "outlined"}
+            >
+              {item.label}
+            </CustomButton>
+          ))}
+          <DatePickerRange />
+        </div>
+      </div>
 
       <div className="grid grid-cols-1">
         <CustomTable
-          columnVisibilityModel={{
-            action: false,
-            clientName: false,
-            clientID: false,
-            empID: false,
-            expenseID: false,
-            farmID: false,
-            fridgeID: false,
-            id: false,
-            type: false,
-            typeID: false,
-          }}
-          rows={transactions || []}
+          onColumnVisibilityModelChange={(val) => setVisibleColumns(val as any)}
+          columnVisibilityModel={visibleColumns}
+          rows={
+            transactions.filter((item) => {
+              switch (detailsType) {
+                case getTrasactionsEnums.client:
+                  return item.clientID;
+                case getTrasactionsEnums.expense:
+                  return item.expenseID;
+                case getTrasactionsEnums.fridge:
+                  return item.fridgeID;
+                case getTrasactionsEnums.employee:
+                  return item.empID;
+                case getTrasactionsEnums.supplier:
+                  return item.farmID;
+                default:
+                  return item;
+              }
+            }) || []
+          }
           columns={customeColumns as any}
           getRowId={(item) => item.id}
         />

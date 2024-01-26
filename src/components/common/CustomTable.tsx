@@ -4,6 +4,7 @@ const CustomTable = ({ rows, ...props }: DataGridProps) => (
   <div className="relative m-0 w-full overflow-y-auto bg-white ">
     <div style={{ width: "100%" }} className="h-[80vh]">
       <DataGrid
+        density="compact"
         showCellVerticalBorder
         showColumnVerticalBorder
         rows={rows}

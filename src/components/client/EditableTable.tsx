@@ -35,8 +35,6 @@ export type productListProps = {
   isNew: boolean;
 };
 
-const roles = ["Market", "Finance", "Development"];
-
 interface EditToolbarProps {
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel

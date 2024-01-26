@@ -71,7 +71,7 @@ const SideMenu = ({
             {SIDEMENU_LINKS.map(
               ({ title, url, ActiveIcon, InActiveIcon }, i) => (
                 <li key={url + " " + i}>
-                  <Tooltip title={t(`menu.${title}`)}>
+                  <Tooltip title={t(`menu.${title}`)} placement="left">
                     <NavLink
                       to={url}
                       onClick={() => setIsShowMenu(false)}

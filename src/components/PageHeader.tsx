@@ -18,14 +18,14 @@ const PageHeader = ({
 
   const title = SIDEMENU_LINKS.find((item) => item.url === pathname)?.title;
 
-  if (pathname.includes("/login") || (!isShowMenu && !title )) {
+  if (pathname.includes("/login") || (!isShowMenu && !title)) {
     // if (pathname.includes("/login") || !title) {
     return <></>;
   }
 
   return (
     <header
-      className={`flex min-h-[48px] flex-1 items-center bg-white px-4 py-2 md:bg-transparent md:px-4 ${
+      className={`md:hidden flex min-h-[48px] flex-1 items-center bg-white px-4 py-2 md:bg-transparent md:px-4 ${
         title
           ? "justify-between"
           : isShowMenu
@@ -35,7 +35,7 @@ const PageHeader = ({
     >
       {isShowMenu ? (
         <IoClose
-          className={"inline cursor-pointer  md:hidden"}
+          className={"inline cursor-pointer md:hidden"}
           size={24}
           onClick={() => {
             setIsShowMenu(!isShowMenu);
