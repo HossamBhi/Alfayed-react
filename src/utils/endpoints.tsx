@@ -26,7 +26,7 @@ export const CLIENT = {
   update: "UpdateClient",
   getById: "GetClientById",
   addRecord: "AddTransaction",
-  updateRecord: "UpdateFarmRecord",
+  updateRecord: "UpdateClientRecord",
   getRecordWithData: "GetTransactionsWithClientData",
   getRecord: "GetTransactionRecordByID",
   pay: "CollectMoneyFromClient",

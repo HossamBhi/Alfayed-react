@@ -79,6 +79,8 @@ export const ar = {
       "totalPay": "اجمال الدفع",
       "notes": "ملحوظة",
       "pay": "ادفع",
+      "income": "استلم",
+      "incomeFrom": "استلم من",
       "payTo": "ادفع ل",
       "payType1": "دفعه",
       "payType2": "نقله",

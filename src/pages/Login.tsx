@@ -1,21 +1,17 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import {
-  MdAlternateEmail,
-  MdOutlineAlternateEmail,
-  MdOutlineLock,
-} from "react-icons/md";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { MdOutlineAlternateEmail, MdOutlineLock } from "react-icons/md";
 // import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { CustomButton, CustomInput } from "../components/common";
 import { InputAdornment } from "@mui/material";
-import { useApi } from "../hooks";
-import { AUTH } from "../utils/endpoints";
-import { ToastContainer, toast } from "react-toastify";
-import { setUserAction } from "../redux/user";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { CustomButton, CustomInput } from "../components/common";
+import { useApi } from "../hooks";
+import { setUserAction } from "../redux/user";
+import { AUTH } from "../utils/endpoints";
 // import { setUserAction } from "@/redux/auth";
 
 const Login = () => {
@@ -24,10 +20,8 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const { post } = useApi();
   const navigate = useNavigate();
-  // const router = useRouter();
   const dispatch = useDispatch();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // dispatch(setUserAction({ email, password, token: "", name: email }));
     e.preventDefault();
 
     post({ url: AUTH.login, data: { email, password } }).then((res) => {
@@ -41,7 +35,6 @@ const Login = () => {
         dispatch(setUserAction(res));
         navigate("/");
       }
-      console.log("Login: ", res);
     });
 
     // router.push("/");
@@ -61,7 +54,7 @@ const Login = () => {
             type="text"
             name="email"
             value={email}
-            label="Email"
+            label="البريد الإلكتروني"
             placeholder="Email"
             onChange={(e: any) => setEmail(e.target.value)}
             id="email"
@@ -95,7 +88,7 @@ const Login = () => {
             type={!showPass ? "password" : "text"}
             name="password"
             value={password}
-            label="Password"
+            label="كلمة المرور"
             placeholder="Password"
             onChange={(e: any) => setPassword(e.target.value)}
             id="password"

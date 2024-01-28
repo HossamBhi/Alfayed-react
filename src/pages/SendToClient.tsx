@@ -76,7 +76,7 @@ const SendToClient = () => {
         console.log("CLIENT.getRecord: ", { res });
 
         if (res?.clientID) {
-          setValues({ ...values, ...res });
+          setValues({ ...values, ...res, payDate: formatDate(res.payDate), date: formatDate(res.date) });
         }
       });
     }
@@ -150,18 +150,19 @@ const SendToClient = () => {
       if (id) {
         put({
           url: CLIENT.updateRecord,
-          params: { recordId: id },
+          params: { id },
           data: {
             ...values,
             total: calculateTotal,
-            netQuantity: calculateNetQuantity,
+            carCapacity: calculateNetQuantity,
+            typeId: trasactionsEnums.income,
+            payed: values.payed || 0,
+            deliveredToDriver: values.deliveredToDriver || 0,
           },
         }).then((res) => {
-          console.log("SUPPLIERS.addRecord: ", { res });
-          if (res.farmRecordID) {
-            navigate(
-              pathname + "?" + createQueryString("id", res.farmRecordID)
-            );
+          console.log("CLIENT.updateRecord: ", { res });
+          if (res.id) {
+            navigate(pathname + "?" + createQueryString("id", res.id));
           }
           setIsLoad(false);
         });

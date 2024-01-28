@@ -91,10 +91,10 @@ const Clients = () => {
             // </div>
             // <div className="w-full flex flex-col">
             <>
-              <Tooltip key={"Pay"} title={t("payForm.pay")}>
+              <Tooltip key={"income"} title={t("payForm.income")}>
                 <GridActionsCellItem
                   icon={<MdOutlineAttachMoney size={16} />}
-                  label="pay"
+                  label="income"
                   sx={{ color: "primary.main" }}
                   onClick={() => {
                     setEditData(row);

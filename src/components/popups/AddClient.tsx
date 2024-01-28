@@ -34,7 +34,7 @@ const AddClient = ({
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [name, setName] = useState(editData?.name ? editData?.name : "");
   const handleOnCloseAddProduct = () =>
-    onClose ? onClose : setShowAddProduct(false);
+    onClose ? onClose() : setShowAddProduct(false);
   const dispatch = useDispatch();
 
   useEffect(() => {

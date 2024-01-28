@@ -1,11 +1,3 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { UserCard } from "../components/cards";
-import { CustomTable } from "../components/common";
-import { AddFarm } from "../components/popups";
-import { useApi } from "../hooks";
-import { EMPLOYEES } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
-import { supplierDataProps, supplierProps } from "../utils/types";
 import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
@@ -17,6 +9,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { GiFarmer } from "react-icons/gi";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { UserCard } from "../components/cards";
+import { CustomTable } from "../components/common";
+import { AddEmployee } from "../components/popups";
+import { useApi } from "../hooks";
+import { EMPLOYEES } from "../utils/endpoints";
+import { createDataColumns, formatDate } from "../utils/helper";
+import { employeeProps, supplierDataProps } from "../utils/types";
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const EmployeeDetails = () => {
   const id = searchParams.get("id");
   const [showEdit, setShowEdit] = useState(false);
   const { get } = useApi();
-  const [data, setData] = useState<null | supplierProps>(null);
+  const [data, setData] = useState<null | employeeProps>(null);
   const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
     null
   );
@@ -156,7 +156,7 @@ const EmployeeDetails = () => {
             onClick={() => setShowEdit(true)}
           />
         )}
-        <AddFarm
+        <AddEmployee
           hideShowBtn={true}
           editData={data}
           setEditData={(data) => setData(data)}

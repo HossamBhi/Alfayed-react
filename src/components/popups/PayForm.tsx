@@ -108,7 +108,7 @@ const PayForm = ({
       handleOnCloseAddProduct();
     }
   };
-  
+
   return (
     <div>
       {!hideShowBtn && (
@@ -127,7 +127,10 @@ const PayForm = ({
         onClose={handleOnCloseAddProduct}
       >
         <DialogTitle>
-          {t("payForm.payTo")} {editData?.name}{" "}
+          {type === profileEnums.clients
+            ? t("payForm.incomeFrom")
+            : t("payForm.payTo")}{" "}
+          {editData?.name}{" "}
         </DialogTitle>
         <DialogContent sx={{ width: "100%" }}>
           <CustomInput
