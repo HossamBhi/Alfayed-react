@@ -10,7 +10,7 @@ import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
 import { FRIDGE_TRANSACTION_TYPES } from "../utils/appDB";
 import { FRIDGES } from "../utils/endpoints";
-import { fridgeTransactionEnums } from "../utils/enums";
+import { fridgeTransactionEnums, trasactionsEnums } from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
 
@@ -130,9 +130,10 @@ const AddToFridge = () => {
           params: { recordId: id },
           data: {
             ...values,
+            typeId: trasactionsEnums.pay,
           },
         }).then((res) => {
-          console.log("FRIDGES.addRecord: ", { res });
+          console.log("FRIDGES.updateRecord: ", { res });
           if (res.farmRecordID) {
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
@@ -145,6 +146,7 @@ const AddToFridge = () => {
           url: FRIDGES.addRecord,
           data: {
             ...values,
+            typeId: trasactionsEnums.pay,
           },
         }).then((res) => {
           console.log("FRIDGES.addRecord: ", { res });

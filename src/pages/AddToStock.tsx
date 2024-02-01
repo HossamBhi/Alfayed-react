@@ -14,6 +14,7 @@ import { DISCOUNT_TYPES } from "../utils/appDB";
 import { SUPPLIERS } from "../utils/endpoints";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
+import { trasactionsEnums } from "../utils/enums";
 
 const AddToStock = () => {
   const navigate = useNavigate();
@@ -33,18 +34,16 @@ const AddToStock = () => {
     carNumber: "",
     // date: ,
     productName: "",
-    productID: "",
-    number: "",
-    quantity: "",
+    productID: 0,
+    number: 0,
+    quantity: 0,
     discount: 0,
     netQuantity: 0,
     price: 0,
     paied: 0,
-    remaining: 0,
     farmsNotes: "",
     total: 0,
     supplyDate: formatDate(new Date()),
-    created_Date: null,
     isPercentage: true,
   });
   // console.log(new Date("2023-12-04T00:00:00"));
@@ -71,10 +70,7 @@ const AddToStock = () => {
   const { get } = useApi();
 
   useEffect(() => {
-    // const searchQuiry = new URLSearchParams(window.location.search);
-    // const ID = searchQuiry.get("id");
     if (id != null) {
-      // setId(ID);
       get({ url: SUPPLIERS.getRecord, params: { recordId: id } }).then(
         (res) => {
           console.log("SUPPLIERS.getRecord: ", { res });
@@ -142,7 +138,7 @@ const AddToStock = () => {
   const calculateTotal = useMemo(() => {
     const { price } = values;
 
-    return (price * (calculateNetQuantity || 1)).toFixed(2);
+    return Number((price * (calculateNetQuantity || 1)).toFixed(2));
   }, [calculateNetQuantity, values.price]);
   const isValid = () => {
     let isTrue = true;
@@ -179,6 +175,7 @@ const AddToStock = () => {
           params: { recordId: id },
           data: {
             ...values,
+            typeId: trasactionsEnums.pay,
             total: calculateTotal,
             netQuantity: calculateNetQuantity,
           },
@@ -196,6 +193,7 @@ const AddToStock = () => {
           url: SUPPLIERS.addRecord,
           data: {
             ...values,
+            typeId: trasactionsEnums.pay,
             total: calculateTotal,
             netQuantity: calculateNetQuantity,
           },

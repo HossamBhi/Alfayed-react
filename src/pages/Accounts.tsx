@@ -3,7 +3,7 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import {
@@ -32,19 +32,81 @@ const Accounts = () => {
   );
   const [visibleColumns, setVisibleColumns] = useState({
     action: false,
-    clientName: false,
     clientID: false,
     empID: false,
     expenseID: false,
     farmID: false,
     fridgeID: false,
     id: false,
-    // type: false,
     typeID: false,
+    farmName: true,
+    fridgeName: true,
+    expenseName: true,
+    empName: true,
+    clientName: true,
   });
   const [detailsType, setDetailsType] = useState<getTrasactionsEnums>(
     getTrasactionsEnums.all
   );
+
+  useEffect(() => {
+    switch (detailsType) {
+      case getTrasactionsEnums.client:
+        return setVisibleColumns({
+          ...visibleColumns,
+          farmName: false,
+          fridgeName: false,
+          expenseName: false,
+          empName: false,
+          clientName: true,
+        });
+      case getTrasactionsEnums.expense:
+        return setVisibleColumns({
+          ...visibleColumns,
+          farmName: false,
+          fridgeName: false,
+          expenseName: true,
+          empName: false,
+          clientName: false,
+        });
+      case getTrasactionsEnums.fridge:
+        return setVisibleColumns({
+          ...visibleColumns,
+          farmName: false,
+          fridgeName: true,
+          expenseName: false,
+          empName: false,
+          clientName: false,
+        });
+      case getTrasactionsEnums.employee:
+        return setVisibleColumns({
+          ...visibleColumns,
+          farmName: false,
+          fridgeName: false,
+          expenseName: false,
+          empName: true,
+          clientName: false,
+        });
+      case getTrasactionsEnums.supplier:
+        return setVisibleColumns({
+          ...visibleColumns,
+          farmName: true,
+          fridgeName: false,
+          expenseName: false,
+          empName: false,
+          clientName: false,
+        });
+      default:
+        setVisibleColumns({
+          ...visibleColumns,
+          farmName: true,
+          fridgeName: true,
+          expenseName: true,
+          empName: true,
+          clientName: true,
+        });
+    }
+  }, [detailsType]);
   // console.log(transactions);
   // const { get } = useApi();
   // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
@@ -113,6 +175,8 @@ const Accounts = () => {
       // },
     ];
   }, [columns]);
+  console.log({ visibleColumns });
+
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-2">
       <div className="bg-background-card flex items-center justify-between rounded-lg px-2 py-2 md:px-4 md:py-4">

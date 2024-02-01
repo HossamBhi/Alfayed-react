@@ -13,6 +13,7 @@ import { BsFillPlusCircleFill } from "react-icons/bs";
 import { PopupButton } from ".";
 import { CustomButton, CustomDialog } from "../common";
 import { ExpenseForm } from "../stock";
+import { trasactionsEnums } from "../../utils/enums";
 
 type AddExpenseToStockProps = {
   onClose?: () => void;
@@ -118,17 +119,12 @@ const AddExpenseToStock = ({
       put({
         url: EXPENSES.updateRecord,
         data: { ...values },
-        params: { id: editData.expenseRecordID },
+        params: { id: editData.expenseRecordID, typeId: trasactionsEnums.pay },
       })
         .then((res) => {
           console.log("EXPENSES.updateRecord: ", res);
           if (res?.expenseRecordID) {
             setEditData && setEditData(res);
-            // const findIndex = expensesData.findIndex(
-            //   (item: expenseProps & { expenseRecordID: number }) =>
-            //     item?.expenseRecordID === res?.expenseRecordID
-            // );
-            // let newData =
             setExpensesData(
               expensesData.map((item: any) =>
                 item?.expenseRecordID === res?.expenseRecordID ? res : item
@@ -140,7 +136,7 @@ const AddExpenseToStock = ({
     } else {
       post({
         url: EXPENSES.addRecord,
-        data: { ...values, farmRecordID: farmId },
+        data: { ...values, farmRecordID: farmId, typeId: trasactionsEnums.pay },
       })
         .then((res) => {
           console.log("EXPENSES.addRecord: ", res);

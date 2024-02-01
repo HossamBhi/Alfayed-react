@@ -37,10 +37,10 @@ export default () => {
 
   const getDataAndParams = ({ data, params }: any) => ({
     data: JSON.stringify(data),
-    params: { lang: APP_LANG(), ...params },
+    params: { lang: APP_LANG(), ...params, pageSize: 500 },
   });
   const getDataAndParamsGet = ({ params }: any) => ({
-    params: { lang: APP_LANG(), ...params },
+    params: { lang: APP_LANG(), ...params, pageSize: 500 },
   });
 
   const validateUser = () => {
@@ -57,10 +57,10 @@ export default () => {
     removeHost,
     load = true,
   }: requestProps) => {
-    // console.log({data: data, url, userId: logedUser?.user.id});
-    // console.log("Call Post Request " + API_URL + url);
+    // console.group("Call Post Request " + API_URL + url);
     // console.log("Post data ", data);
     // console.log("Post params ", params);
+    // console.groupEnd();
     if (load) dispatch(showLoader());
     return await axios({
       url: removeHost ? url : `${API_URL}${url}`,
@@ -86,9 +86,17 @@ export default () => {
     load = true,
   }: requestProps) => {
     // console.log({data: data, url, userId: logedUser?.user.id});
-    // console.log('Call Post Request ' + API_URL + url);
-    // console.log('Post data ', data);
-    // console.log('Post params ', params);
+    // console.group("Call Post Request " + API_URL + url);
+    // console.log("Post data ", data);
+    // console.log("Post params ", params);
+    // console.log("Post headers ", {
+    //   Authorization: `Bearer ${token}`,
+    //   lang: APP_LANG(),
+    //   "Content-type": "Application/json",
+    //   ...headers,
+    // });
+    // console.groupEnd();
+
     if (validateUser()) return;
     if (load) dispatch(showLoader());
 
@@ -117,10 +125,11 @@ export default () => {
       removeHost,
       load = true,
     }: requestProps) => {
-      // console.log({data: data, url, userId: logedUser?.user.id});
-      // console.log('Call Post Request ' + API_URL + url);
-      // console.log('Post data ', data);
-      // console.log('Post params ', params);
+      // console.group("Call Put Request " + API_URL + url);
+      // console.log("Call Put Request " + API_URL + url);
+      // console.log("Put data ", data);
+      // console.log("Put params ", params);
+      // console.groupEnd();
       if (validateUser()) return;
       if (load) dispatch(showLoader());
 
