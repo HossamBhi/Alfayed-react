@@ -175,7 +175,6 @@ const Accounts = () => {
       // },
     ];
   }, [columns]);
-  console.log({ visibleColumns });
 
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-2">
