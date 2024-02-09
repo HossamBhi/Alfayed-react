@@ -5,11 +5,21 @@ export type StatisticCardProps = {
   Icon: IconType;
   label: string;
   color: string;
+  onClick: () => void;
 };
 
-const StatisticCard = ({ price, Icon, label, color }: StatisticCardProps) => {
+const StatisticCard = ({
+  price,
+  Icon,
+  label,
+  color,
+  onClick,
+}: StatisticCardProps) => {
   return (
-    <div className="bg-background-card flex items-center justify-between rounded-lg px-2 py-2 md:px-4 md:py-4">
+    <div
+      onClick={onClick}
+      className="bg-background-card cursor-pointer flex items-center justify-between rounded-lg px-2 py-2 md:px-4 md:py-4"
+    >
       <div className="flex w-full flex-col">
         <p className={`text-lg font-bold md:text-2xl text-${color}-600 pb-2`}>
           {price}

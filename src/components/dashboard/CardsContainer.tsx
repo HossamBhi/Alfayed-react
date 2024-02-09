@@ -40,7 +40,7 @@ const CardsContainer = ({
     [searchValue, items]
   );
   return (
-    <div className="relative col-span-1 m-auto w-full rounded-lg border bg-white p-4">
+    <div className="relative col-span-1 m-auto w-full rounded-lg border bg-white p-4 h-full">
       <h2 className="flex items-center justify-between pb-4">
         <div
           className="flex cursor-pointer items-center border-b-2 border-b-green-600 pb-2"
