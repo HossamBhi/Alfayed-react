@@ -52,7 +52,7 @@ const FarmDetails = () => {
       );
     }
   }, [id]);
-  console.log({ supplierData });
+
   const columns: GridColDef[] =
     !supplierData || supplierData?.length <= 0
       ? []
@@ -136,7 +136,7 @@ const FarmDetails = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id, row } = params;
-          console.log({ id });
+          
           if (row.description === "Pay") return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>

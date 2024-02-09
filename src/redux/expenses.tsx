@@ -18,7 +18,7 @@ const expenses = createSlice({
       if (state === null) {
         return state;
       }
-      console.log({ state: state.expensesTypes, payload });
+  
       if (Array.isArray(state?.expenses)) {
         state?.expenses?.unshift(payload);
       }
@@ -39,7 +39,7 @@ const expenses = createSlice({
       if (state === null) {
         return state;
       }
-      console.log({ state: state.expensesTypes, payload });
+     
       if (Array.isArray(state?.expensesTypes)) {
         state?.expensesTypes?.unshift(payload);
       }

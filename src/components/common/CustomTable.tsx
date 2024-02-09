@@ -10,7 +10,9 @@ const CustomTable = ({ rows, ...props }: DataGridProps) => (
         rows={rows}
         {...{ rowLength: 5 }}
         slots={{ toolbar: GridToolbar }}
-        slotProps={{ toolbar: { showQuickFilter: true } }}
+        slotProps={{
+          toolbar: { showQuickFilter: true, csvOptions: { utf8WithBom: true } },
+        }}
         initialState={{
           filter: {
             filterModel: {

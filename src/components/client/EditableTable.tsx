@@ -134,11 +134,6 @@ export default function EditableTable({
       productBoxID: products.find((item) => item.name == newRow.productBoxName)
         ?.id,
     };
-    console.log({
-      updatedRow,
-      newRow,
-      testID: products.find((item) => item.name == newRow.productBoxName),
-    });
     setProductList(
       productList.map((row) => (row.id === newRow.id ? updatedRow : row))
     );

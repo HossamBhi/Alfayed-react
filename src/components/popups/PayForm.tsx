@@ -143,7 +143,6 @@ const PayForm = ({
             value={total}
             onChange={({ target }) => {
               const value = target.value;
-              console.log({ len: value?.trim()?.length });
               setTotal(target.value);
               setErrors({ ...errors, total: value?.trim()?.length <= 0 });
             }}

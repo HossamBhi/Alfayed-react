@@ -115,7 +115,6 @@ const AddExpenseToStock = ({
 
   const callAPI = () => {
     if (editData) {
-      console.log({ editData });
       put({
         url: EXPENSES.updateRecord,
         data: { ...values },

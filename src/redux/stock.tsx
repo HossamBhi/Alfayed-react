@@ -33,7 +33,7 @@ const stock = createSlice({
       const findIndex = state.products.findIndex(
         (item: productProps) => item.productID === payload.productID
       );
-      console.log({ findIndex, products: state.products[0], id: payload });
+      
       state.products[findIndex] = payload;
     },
     saveProductsDetailsAction: (state, { payload }) => {

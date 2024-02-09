@@ -53,7 +53,7 @@ const ClientDetails = () => {
     !clientData || clientData?.length <= 0
       ? []
       : createDataColumns(clientData[0], (s: string) => t("client." + s));
-  console.log(client);
+ 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
       return [];
