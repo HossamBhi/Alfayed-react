@@ -108,7 +108,13 @@ export const createDataColumns = (
 
 export const formatDate = (date: Date) => {
   // "2023-11-16"
+  if (!date) {
+    return "";
+  }
   const d = new Date(date);
-  return `${d.toISOString().substring(0, 10)}`;
-  // return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  return `${d.getFullYear()}-${
+    month.toString().length === 1 ? 0 + "" + month : month
+  }-${day.toString().length === 1 ? 0 + "" + day : day}`;
 };

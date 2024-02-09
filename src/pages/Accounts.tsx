@@ -5,13 +5,16 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CustomButton,
   CustomTable,
   DatePickerRange,
 } from "../components/common";
+import { useApi } from "../hooks";
+import { saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
+import { ACCOUNTS } from "../utils/endpoints";
 import { getTrasactionsEnums } from "../utils/enums";
 import { createDataColumns, formatDate } from "../utils/helper";
 
@@ -26,6 +29,10 @@ const filter = [
 
 const Accounts = () => {
   const { t } = useTranslation();
+  const { post } = useApi();
+  const dispatch = useDispatch();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const total = useSelector((state: RootState) => state.accounts.total);
   const transactions = useSelector(
     (state: RootState) => state.accounts.transactions
@@ -107,21 +114,22 @@ const Accounts = () => {
         });
     }
   }, [detailsType]);
-  // console.log(transactions);
-  // const { get } = useApi();
-  // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
-  // useEffect(() => {
-  //   get({ url: STORE.getAll }).then((res) => {
-  //     console.log("STORE.getAll", { res });
-  //     // if (Array.isArray(res)) {
-  //     if (!res.status || Array.isArray(res)) {
-  //       setTableData(res);
-  //     } else {
-  //       setTableData([]);
-  //       alert("Error " + res.status + ": " + res.data);
-  //     }
-  //   });
-  // }, []);
+
+  useEffect(() => {
+    post({
+      url: ACCOUNTS.getAll,
+      params: {
+        recordType: detailsType,
+        from: formatDate(startDate),
+        to: formatDate(endDate),
+      },
+    }).then((res) => {
+      // console.log("ACCOUNTS.getAll: ", { res });
+      if (Array.isArray(res?.responseValue)) {
+        dispatch(saveTransactionsAction(res.responseValue));
+      }
+    });
+  }, [startDate, endDate, detailsType]);
 
   const columns: GridColDef[] =
     !transactions || transactions?.length <= 0
@@ -153,26 +161,6 @@ const Accounts = () => {
             ? { ...col, width: 200 }
             : { ...col, width: 120 }
         ),
-      // {
-      //   field: "action",
-      //   headerName: t("table.actions"),
-      //   width: 150,
-      //   type: "actions",
-      //   getActions: (params: any) => {
-      //     const { id } = params;
-
-      //     return [
-      //       <Tooltip key={id} title={t("common.show")}>
-      //         <GridActionsCellItem
-      //           icon={<FaEye size={16} />}
-      //           label={t("common.show")}
-      //           sx={{ color: "primary.main" }}
-      //           onClick={() => navigate("/products")}
-      //         />
-      //       </Tooltip>,
-      //     ];
-      //   },
-      // },
     ];
   }, [columns]);
 
@@ -200,7 +188,12 @@ const Accounts = () => {
               {item.label}
             </CustomButton>
           ))}
-          <DatePickerRange />
+          <DatePickerRange
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+          />
         </div>
       </div>
 

@@ -119,7 +119,11 @@ const FarmDetails = () => {
                     className={`py-1 px-4 rounded-md text-white ${
                       row.productID ? "bg-primary" : "bg-blue-700"
                     }`}
-                  >{`${row.productID ? t("payForm.payType2") : t("payForm.payType1")}`}</p>
+                  >{`${
+                    row.productID
+                      ? t("payForm.payType2")
+                      : t("payForm.payType1")
+                  }`}</p>
                 );
               },
             }
@@ -132,7 +136,7 @@ const FarmDetails = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id, row } = params;
-
+          console.log({ id });
           if (row.description === "Pay") return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>
@@ -140,7 +144,7 @@ const FarmDetails = () => {
                 icon={<FaRegEdit size={16} />}
                 label="Edit"
                 sx={{ color: "primary.main" }}
-                onClick={() => navigate("/add-to-stock?id=" + id)}
+                onClick={() => navigate("/add-to-stock?id=" + row.farmRecordID)}
               />
             </Tooltip>,
           ];
