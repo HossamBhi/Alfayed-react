@@ -13,11 +13,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
+import { ViewClientRow } from "../components/popups";
 import AddClient from "../components/popups/AddClient";
 import { useApi } from "../hooks";
 import { CLIENT } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
-import { clientProps } from "../utils/types";
+import { clientProps, clientRowProps } from "../utils/types";
 
 const ClientDetails = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const ClientDetails = () => {
   const { get } = useApi();
   const [client, setClient] = useState<null | clientProps>(null);
   const [clientData, setClientData] = useState<null | any[]>(null);
+  const [selectedRow, setSelectedRow] = useState<undefined | clientRowProps>();
 
   useEffect(() => {
     if (id != null) {
@@ -53,7 +55,7 @@ const ClientDetails = () => {
     !clientData || clientData?.length <= 0
       ? []
       : createDataColumns(clientData[0], (s: string) => t("client." + s));
- 
+
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
       return [];
@@ -98,7 +100,8 @@ const ClientDetails = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id, row } = params;
-          if (row.description === "Pay") return [];
+
+          if (row.description === "Income") return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>
               <GridActionsCellItem
@@ -117,7 +120,9 @@ const ClientDetails = () => {
                 icon={<FaEye size={16} />}
                 label="show"
                 sx={{ color: "primary.main" }}
-                onClick={() => toast.info("قريبا")}
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
               />
             </Tooltip>,
           ];
@@ -156,6 +161,11 @@ const ClientDetails = () => {
           setEditData={(data) => setClient(data)}
           show={showEdit}
           onClose={() => setShowEdit(false)}
+        />
+        <ViewClientRow
+          data={selectedRow}
+          show={!!selectedRow}
+          onClose={() => setSelectedRow(undefined)}
         />
       </div>
 

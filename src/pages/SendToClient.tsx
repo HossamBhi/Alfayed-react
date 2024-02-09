@@ -1,19 +1,23 @@
 import { Autocomplete, CircularProgress, FormControl } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CarProducts from "../components/client/CarProducts";
-import { productListProps } from "../components/client/EditableTable";
 import { CustomButton, CustomInput } from "../components/common";
 import { AddFarm } from "../components/popups";
 import { useApi } from "../hooks";
 import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
 import { CLIENT } from "../utils/endpoints";
-import { formatDate } from "../utils/helper";
-import { productProps, supplierProps } from "../utils/types";
 import { trasactionsEnums } from "../utils/enums";
+import { formatDate } from "../utils/helper";
+import {
+  clientRowProps,
+  productListProps,
+  productProps,
+  supplierProps,
+} from "../utils/types";
 
 const SendToClient = () => {
   const navigate = useNavigate();
@@ -25,20 +29,7 @@ const SendToClient = () => {
   const { t } = useTranslation();
 
   const { post, put } = useApi();
-  const [values, setValues] = useState<{
-    clientID: string | number;
-    clientName: string;
-    driverName: "";
-    deliveredToDriver: number;
-    date: string;
-    typeId: 0;
-    total: 0;
-    carCapacity: 0;
-    payed: number;
-    notes: "";
-    payDate: string;
-    productList: productListProps[];
-  }>({
+  const [values, setValues] = useState<clientRowProps>({
     clientID: searchParams.get("clientID") || 0,
     clientName: searchParams.get("clientName") || "",
     driverName: "",
@@ -50,24 +41,9 @@ const SendToClient = () => {
     payed: 0,
     notes: "",
     payDate: formatDate(new Date()),
-    productList: [
-      // {
-      //   id: 1,
-      //   productID: 0,
-      //   productName: "",
-      //   productBoxID: 0,
-      //   productBoxName: "",
-      //   quantity: "",
-      //   number: "",
-      //   price: "",
-      //   total: "",
-      //   isNew: false,
-      // },
-    ],
+    productList: [],
   });
-  // console.log({ pr: values.productList });
   const [errors, setErrors] = useState({ clientID: false, productID: false });
-  const dispatch = useDispatch();
   const { get } = useApi();
 
   useEffect(() => {
@@ -76,7 +52,12 @@ const SendToClient = () => {
         console.log("CLIENT.getRecord: ", { res });
 
         if (res?.clientID) {
-          setValues({ ...values, ...res, payDate: formatDate(res.payDate), date: formatDate(res.date) });
+          setValues({
+            ...values,
+            ...res,
+            payDate: formatDate(res.payDate),
+            date: formatDate(res.date),
+          });
         }
       });
     }

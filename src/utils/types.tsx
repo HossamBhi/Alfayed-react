@@ -2,7 +2,7 @@ import { trasactionsEnums } from "./enums";
 
 export type productProps = {
   productID: number;
-  id?: number
+  id?: number;
   name: string;
   productUnitPrice: number;
   productNote: string;
@@ -112,4 +112,31 @@ export type transactionProps = {
   total: string | number;
   type: string;
   typeID: trasactionsEnums;
+};
+export type productListProps = {
+  id: number;
+  productID: number;
+  productName?: string;
+  productBoxID: number;
+  productBoxName?: string;
+  quantity: string;
+  number: string;
+  price: string;
+  total: string;
+  isNew: boolean;
+};
+
+export type clientRowProps = {
+  clientID: string | number;
+  clientName: string;
+  driverName: "";
+  deliveredToDriver: number;
+  date: string;
+  typeId: 0;
+  total: 0;
+  carCapacity: 0;
+  payed: number;
+  notes: "";
+  payDate: string;
+  productList: productListProps[];
 };

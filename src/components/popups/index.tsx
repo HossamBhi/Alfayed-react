@@ -7,6 +7,7 @@ import AddFridge from "./AddFridge";
 import AddPropduct from "./AddPropduct";
 import PayForm from "./PayForm";
 import PopupButton from "./PopupButton";
+import ViewClientRow from "./ViewClientRow";
 
 export {
   AddEmployee,
@@ -18,4 +19,5 @@ export {
   AddPropduct,
   PayForm,
   PopupButton,
+  ViewClientRow,
 };

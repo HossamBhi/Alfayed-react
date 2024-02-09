@@ -21,19 +21,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { createDataColumns } from "../../utils/helper";
 import { CustomButton } from "../common";
+import { productListProps } from "../../utils/types";
 
-export type productListProps = {
-  id: number;
-  productID: number;
-  productName?: string;
-  productBoxID: number;
-  productBoxName?: string;
-  quantity: string;
-  number: string;
-  price: string;
-  total: string;
-  isNew: boolean;
-};
+
 
 interface EditToolbarProps {
   setRowModesModel: (
