@@ -35,7 +35,6 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const isLoginPage = pathname.includes("/login");
-  // console.log({ pathname, isLoginPage });
   const navigate = useNavigate();
 
   useLayoutEffect(() => {

@@ -5,6 +5,8 @@ import { hideLoader, showLoader } from "../redux/appSettings";
 import { APP_LANG } from "../langs";
 import { API_URL } from "../utils/endpoints";
 import { useCallback } from "react";
+import { logOutAction } from "../redux/user";
+import { useNavigate } from "react-router-dom";
 
 type requestProps = {
   url: string;
@@ -23,10 +25,14 @@ export default () => {
   );
   const token = logedUser?.token;
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const onCatchError = (error: AxiosError) => {
     console.log("on chatch error: ", error);
     if (error.response) {
+      if (error.response.status === 401) {
+        dispatch(logOutAction());
+        navigate("/login");
+      }
       // console.log("error.response: ", error.response);
       return error.response;
     } else if (error.request) {
@@ -45,7 +51,8 @@ export default () => {
 
   const validateUser = () => {
     if (!token) {
-      console.log("go to login");
+      dispatch(logOutAction());
+      navigate("/login");
     }
     return false;
   };

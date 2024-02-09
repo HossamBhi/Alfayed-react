@@ -48,14 +48,14 @@ const Login = () => {
           className="flex flex-col gap-6 md:w-[50%] w-[80%] bg-white p-6 rounded-lg py-12 "
         >
           <h2 className="text-center text-2xl sm:text-lg pb-8 font-bold">
-            login to Alfayed
+            تسجيل الدخول إلى الفايد
           </h2>
           <CustomInput
             type="text"
             name="email"
             value={email}
             label="البريد الإلكتروني"
-            placeholder="Email"
+            placeholder="البريد الإلكتروني"
             onChange={(e: any) => setEmail(e.target.value)}
             id="email"
             InputProps={{
@@ -89,7 +89,7 @@ const Login = () => {
             name="password"
             value={password}
             label="كلمة المرور"
-            placeholder="Password"
+            placeholder="كلمة المرور"
             onChange={(e: any) => setPassword(e.target.value)}
             id="password"
           />
@@ -98,7 +98,7 @@ const Login = () => {
             onClick={(e: any) => handleSubmit(e)}
             variant="contained"
           >
-            {"Log in"}
+            تسجيل الدخول
           </CustomButton>
         </form>
       </div>

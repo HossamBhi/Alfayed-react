@@ -17,7 +17,7 @@ const persistConfig = {
   storage,
 };
 
-const rootReducers = combineReducers({
+const appReducer = combineReducers({
   user,
   appSettings,
   suppliers,
@@ -28,6 +28,13 @@ const rootReducers = combineReducers({
   fridges,
   stock,
 });
+
+const rootReducers = (state: any, action: any) => {
+  if (action.type === "user/logOutAction") {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);
 export type RootState = ReturnType<typeof rootReducers>;
