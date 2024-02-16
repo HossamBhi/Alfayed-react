@@ -51,7 +51,7 @@ const SendToClient = () => {
     if (id != null) {
       get({ url: CLIENT.getRecord, params: { recordId: id } }).then((res) => {
         console.log("CLIENT.getRecord: ", { res });
-
+        document.title = t("client.editCar");
         if (res?.clientID) {
           setValues({
             ...values,

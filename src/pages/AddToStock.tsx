@@ -75,9 +75,13 @@ const AddToStock = () => {
       get({ url: SUPPLIERS.getRecord, params: { recordId: id } }).then(
         (res) => {
           console.log("SUPPLIERS.getRecord: ", { res });
-
+          document.title = t("AddToStock.editProduct");
           if (res?.farmsID) {
-            setValues({ ...values, ...res });
+            setValues({
+              ...values,
+              ...res,
+              supplyDate: formatDate(res.supplyDate),
+            });
           }
         }
       );
@@ -191,7 +195,7 @@ const AddToStock = () => {
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
             );
-          } 
+          }
           setIsLoad(false);
         });
     }

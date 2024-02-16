@@ -68,7 +68,7 @@ const AddToFridge = () => {
     if (id != null) {
       get({ url: FRIDGES.getRecord, params: { id } }).then((res) => {
         console.log("FRIDGES.getRecord: ", { res });
-
+        document.title = 'تعديل البراد';
         if (res?.fridgeID) {
           setValues({ ...values, ...res });
         }
