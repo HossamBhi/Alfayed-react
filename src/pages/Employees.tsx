@@ -13,7 +13,7 @@ import { employeeProps } from "../utils/types";
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaRegEdit } from "react-icons/fa";
+import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -104,14 +104,14 @@ const Employees = () => {
                 onClick={() => handleRowEdit(row)}
               />
             </Tooltip>,
-            // <Tooltip key={2} title={t("common.show")}>
-            //   <GridActionsCellItem
-            //     icon={<FaEye size={16} />}
-            //     label="show"
-            //     sx={{ color: "primary.main" }}
-            //     onClick={() => navigate("/employee-details?id=" + id)}
-            //   />
-            // </Tooltip>,
+            <Tooltip key={2} title={t("common.show")}>
+              <GridActionsCellItem
+                icon={<FaEye size={16} />}
+                label="show"
+                sx={{ color: "primary.main" }}
+                onClick={() => navigate("/employee-details?id=" + id)}
+              />
+            </Tooltip>,
             <Tooltip key={"Pay"} title={t("PayEmployee.pay")}>
               <GridActionsCellItem
                 icon={<MdOutlineAttachMoney size={16} />}

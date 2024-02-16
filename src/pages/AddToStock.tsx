@@ -132,12 +132,14 @@ const AddToStock = () => {
   const isValid = () => {
     let isTrue = true;
     if (!values.farmsID) {
+      toast.error("قم باختيار المورد او المزرعه");
       setErrors((v) => ({ ...v, farmsID: true }));
       isTrue = false;
     } else {
       setErrors((v) => ({ ...v, farmsID: false }));
     }
     if (!values.productID) {
+      toast.error("قم باختيار المنتج");
       setErrors((v) => ({ ...v, productID: true }));
       isTrue = false;
     } else {

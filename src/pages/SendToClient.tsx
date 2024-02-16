@@ -109,6 +109,7 @@ const SendToClient = () => {
   const isValid = () => {
     let isTrue = true;
     if (!values.clientID) {
+      toast.error("قم باختيار العميل");
       setErrors((v) => ({ ...v, clientID: true }));
       isTrue = false;
     } else {

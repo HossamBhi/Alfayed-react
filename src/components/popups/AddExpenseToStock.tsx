@@ -103,6 +103,7 @@ const AddExpenseToStock = ({
   const isValid = () => {
     let isTrue = true;
     if (!values.expenseID) {
+      toast.error("قم باختيار المصروف");
       setErrors((v) => ({ ...v, expenseID: true }));
       isTrue = false;
     } else {

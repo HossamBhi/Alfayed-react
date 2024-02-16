@@ -1,8 +1,9 @@
 import { Autocomplete, CircularProgress, FormControl } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { CustomButton, CustomInput, CustomSelect } from "../components/common";
 import { AddFridge, AddPropduct } from "../components/popups";
 import { useApi } from "../hooks";
@@ -13,7 +14,6 @@ import { FRIDGES } from "../utils/endpoints";
 import { fridgeTransactionEnums, trasactionsEnums } from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
-import { toast } from "react-toastify";
 
 const AddToFridge = () => {
   const navigate = useNavigate();
@@ -62,13 +62,18 @@ const AddToFridge = () => {
     productName: false,
   });
 
-  const dispatch = useDispatch();
   const { get } = useApi();
+  useEffect(() => {
+    handleSelectChange("fridge", {
+      id: Number(searchParams.get("fridgeID")),
+      name: searchParams.get("fridgeName") || "",
+    } as any);
+  }, [searchParams.get("fridgeID")]);
   useEffect(() => {
     if (id != null) {
       get({ url: FRIDGES.getRecord, params: { id } }).then((res) => {
         console.log("FRIDGES.getRecord: ", { res });
-        document.title = 'تعديل البراد';
+        document.title = "تعديل البراد";
         if (res?.fridgeID) {
           setValues({ ...values, ...res });
         }
@@ -99,12 +104,15 @@ const AddToFridge = () => {
   const isValid = () => {
     let isTrue = true;
     if (!values.fridgeID) {
+      toast.error("قم باختيار المحطه");
       setErrors((v) => ({ ...v, fridgeID: true }));
       isTrue = false;
     } else {
       setErrors((v) => ({ ...v, fridgeID: false }));
     }
     if (!values.productID) {
+      toast.error("قم باختيار المنتج");
+
       setErrors((v) => ({ ...v, productID: true }));
       isTrue = false;
     } else {
@@ -243,11 +251,12 @@ const AddToFridge = () => {
               id="actionType"
               label={t("fridges.actionType")}
               value={
-                values.action
+                values.action === 1
                   ? FRIDGE_TRANSACTION_TYPES()[0].id
                   : FRIDGE_TRANSACTION_TYPES()[1].id
               }
               onChange={(e, item) => {
+                console.log({ item, target: e.target.value });
                 const { value } = e.target;
                 setValues((values) => ({
                   ...values,

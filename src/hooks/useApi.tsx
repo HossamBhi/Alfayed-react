@@ -35,7 +35,8 @@ export default () => {
         navigate("/login");
       } else if (error.response.status === 500) {
         toast.error(error.message);
-      } else {
+      } else if (error.response.status === 400) {
+        toast.error(error.response.data as string);
       }
       // console.log("error.response: ", error.response);
       return error.response;

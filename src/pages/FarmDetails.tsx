@@ -136,7 +136,7 @@ const FarmDetails = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id, row } = params;
-          
+
           if (row.description === "Pay") return [];
           return [
             <Tooltip key={id} title={t("common.edit")}>
@@ -193,10 +193,11 @@ const FarmDetails = () => {
             farmsID: false,
             productID: false,
             typeId: false,
+            farmRecordID: false,
           }}
           rows={supplierData || []}
           columns={customeColumns as any}
-          getRowId={(item) => item.farmRecordID + " " + item.description}
+          getRowId={(item) => item.id}
         />
       </div>
     </main>

@@ -14,9 +14,10 @@ import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
 import { AddEmployee } from "../components/popups";
 import { useApi } from "../hooks";
-import { EMPLOYEES } from "../utils/endpoints";
+import { ACCOUNTS, EMPLOYEES } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
 import { employeeProps, supplierDataProps } from "../utils/types";
+import { getTrasactionsEnums } from "../utils/enums";
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
@@ -24,34 +25,34 @@ const EmployeeDetails = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const [showEdit, setShowEdit] = useState(false);
-  const { get } = useApi();
+  const { post } = useApi();
   const [data, setData] = useState<null | employeeProps>(null);
-  const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
+  const [transactions, setTransactions] = useState<null | any[]>(
     null
   );
 
   useEffect(() => {
     if (id != null) {
-      get({ url: EMPLOYEES.getById, params: { id: id } }).then((res) => {
-        console.log("EMPLOYEES.getById", { res });
-        // if (Array.isArray(res)) {
-        if (!res.status) {
-          setData(res);
-          setSupplierData(res.farmRecords);
-        } else {
-          setSupplierData([]);
-          alert("Error " + res.status + ": " + res.data);
+      post({
+        url: ACCOUNTS.getAll,
+        params: {
+          recordType: getTrasactionsEnums.employee,
+          from: formatDate(new Date("2024-01-01")),
+          to: formatDate(new Date()),
+        },
+      }).then((res) => {
+        // console.log("ACCOUNTS.getAll: ", { res });
+        if (Array.isArray(res?.responseValue)) {
+          setTransactions(res.responseValue);
         }
       });
     }
   }, [id]);
 
   const columns: GridColDef[] =
-    !supplierData || supplierData?.length <= 0
+    !transactions || transactions?.length <= 0
       ? []
-      : createDataColumns(supplierData[0], (s: string) =>
-          t("supplierTable." + s)
-        );
+      : createDataColumns(transactions[0], (s: string) => t("table." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -62,14 +63,23 @@ const EmployeeDetails = () => {
       ...columns
         .filter(
           (col) =>
-            col.field !== "farmsID" &&
-            col.field != "typeId" &&
-            col.field !== "productID"
-          // &&
-          // col.field !== "created_Date"
+            ![
+              "safeID",
+              "action",
+              "clientID",
+              "expenseID",
+              "farmID",
+              "fridgeID",
+              "typeID",
+              "farmName",
+              "fridgeName",
+              "expenseName",
+              "clientName",
+              "empID", 
+            ].includes(col.field)
         )
         .map((col) =>
-          col.field === "supplyDate"
+          col.field === "date"
             ? {
                 ...col,
                 width: 150,
@@ -81,95 +91,20 @@ const EmployeeDetails = () => {
                 valueGetter: (params: GridValueGetterParams) =>
                   formatDate(params.value),
               }
-            : col.field === "created_Date"
-            ? {
-                ...col,
-                width: 150,
-                type: "date",
-                align: "center",
-                headerAlign: "center",
-                valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
-                valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
-              }
-            : col.field === "farmsNotes"
+            : ["notes"].includes(col.field)
             ? { ...col, width: 200 }
-            : col.field === "isPercentage"
-            ? {
-                ...col,
-                width: 120,
-                headerName: t("AddToStock.discountType"),
-                valueGetter: (params: GridValueGetterParams) => {
-                  if (params.value === true) {
-                    return t("AddToStock.discountPercentage");
-                  }
-                  return t("AddToStock.discountFlat");
-                },
-              }
-            : col
+            : { ...col, width: 120 }
         ),
-      {
-        field: "action",
-        headerName: t("table.actions"),
-        width: 150,
-        type: "actions",
-        getActions: (params: any) => {
-          const { id } = params;
-
-          return [
-            <Tooltip key={id} title={t("common.edit")}>
-              <GridActionsCellItem
-                icon={<FaRegEdit size={16} />}
-                label="Edit"
-                sx={{ color: "primary.main" }}
-                onClick={() => navigate("/add-to-stock?id=" + id)}
-              />
-            </Tooltip>,
-          ];
-        },
-      },
     ];
   }, [columns]);
 
-  if (id === null || !data || !supplierData) {
-    return (
-      <main className="flex min-h-screen flex-col">
-        {/* <LinearProgress
-          sx={{ minWidth: "100%" }}
-          className="absolute top-0 rounded"
-        /> */}
-      </main>
-    );
-  }
-
   return (
     <main className="flex min-h-screen flex-col p-4">
-      <div className="m-0">
-        {id != null && (
-          <UserCard
-            item={data}
-            containerStyle={"bg-white hover:bg-white mt-0"}
-            showEdit
-            Icon={GiFarmer}
-            onEdit={() => setShowEdit(true)}
-            onClick={() => setShowEdit(true)}
-          />
-        )}
-        <AddEmployee
-          hideShowBtn={true}
-          editData={data}
-          setEditData={(data) => setData(data)}
-          show={showEdit}
-          onClose={() => setShowEdit(false)}
-        />
-      </div>
-
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={supplierData || []}
+          rows={transactions?.filter((item) => item.empID == id) || []}
           columns={customeColumns as any}
-          getRowId={(item) => item.farmRecordID}
+          getRowId={(item) => item.id}
         />
       </div>
     </main>

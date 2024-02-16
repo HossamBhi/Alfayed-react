@@ -2,7 +2,6 @@ import createCache from "@emotion/cache";
 import { createTheme } from "@mui/material";
 import { arSD } from "@mui/x-data-grid";
 import rtlPlugin from "stylis-plugin-rtl";
-import i18n from "../langs";
 // import i18n from "./localization";
 // import { prefixer } from "stylis";
 

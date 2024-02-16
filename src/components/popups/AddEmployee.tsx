@@ -34,16 +34,14 @@ const AddEmployee = ({
   const { t } = useTranslation();
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [name, setName] = useState(editData?.name ? editData?.name : "");
-  const [salary, setSalary] = useState(
-    editData?.salary ? editData?.salary : ""
-  );
+  const [salary, setSalary] = useState(editData?.salary ? editData?.salary : 0);
   const handleOnCloseAddProduct = () =>
     onClose ? onClose() : setShowAddProduct(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setName(editData?.name ? editData?.name : "");
-    setSalary(editData?.salary ? editData?.salary : "");
+    setSalary(editData?.salary ? editData?.salary : 0);
   }, [editData]);
 
   const callAPI = () => {

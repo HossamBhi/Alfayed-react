@@ -26,12 +26,14 @@ const filter = [
   { id: getTrasactionsEnums.fridge, label: "المحطات" },
   { id: getTrasactionsEnums.employee, label: "الموظفين" },
 ];
-
+const currentDate = new Date();
 const Accounts = () => {
   const { t } = useTranslation();
   const { post } = useApi();
   const dispatch = useDispatch();
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(
+    new Date(currentDate.getFullYear() + "-01-01")
+  );
   const [endDate, setEndDate] = useState(new Date());
   const total = useSelector((state: RootState) => state.accounts.total);
   const transactions = useSelector(
@@ -44,7 +46,7 @@ const Accounts = () => {
     expenseID: false,
     farmID: false,
     fridgeID: false,
-    id: false,
+    // id: false,
     typeID: false,
     farmName: true,
     fridgeName: true,
