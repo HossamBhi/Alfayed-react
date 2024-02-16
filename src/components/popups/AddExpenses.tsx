@@ -21,6 +21,7 @@ import { BsFillPlusCircleFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { AddExpensesCategory, PopupButton } from ".";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { toast } from "react-toastify";
 
 type AddExpensesProps = {
   onClose?: () => void;
@@ -83,6 +84,7 @@ const AddExpenses = ({
       }).then((res) => {
         console.log("Update EXPENSES: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(res);
           dispatch(editExpenseAction(res));
         }
@@ -96,6 +98,7 @@ const AddExpenses = ({
         if (res.status) {
           alert("Error " + res.status + ": " + res.data);
         } else {
+          toast.success(" تم الحفظ بنجاح ");
           dispatch(addExpenseAction(res));
         }
       });

@@ -7,6 +7,7 @@ import { FaEye } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { CustomButton, CustomTable } from "../components/common";
 import { useApi } from "../hooks";
 import { editStockAction, saveStockAction } from "../redux/stock";
@@ -91,6 +92,7 @@ const Stock = () => {
                     (res) => {
                       console.log({ res });
                       if (res.productID) {
+                        toast.success(" تم الحفظ بنجاح ");
                         dispatch(editStockAction(res));
                       }
                     }

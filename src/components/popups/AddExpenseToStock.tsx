@@ -14,6 +14,7 @@ import { PopupButton } from ".";
 import { CustomButton, CustomDialog } from "../common";
 import { ExpenseForm } from "../stock";
 import { trasactionsEnums } from "../../utils/enums";
+import { toast } from "react-toastify";
 
 type AddExpenseToStockProps = {
   onClose?: () => void;
@@ -123,6 +124,7 @@ const AddExpenseToStock = ({
         .then((res) => {
           console.log("EXPENSES.updateRecord: ", res);
           if (res?.expenseRecordID) {
+            toast.success(" تم التعديل بنجاح ");
             setEditData && setEditData(res);
             setExpensesData(
               expensesData.map((item: any) =>
@@ -139,7 +141,10 @@ const AddExpenseToStock = ({
       })
         .then((res) => {
           console.log("EXPENSES.addRecord: ", res);
-          setExpensesData([res, ...expensesData]);
+          if (!res.status) {
+            toast.success(" تم الحفظ بنجاح ");
+            setExpensesData([res, ...expensesData]);
+          }
         })
         .finally(() => setIsLoad(false));
     }

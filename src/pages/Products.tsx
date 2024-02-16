@@ -1,29 +1,32 @@
-import { useNavigate } from "react-router-dom";
-import { CustomTable } from "../components/common";
-import { AddPropduct } from "../components/popups";
-import { useApi } from "../hooks";
-import { PRODUCTS } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
-import { supplierProps } from "../utils/types";
-import { Tooltip } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import {
   GridActionsCellItem,
   GridColDef,
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { CustomTable } from "../components/common";
+import { AddPropduct } from "../components/popups";
+import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
+import { createDataColumns, formatDate } from "../utils/helper";
 
 const Products = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  // const pathname = usePathname();
+  // const [searchParams] = useSearchParams();
   // const { get } = useApi();
   // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
-  const products = useSelector((state: RootState) => state.stock.productsDetails);
+  const productsDetails = useSelector(
+    (state: RootState) => state.stock.productsDetails
+  );
+  const products = useSelector((state: RootState) => state.stock.products);
   // useEffect(() => {
   //   get({ url: PRODUCTS.getAllDetails }).then((res) => {
   //     console.log("PRODUCTS.getAllDetails", { res });
@@ -38,9 +41,9 @@ const Products = () => {
   // }, []);
 
   const columns: GridColDef[] =
-    !products || products?.length <= 0
+    !productsDetails || productsDetails?.length <= 0
       ? []
-      : createDataColumns(products[0], (s: string) => t("table." + s));
+      : createDataColumns(productsDetails[0], (s: string) => t("table." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -128,8 +131,33 @@ const Products = () => {
       </div>
 
       <div className="grid grid-cols-1">
+        <div className="bg-white px-2 pt-2 border mb-2 rounded-sm relative">
+          <p className="pb-2 font-semibold text-md">
+            {t("menu.products")} ({products.length})
+          </p>
+          <div className="pb-2 no-scrollbar relative h-full w-full overflow-x-scroll scroll-smooth whitespace-nowrap">
+            {/* <div className="gap-2 flex flex-wrap mb-2 no-scrollbar relative w-full overflow-x-scroll scroll-smooth whitespace-nowrap"> */}
+            {products.map((item, index) => (
+              <Typography
+                variant="subtitle2"
+                className={`inline-block px-2 ${
+                  index + 1 !== products.length && "border-e-2"
+                }`}
+                // onClick={() => navigate(pathname + "?id=" + item.id)}
+                key={item.id}
+                // variant={
+                //   Number(searchParams.get("id")) === item.id
+                //     ? "contained"
+                //     : "outlined"
+                // }
+              >
+                {item.name}
+              </Typography>
+            ))}
+          </div>
+        </div>
         <CustomTable
-          rows={products || []}
+          rows={productsDetails || []}
           columns={customeColumns as any}
           getRowId={(item) => item.farmRecordID}
         />

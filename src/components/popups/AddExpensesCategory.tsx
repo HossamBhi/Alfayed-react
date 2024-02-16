@@ -10,6 +10,7 @@ import { EXPENSES_TYPE } from "../../utils/endpoints";
 import { useDispatch } from "react-redux";
 import { addExpenseTypeAction } from "../../redux/expenses";
 import { isNotEmpty } from "../../utils/validation";
+import { toast } from "react-toastify";
 
 type AddExpensesCategoryProps = {
   onClose?: () => void;
@@ -50,6 +51,7 @@ const AddExpensesCategory = ({
       }).then((res) => {
         console.log("Update Supplier: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(res);
         }
       });
@@ -60,6 +62,7 @@ const AddExpensesCategory = ({
           if (res.status) {
             alert("Error " + res.status + ": " + res.data);
           } else {
+            toast.success(" تم الحفظ بنجاح ");
             dispatch(addExpenseTypeAction(res));
           }
         }

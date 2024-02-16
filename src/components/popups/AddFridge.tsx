@@ -10,6 +10,7 @@ import { FRIDGES, SUPPLIERS } from "../../utils/endpoints";
 import { supplierProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
 import { addFridgeAction, editFridgeAction } from "../../redux/fridges";
+import { toast } from "react-toastify";
 
 type AddFridgeProps = {
   onClose?: () => void;
@@ -51,6 +52,7 @@ const AddFridge = ({
       }).then((res) => {
         console.log("Update FRIDGES: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(res);
           dispatch(editFridgeAction(res));
         }
@@ -59,6 +61,7 @@ const AddFridge = ({
       post({ url: FRIDGES.add, data: { name } }).then((res) => {
         console.log("Get FRIDGES:  ", res);
         if (!res.status) {
+          toast.success(" تم الحفظ بنجاح ");
           dispatch(addFridgeAction(res));
         }
       });

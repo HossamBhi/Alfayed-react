@@ -60,5 +60,5 @@ body {
 }
 
 p {
-  @apply truncate max-w-[100px];
+  @apply truncate max-w-[140px];
 }

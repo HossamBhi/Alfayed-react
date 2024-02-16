@@ -9,6 +9,7 @@ import { addEmployeeAction, editEmployeeAction } from "../../redux/employees";
 import { EMPLOYEES } from "../../utils/endpoints";
 import { employeeProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { toast } from "react-toastify";
 
 type AddEmployeeProps = {
   onClose?: () => void;
@@ -54,6 +55,7 @@ const AddEmployee = ({
       }).then((res) => {
         console.log("Update Employee: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(null);
           dispatch(editEmployeeAction(res));
         }
@@ -62,6 +64,7 @@ const AddEmployee = ({
       post({ url: EMPLOYEES.add, data: { name, salary } }).then((res) => {
         console.log("Add Employees: ", res);
         if (!res.status) {
+          toast.success(" تم الحفظ بنجاح ");
           dispatch(addEmployeeAction(res));
         }
       });

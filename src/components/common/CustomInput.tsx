@@ -1,7 +1,13 @@
 import { TextField, TextFieldProps } from "@mui/material";
 
-const CustomInput = ({ ...props }: TextFieldProps) => {
-  return <TextField  variant="outlined" {...props} />;
+const CustomInput = ({ inputProps, ...props }: TextFieldProps) => {
+  return (
+    <TextField
+      variant="outlined"
+      inputProps={{ ...inputProps, maxLength: 200 }}
+      {...props}
+    />
+  );
 };
 
 export default CustomInput;

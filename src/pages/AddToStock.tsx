@@ -12,9 +12,10 @@ import { RootState } from "../redux/store";
 import { saveSuppliersAction } from "../redux/suppliers";
 import { DISCOUNT_TYPES } from "../utils/appDB";
 import { SUPPLIERS } from "../utils/endpoints";
+import { trasactionsEnums } from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
-import { trasactionsEnums } from "../utils/enums";
+import { toast } from "react-toastify";
 
 const AddToStock = () => {
   const navigate = useNavigate();
@@ -87,23 +88,8 @@ const AddToStock = () => {
         // setSuppliers(res);
         dispatch(saveSuppliersAction(res));
       } else {
-        // alert("Error: get suppliers");
-        // setSuppliers([]);
-        // if (!suppliers) {
-        //   dispatch(saveSuppliersAction([]));
-        // }
       }
     });
-    // get({ url: PRODUCTS.getAll }).then((res) => {
-    //   console.log("PRODUCTS.getAll: ", { res });
-    //   if (Array.isArray(res)) {
-    //     setProducts(res);
-    //   } else {
-    //     alert("Error: get Products");
-    //     setProducts([]);
-
-    //   }
-    // });
   }, [id]);
 
   const handleChangeValue = useCallback((e: any) => {
@@ -182,6 +168,7 @@ const AddToStock = () => {
         }).then((res) => {
           console.log("SUPPLIERS.addRecord: ", { res });
           if (res.farmRecordID) {
+            toast.success(" تم التعديل بنجاح ");
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
             );
@@ -200,10 +187,11 @@ const AddToStock = () => {
         }).then((res) => {
           console.log("SUPPLIERS.addRecord: ", { res });
           if (res.farmRecordID) {
+            toast.success(" تم الحفظ بنجاح ");
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
             );
-          }
+          } 
           setIsLoad(false);
         });
     }
@@ -229,18 +217,13 @@ const AddToStock = () => {
               onChange={(e, value) => {
                 handleSelectChange("farms", value);
               }}
-              // value={suppliers?.find((item) => item.id == values.farmsID)}
               value={{ id: values.farmsID, name: values.farmsName } as any}
-              // inputValue={values.farmsName || ""}
               renderInput={(params) => (
                 <CustomInput
                   {...params}
                   error={errors.farmsID}
                   id="farms"
                   label={t("AddToStock.name")}
-                  // value={
-                  //   suppliers?.find((item) => item.id === values.farmsID)?.name
-                  // }
                 />
               )}
             />

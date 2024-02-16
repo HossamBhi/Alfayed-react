@@ -9,6 +9,7 @@ import { addSupplierAction, editSupplierAction } from "../../redux/suppliers";
 import { SUPPLIERS } from "../../utils/endpoints";
 import { supplierProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { toast } from "react-toastify";
 
 type AddFarmProps = {
   onClose?: () => void;
@@ -50,6 +51,7 @@ const AddFarm = ({
       }).then((res) => {
         console.log("Update Supplier: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(res);
           dispatch(editSupplierAction(res));
         }
@@ -58,6 +60,7 @@ const AddFarm = ({
       post({ url: SUPPLIERS.add, data: { name } }).then((res) => {
         console.log("Get Supplier: ", res);
         if (!res.status) {
+          toast.success(" تم الحفظ بنجاح ");
           dispatch(addSupplierAction(res));
         }
       });

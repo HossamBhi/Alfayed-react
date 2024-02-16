@@ -9,6 +9,7 @@ import { CLIENT } from "../../utils/endpoints";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { addClientAction, editClientAction } from "../../redux/clients";
+import { toast } from "react-toastify";
 
 type AddClientProps = {
   onClose?: () => void;
@@ -50,6 +51,7 @@ const AddClient = ({
       }).then((res) => {
         console.log("Update Cleint: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(res);
           dispatch(editClientAction(res));
         }
@@ -58,6 +60,7 @@ const AddClient = ({
       post({ url: CLIENT.add, data: { name } }).then((res) => {
         console.log("Update Cleint: ", res);
         if (!res.status) {
+          toast.success(" تم الحفظ بنجاح ");
           dispatch(addClientAction(res));
         }
       });

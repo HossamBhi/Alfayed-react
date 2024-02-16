@@ -18,6 +18,7 @@ import {
   productProps,
   supplierProps,
 } from "../utils/types";
+import { toast } from "react-toastify";
 
 const SendToClient = () => {
   const navigate = useNavigate();
@@ -143,6 +144,7 @@ const SendToClient = () => {
         }).then((res) => {
           console.log("CLIENT.updateRecord: ", { res });
           if (res.id) {
+            toast.success(" تم التعديل بنجاح ");
             navigate(pathname + "?" + createQueryString("id", res.id));
           }
           setIsLoad(false);
@@ -159,16 +161,8 @@ const SendToClient = () => {
             deliveredToDriver: values.deliveredToDriver || 0,
           },
         }).then((res) => {
-          console.log("CLIENT.addRecord: ", {
-            res,
-            requestData: {
-              ...values,
-              total: calculateTotal,
-              carCapacity: calculateNetQuantity,
-              typeId: trasactionsEnums.income,
-            },
-          });
           if (res.id) {
+            toast.success(" تم الحفظ بنجاح ");
             navigate(pathname + "?" + createQueryString("id", res.id));
           }
           setIsLoad(false);

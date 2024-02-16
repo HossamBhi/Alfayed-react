@@ -13,6 +13,7 @@ import { FRIDGES } from "../utils/endpoints";
 import { fridgeTransactionEnums, trasactionsEnums } from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
+import { toast } from "react-toastify";
 
 const AddToFridge = () => {
   const navigate = useNavigate();
@@ -135,6 +136,7 @@ const AddToFridge = () => {
         }).then((res) => {
           console.log("FRIDGES.updateRecord: ", { res });
           if (res.farmRecordID) {
+            toast.success(" تم التعديل بنجاح ");
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
             );
@@ -151,6 +153,7 @@ const AddToFridge = () => {
         }).then((res) => {
           console.log("FRIDGES.addRecord: ", { res });
           if (res.farmRecordID) {
+            toast.success(" تم الحفظ بنجاح ");
             navigate(
               pathname + "?" + createQueryString("id", res.farmRecordID)
             );

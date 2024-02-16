@@ -9,6 +9,7 @@ import { PRODUCTS } from "../../utils/endpoints";
 import { DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addProductAction, editProductAction } from "../../redux/stock";
+import { toast } from "react-toastify";
 
 type AddPropductProps = {
   onClose?: () => void;
@@ -44,6 +45,7 @@ const AddPropduct = ({
       }).then((res) => {
         console.log("Update PRODUCTS: ", res);
         if (res?.id) {
+          toast.success(" تم التعديل بنجاح ");
           setEditData && setEditData(res);
           dispatch(editProductAction(res));
         }
@@ -52,6 +54,7 @@ const AddPropduct = ({
       post({ url: PRODUCTS.add, data: { name } }).then((res) => {
         console.log("Add PRODUCTS: ", res);
         if (!res.status) {
+          toast.success(" تم الحفظ بنجاح ");
           dispatch(addProductAction(res));
           // if (setProducts && products)
           //   setProducts && setProducts([res, ...products]);
