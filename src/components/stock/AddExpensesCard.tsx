@@ -51,11 +51,14 @@ const AddExpensesCard = ({ farmId }: { farmId: null | number | string }) => {
       ...columns
         .filter(
           (col) =>
-            col.field !== "expenseID" &&
-            col.field !== "farmRecordID" &&
-            // col.field !== "created_Date" &&
-            col.field !== "expenseID"
-          // col.field !== "expenseRecordID"
+            ![
+              "typeId",
+              "id",
+              "description",
+              "expenseID",
+              "farmRecordID",
+              "expenseID",
+            ].includes(col.field)
         )
         .map((col) =>
           col.field === "expenseDate"
@@ -125,7 +128,10 @@ const AddExpensesCard = ({ farmId }: { farmId: null | number | string }) => {
           farmId={farmId}
           setExpensesData={setExpensesData}
           expensesData={expensesData}
-          onShowPress={() => setShowEdit(true)}
+          onShowPress={() => {
+            setEditData(null);
+            setShowEdit(true);
+          }}
           show={showEdit}
           onClose={() => setShowEdit(false)}
           editData={editData}

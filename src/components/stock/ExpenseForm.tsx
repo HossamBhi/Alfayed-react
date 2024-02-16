@@ -6,6 +6,7 @@ import { CustomInput } from "../../components/common";
 import { AddExpenses } from "../../components/popups";
 import { RootState } from "../../redux/store";
 import { productProps, supplierProps } from "../../utils/types";
+import { formatDate } from "../../utils/helper";
 
 interface ExpenseFormProps {
   values: {
@@ -174,7 +175,7 @@ const ExpenseForm = ({
         <CustomInput
           id="expenseDate"
           label={t("AddToStock.expenseDate")}
-          value={values.expenseDate}
+          value={formatDate(values.expenseDate)}
           onChange={handleChangeValue}
           type="date"
         />
@@ -182,7 +183,7 @@ const ExpenseForm = ({
       <FormControl className="col-span-1 md:col-span-3">
         <CustomInput
           id="expenseRecordNotes"
-          label={t("AddToStock.note")}
+          label={t("table.expenseRecordNotes")}
           value={values.expenseRecordNotes}
           onChange={handleChangeValue}
           type="text"

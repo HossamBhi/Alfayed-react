@@ -7,6 +7,7 @@ import { API_URL } from "../utils/endpoints";
 import { useCallback } from "react";
 import { logOutAction } from "../redux/user";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type requestProps = {
   url: string;
@@ -32,6 +33,9 @@ export default () => {
       if (error.response.status === 401) {
         dispatch(logOutAction());
         navigate("/login");
+      } else if (error.response.status === 500) {
+        toast.error(error.message);
+      } else {
       }
       // console.log("error.response: ", error.response);
       return error.response;

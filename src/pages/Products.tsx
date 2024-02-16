@@ -5,40 +5,37 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { CustomTable } from "../components/common";
 import { AddPropduct } from "../components/popups";
-import usePathname from "../hooks/usePathname";
+import { useApi } from "../hooks";
+import { saveProductsDetailsAction } from "../redux/stock";
 import { RootState } from "../redux/store";
+import { PRODUCTS } from "../utils/endpoints";
 import { createDataColumns, formatDate } from "../utils/helper";
 
 const Products = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   // const pathname = usePathname();
   // const [searchParams] = useSearchParams();
-  // const { get } = useApi();
-  // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
+  const { get } = useApi();
   const productsDetails = useSelector(
     (state: RootState) => state.stock.productsDetails
   );
   const products = useSelector((state: RootState) => state.stock.products);
-  // useEffect(() => {
-  //   get({ url: PRODUCTS.getAllDetails }).then((res) => {
-  //     console.log("PRODUCTS.getAllDetails", { res });
-  //     // if (Array.isArray(res)) {
-  //     if (!res.status || Array.isArray(res)) {
-  //       setTableData(res);
-  //     } else {
-  //       setTableData([]);
-  //       alert("Error " + res.status + ": " + res.data);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    get({ url: PRODUCTS.getAllDetails }).then((res) => {
+      if (Array.isArray(res)) {
+        dispatch(saveProductsDetailsAction(res));
+      }
+    });
+  }, []);
 
   const columns: GridColDef[] =
     !productsDetails || productsDetails?.length <= 0

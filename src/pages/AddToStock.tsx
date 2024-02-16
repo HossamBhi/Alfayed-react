@@ -74,7 +74,6 @@ const AddToStock = () => {
     if (id != null) {
       get({ url: SUPPLIERS.getRecord, params: { recordId: id } }).then(
         (res) => {
-          console.log("SUPPLIERS.getRecord: ", { res });
           document.title = t("AddToStock.editProduct");
           if (res?.farmsID) {
             setValues({
@@ -87,7 +86,7 @@ const AddToStock = () => {
       );
     }
     get({ url: SUPPLIERS.getAll }).then((res) => {
-      console.log("SUPPLIERS.getAll: ", { res });
+      // console.log("SUPPLIERS.getAll: ", { res });
       if (Array.isArray(res)) {
         // setSuppliers(res);
         dispatch(saveSuppliersAction(res));
