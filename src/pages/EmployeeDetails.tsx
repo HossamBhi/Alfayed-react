@@ -1,38 +1,41 @@
-import { Tooltip } from "@mui/material";
 import {
-  GridActionsCellItem,
   GridColDef,
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaRegEdit } from "react-icons/fa";
-import { GiFarmer } from "react-icons/gi";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { UserCard } from "../components/cards";
+import { useSearchParams } from "react-router-dom";
 import { CustomTable } from "../components/common";
-import { AddEmployee } from "../components/popups";
+import { AddEmployee, PayForm } from "../components/popups";
 import { useApi } from "../hooks";
-import { ACCOUNTS, EMPLOYEES } from "../utils/endpoints";
+import { ACCOUNTS } from "../utils/endpoints";
+import { getTrasactionsEnums, profileEnums } from "../utils/enums";
 import { createDataColumns, formatDate } from "../utils/helper";
-import { employeeProps, supplierDataProps } from "../utils/types";
-import { getTrasactionsEnums } from "../utils/enums";
+import { employeeProps } from "../utils/types";
 
 const EmployeeDetails = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
-  const [showEdit, setShowEdit] = useState(false);
+  const employeeData = {
+    id: Number(searchParams.get("id")),
+    name: searchParams.get("name") || "",
+    salary: searchParams.get("salary") || "",
+    total: searchParams.get("total") || 0,
+  };
   const { post } = useApi();
-  const [data, setData] = useState<null | employeeProps>(null);
-  const [transactions, setTransactions] = useState<null | any[]>(
-    null
-  );
+  const [transactions, setTransactions] = useState<null | any[]>(null);
+  const [editData, setEditData] = useState<null | employeeProps>(null);
+  const [showPay, setShowPay] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+
+  // const handleRowEdit = () => {
+  //   setEditData(employeeData);
+  //   setShowEdit(true);
+  // };
 
   useEffect(() => {
-    if (id != null) {
+    if (employeeData.id != null) {
       post({
         url: ACCOUNTS.getAll,
         params: {
@@ -47,7 +50,7 @@ const EmployeeDetails = () => {
         }
       });
     }
-  }, [id]);
+  }, [employeeData.id]);
 
   const columns: GridColDef[] =
     !transactions || transactions?.length <= 0
@@ -75,7 +78,7 @@ const EmployeeDetails = () => {
               "fridgeName",
               "expenseName",
               "clientName",
-              "empID", 
+              "empID",
             ].includes(col.field)
         )
         .map((col) =>
@@ -100,9 +103,63 @@ const EmployeeDetails = () => {
 
   return (
     <main className="flex min-h-screen flex-col p-4">
+      <AddEmployee
+        hideShowBtn
+        editData={editData}
+        setEditData={(data) => setEditData(data)}
+        show={showEdit}
+        onClose={() => setShowEdit(false)}
+        onShowClick={() => setShowEdit(true)}
+      />
+      <PayForm
+        hideShowBtn
+        editData={editData}
+        setEditData={(data) => setEditData(data)}
+        show={showPay}
+        onClose={() => setShowPay(false)}
+        onShowClick={() => setShowPay(true)}
+        type={profileEnums.employees}
+      />
+      <div className="my-2 bg-white border rounded-md p-4 flex flex-wrap justify-between items-center gap-2">
+        <div className="flex-1 flex gap-2 divide-x-2 divide-x-reverse w-full">
+          <p className="px-2 text-gray-600">
+            <strong className="text-black">{t("AddEmployee.name")}</strong> :{" "}
+            {searchParams.get("name")}
+          </p>
+          <p className="px-2 text-gray-600">
+            <strong className="text-black">{t("AddEmployee.salary")}</strong> :{" "}
+            {searchParams.get("salary")}
+          </p>
+          <p className="px-2 text-gray-600">
+            <strong className="text-black">{t("AddEmployee.total")}</strong> :{" "}
+            {searchParams.get("total")}
+          </p>
+        </div>
+        {/* <div className="gap-2 flex">
+          <CustomButton
+            variant="contained"
+            startIcon={<FaRegEdit size={16} />}
+            onClick={() => handleRowEdit()}
+          >
+            {t("common.edit")}
+          </CustomButton>
+          <CustomButton
+            variant="contained"
+            startIcon={<MdOutlineAttachMoney size={16} />}
+            onClick={() => {
+              setEditData(employeeData);
+              setShowPay(true);
+            }}
+          >
+            {t("PayEmployee.pay")}
+          </CustomButton>
+        </div> */}
+      </div>
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={transactions?.filter((item) => item.empID == id) || []}
+          rows={
+            transactions?.filter((item) => item.empID == employeeData.id) || []
+          }
           columns={customeColumns as any}
           getRowId={(item) => item.id}
         />

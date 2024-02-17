@@ -109,7 +109,11 @@ const Employees = () => {
                 icon={<FaEye size={16} />}
                 label="show"
                 sx={{ color: "primary.main" }}
-                onClick={() => navigate("/employee-details?id=" + id)}
+                onClick={() =>
+                  navigate(
+                    `/employee-details?id=${id}&name=${row.name}&salary=${row.salary}&total=${row.total}`
+                  )
+                }
               />
             </Tooltip>,
             <Tooltip key={"Pay"} title={t("PayEmployee.pay")}>
