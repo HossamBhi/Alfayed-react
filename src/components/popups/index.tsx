@@ -7,6 +7,7 @@ import AddFridge from "./AddFridge";
 import AddPropduct from "./AddPropduct";
 import PayForm from "./PayForm";
 import PopupButton from "./PopupButton";
+import SafeAddBalanceOrWithdraw from "./SafeAddBalanceOrWithdraw";
 import ViewClientRow from "./ViewClientRow";
 
 export {
@@ -18,6 +19,6 @@ export {
   AddFridge,
   AddPropduct,
   PayForm,
-  PopupButton,
-  ViewClientRow,
+  PopupButton, SafeAddBalanceOrWithdraw, ViewClientRow
 };
+

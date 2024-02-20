@@ -15,8 +15,9 @@ import { useApi } from "../hooks";
 import { saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
 import { ACCOUNTS } from "../utils/endpoints";
-import { getTrasactionsEnums } from "../utils/enums";
+import { getTrasactionsEnums, trasactionsEnums } from "../utils/enums";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
+import { SafeAddBalanceOrWithdraw } from "../components/popups";
 
 const filter = [
   { id: getTrasactionsEnums.all, label: "الكل" },
@@ -35,7 +36,8 @@ const Accounts = () => {
   const { t } = useTranslation();
   const { post } = useApi();
   const dispatch = useDispatch();
-
+  const [showPay, setShowPay] = useState(false);
+  const [payType, setPayType] = useState(trasactionsEnums.income);
   const [startDate, setStartDate] = useState(
     new Date(currentDate.getFullYear() + "-01-01")
   );
@@ -45,7 +47,7 @@ const Accounts = () => {
     pageSize: 10,
     page: 0,
   });
-  console.log({ transactions });
+
   const [detailsType, setDetailsType] = useState<getTrasactionsEnums>(
     getTrasactionsEnums.all
   );
@@ -176,14 +178,42 @@ const Accounts = () => {
 
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-2">
+      <SafeAddBalanceOrWithdraw
+        hideShowBtn
+        // setEditData={(data) => setEditData(data)}
+        show={showPay}
+        onClose={() => setShowPay(false)}
+        onShowClick={() => setShowPay(true)}
+        type={payType}
+      />
       <div className="bg-background-card flex items-center justify-between rounded-lg px-2 py-2 md:px-4 md:py-4">
-        <div className="flex w-full justify-between items-center">
+        <div className="flex justify-between items-center gap-2">
           <p className="text-md text-gray-600 md:text-xl">
-            {t("dashboard.total")}
+            {t("dashboard.total")} :
           </p>
-          <p className={`text-lg font-bold md:text-2xl text-green-600 pb-2`}>
+          <p className={`text-lg font-bold md:text-2xl text-green-600`}>
             {String(total)}
           </p>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          <CustomButton
+            variant="contained"
+            onClick={() => {
+              setShowPay(true);
+              setPayType(trasactionsEnums.income);
+            }}
+          >
+            اضافه الي الخزنه
+          </CustomButton>
+          <CustomButton
+            variant="outlined"
+            onClick={() => {
+              setShowPay(true);
+              setPayType(trasactionsEnums.pay);
+            }}
+          >
+            اضافه مصروفات
+          </CustomButton>
         </div>
       </div>
       <div className="bg-background-card p-4 rounded-md border my-2">

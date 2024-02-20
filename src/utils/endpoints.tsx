@@ -67,6 +67,7 @@ export const ACCOUNTS = {
   getTotal: "GetTotalbalance",
   addBalance: "AddBalanceToSafe",
   getAll: "GetRecords",
+  withdraw: "WithdrawFromSafe"
 };
 
 export const EMPLOYEES = {
