@@ -17,7 +17,7 @@ import { CustomTable } from "../components/common";
 import { AddFridge, PopupButton } from "../components/popups";
 import { useApi } from "../hooks";
 import { FRIDGES } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { fridgeDataProps, fridgeProps } from "../utils/types";
 
 const FridgeDetails = () => {
@@ -88,14 +88,14 @@ const FridgeDetails = () => {
             : col.field === "created_Date"
             ? {
                 ...col,
-                width: 150,
+                width: 200,
                 type: "date",
                 align: "center",
                 headerAlign: "center",
                 valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
                 valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
               }
             : col.field === "notes"
             ? { ...col, width: 200 }

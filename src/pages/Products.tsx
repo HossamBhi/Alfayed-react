@@ -16,7 +16,7 @@ import { useApi } from "../hooks";
 import { saveProductsDetailsAction } from "../redux/stock";
 import { RootState } from "../redux/store";
 import { PRODUCTS } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -73,14 +73,14 @@ const Products = () => {
             : col.field === "created_Date"
             ? {
                 ...col,
-                width: 150,
+                width: 200,
                 type: "date",
                 align: "center",
                 headerAlign: "center",
                 valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
                 valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
               }
             : col.field === "farmsNotes"
             ? { ...col, width: 200 }

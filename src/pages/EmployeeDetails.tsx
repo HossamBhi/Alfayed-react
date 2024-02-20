@@ -11,7 +11,7 @@ import { AddEmployee, PayForm } from "../components/popups";
 import { useApi } from "../hooks";
 import { ACCOUNTS } from "../utils/endpoints";
 import { getTrasactionsEnums, profileEnums } from "../utils/enums";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { employeeProps } from "../utils/types";
 
 const EmployeeDetails = () => {
@@ -56,7 +56,7 @@ const EmployeeDetails = () => {
     !transactions || transactions?.length <= 0
       ? []
       : createDataColumns(transactions[0], (s: string) => t("table." + s));
-
+      console.log({transactions})
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
       return [];
@@ -85,14 +85,14 @@ const EmployeeDetails = () => {
           col.field === "date"
             ? {
                 ...col,
-                width: 150,
+                width: 200,
                 type: "date",
                 align: "center",
                 headerAlign: "center",
                 valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
                 valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
               }
             : ["notes"].includes(col.field)
             ? { ...col, width: 200 }
@@ -122,18 +122,18 @@ const EmployeeDetails = () => {
       />
       <div className="my-2 bg-white border rounded-md p-4 flex flex-wrap justify-between items-center gap-2">
         <div className="flex-1 flex gap-2 divide-x-2 divide-x-reverse w-full">
-          <p className="px-2 text-gray-600">
+          <div className="px-2 text-gray-600">
             <strong className="text-black">{t("AddEmployee.name")}</strong> :{" "}
             {searchParams.get("name")}
-          </p>
-          <p className="px-2 text-gray-600">
+          </div>
+          <div className="px-2 text-gray-600">
             <strong className="text-black">{t("AddEmployee.salary")}</strong> :{" "}
             {searchParams.get("salary")}
-          </p>
-          <p className="px-2 text-gray-600">
+          </div>
+          <div className="px-2 text-gray-600">
             <strong className="text-black">{t("AddEmployee.total")}</strong> :{" "}
             {searchParams.get("total")}
-          </p>
+          </div>
         </div>
         {/* <div className="gap-2 flex">
           <CustomButton

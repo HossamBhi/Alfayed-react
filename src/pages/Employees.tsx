@@ -8,7 +8,7 @@ import {
 import { CustomTable } from "../components/common";
 import { AddEmployee, PayForm } from "../components/popups";
 import { RootState } from "../redux/store";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { employeeProps } from "../utils/types";
 
 import { useEffect, useMemo, useState } from "react";
@@ -62,14 +62,14 @@ const Employees = () => {
         col.field === "created_Date"
           ? {
               ...col,
-              width: 150,
+              width: 200,
               type: "date",
               align: "center",
               headerAlign: "center",
               valueFormatter: (params: GridValueFormatterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
               valueGetter: (params: GridValueGetterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
             }
           : col.field === "created_Date"
           ? {

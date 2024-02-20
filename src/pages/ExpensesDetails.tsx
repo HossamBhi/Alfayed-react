@@ -4,7 +4,7 @@ import { CustomTable, renderCellExpand } from "../components/common";
 import { AddExpenses } from "../components/popups";
 import { useApi } from "../hooks";
 import { EXPENSES } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { supplierDataProps, supplierProps } from "../utils/types";
 import {
   GridColDef,
@@ -75,14 +75,14 @@ const ExpensesDetails = () => {
           : col.field === "created_Date"
           ? {
               ...col,
-              width: 150,
+              width: 200,
               type: "date",
               align: "center",
               headerAlign: "center",
               valueFormatter: (params: GridValueFormatterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
               valueGetter: (params: GridValueGetterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
             }
           : col.field === "expenseRecordNotes"
           ? { ...col, width: 200, renderCell: renderCellExpand }

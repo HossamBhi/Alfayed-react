@@ -16,7 +16,7 @@ import { PayForm } from "../components/popups";
 import AddClient from "../components/popups/AddClient";
 import { RootState } from "../redux/store";
 import { profileEnums } from "../utils/enums";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { clientProps, supplierProps } from "../utils/types";
 import { BsSendPlusFill } from "react-icons/bs";
 
@@ -45,17 +45,17 @@ const Clients = () => {
 
     return [
       ...columns.map((col) =>
-        col.field === "date"
+        col.field === "created_Date"
           ? {
               ...col,
-              width: 150,
+              width: 180,
               type: "date",
               align: "center",
               headerAlign: "center",
               valueFormatter: (params: GridValueFormatterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
               valueGetter: (params: GridValueGetterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
             }
           : col.field === "name"
           ? { ...col, width: 200 }

@@ -17,7 +17,7 @@ import { ViewClientRow } from "../components/popups";
 import AddClient from "../components/popups/AddClient";
 import { useApi } from "../hooks";
 import { CLIENT } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { clientProps, clientRowProps } from "../utils/types";
 
 const ClientDetails = () => {
@@ -68,7 +68,7 @@ const ClientDetails = () => {
             !["clientID", "clientName", "productList"].includes(col.field)
         )
         .map((col) =>
-          ["createdDate", "date", "payDate"].includes(col.field)
+          ["date", "payDate"].includes(col.field)
             ? {
                 ...col,
                 width: 150,
@@ -79,6 +79,18 @@ const ClientDetails = () => {
                   formatDate(params.value),
                 valueGetter: (params: GridValueGetterParams) =>
                   formatDate(params.value),
+              }
+            : ["createdDate"].includes(col.field)
+            ? {
+                ...col,
+                width: 200,
+                type: "date",
+                align: "center",
+                headerAlign: "center",
+                valueFormatter: (params: GridValueFormatterParams) =>
+                  formatDateTime(params.value),
+                valueGetter: (params: GridValueGetterParams) =>
+                  formatDateTime(params.value),
               }
             : col.field === "typeId"
             ? {

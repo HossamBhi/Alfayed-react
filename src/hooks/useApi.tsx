@@ -48,10 +48,10 @@ export default () => {
 
   const getDataAndParams = ({ data, params }: any) => ({
     data: JSON.stringify(data),
-    params: { lang: APP_LANG(), ...params, pageSize: 500 },
+    params: { lang: APP_LANG(), pageSize: 500, ...params },
   });
   const getDataAndParamsGet = ({ params }: any) => ({
-    params: { lang: APP_LANG(), ...params, pageSize: 500 },
+    params: { lang: APP_LANG(), pageSize: 500, ...params },
   });
 
   const validateUser = () => {

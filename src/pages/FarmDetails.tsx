@@ -16,7 +16,7 @@ import { CustomTable } from "../components/common";
 import { AddFarm } from "../components/popups";
 import { useApi } from "../hooks";
 import { SUPPLIERS } from "../utils/endpoints";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { supplierDataProps, supplierProps } from "../utils/types";
 
 const FarmDetails = () => {
@@ -82,14 +82,14 @@ const FarmDetails = () => {
           : col.field === "created_Date"
           ? {
               ...col,
-              width: 150,
+              width: 200,
               type: "date",
               align: "center",
               headerAlign: "center",
               valueFormatter: (params: GridValueFormatterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
               valueGetter: (params: GridValueGetterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
             }
           : col.field === "farmsNotes"
           ? { ...col, width: 200 }

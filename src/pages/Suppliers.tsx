@@ -1,7 +1,7 @@
 import { CustomTable } from "../components/common";
 import { AddFarm, PayForm } from "../components/popups";
 import { RootState } from "../redux/store";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDateTime } from "../utils/helper";
 import { supplierProps } from "../utils/types";
 import { Tooltip } from "@mui/material";
 import {
@@ -44,17 +44,17 @@ const Suppliers = () => {
 
     return [
       ...columns.map((col) =>
-        col.field === "date"
+        col.field === "created_Date"
           ? {
               ...col,
-              width: 150,
+              width: 200,
               type: "date",
               align: "center",
               headerAlign: "center",
               valueFormatter: (params: GridValueFormatterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
               valueGetter: (params: GridValueGetterParams) =>
-                formatDate(params.value),
+                formatDateTime(params.value),
             }
           : col.field === "name"
           ? { ...col, width: 200 }

@@ -16,7 +16,7 @@ import { saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
 import { ACCOUNTS } from "../utils/endpoints";
 import { getTrasactionsEnums } from "../utils/enums";
-import { createDataColumns, formatDate } from "../utils/helper";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 
 const filter = [
   { id: getTrasactionsEnums.all, label: "الكل" },
@@ -28,16 +28,26 @@ const filter = [
 ];
 const currentDate = new Date();
 const Accounts = () => {
+  const transactions = useSelector(
+    (state: RootState) => state.accounts.transactions
+  );
+  const total = useSelector((state: RootState) => state.accounts.total);
   const { t } = useTranslation();
   const { post } = useApi();
   const dispatch = useDispatch();
+
   const [startDate, setStartDate] = useState(
     new Date(currentDate.getFullYear() + "-01-01")
   );
   const [endDate, setEndDate] = useState(new Date());
-  const total = useSelector((state: RootState) => state.accounts.total);
-  const transactions = useSelector(
-    (state: RootState) => state.accounts.transactions
+
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+  console.log({ transactions });
+  const [detailsType, setDetailsType] = useState<getTrasactionsEnums>(
+    getTrasactionsEnums.all
   );
   const [visibleColumns, setVisibleColumns] = useState({
     action: false,
@@ -46,7 +56,6 @@ const Accounts = () => {
     expenseID: false,
     farmID: false,
     fridgeID: false,
-    // id: false,
     typeID: false,
     farmName: true,
     fridgeName: true,
@@ -54,9 +63,6 @@ const Accounts = () => {
     empName: true,
     clientName: true,
   });
-  const [detailsType, setDetailsType] = useState<getTrasactionsEnums>(
-    getTrasactionsEnums.all
-  );
 
   useEffect(() => {
     switch (detailsType) {
@@ -124,14 +130,16 @@ const Accounts = () => {
         recordType: detailsType,
         from: formatDate(startDate),
         to: formatDate(endDate),
+        // ...paginationModel,
+        // currentPage: paginationModel.page,
       },
     }).then((res) => {
-      // console.log("ACCOUNTS.getAll: ", { res });
+      console.log("ACCOUNTS.getAll: ", { res });
       if (Array.isArray(res?.responseValue)) {
         dispatch(saveTransactionsAction(res.responseValue));
       }
     });
-  }, [startDate, endDate, detailsType]);
+  }, [startDate, endDate, detailsType, paginationModel]);
 
   const columns: GridColDef[] =
     !transactions || transactions?.length <= 0
@@ -150,14 +158,14 @@ const Accounts = () => {
           col.field === "date"
             ? {
                 ...col,
-                width: 150,
+                width: 200,
                 type: "date",
                 align: "center",
                 headerAlign: "center",
                 valueFormatter: (params: GridValueFormatterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
                 valueGetter: (params: GridValueGetterParams) =>
-                  formatDate(params.value),
+                  formatDateTime(params.value),
               }
             : ["notes"].includes(col.field)
             ? { ...col, width: 200 }
@@ -201,6 +209,10 @@ const Accounts = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={500}
+          pageSizeOptions={[100]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           onColumnVisibilityModelChange={(val) => setVisibleColumns(val as any)}
           columnVisibilityModel={visibleColumns}
           rows={
