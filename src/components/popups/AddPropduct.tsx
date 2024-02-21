@@ -37,31 +37,35 @@ const AddPropduct = ({
   const dispatch = useDispatch();
 
   const callAPI = () => {
-    if (editData) {
-      put({
-        url: PRODUCTS.update,
-        data: { name },
-        params: { id: editData.id },
-      }).then((res) => {
-        console.log("Update PRODUCTS: ", res);
-        if (res?.id) {
-          toast.success(" تم التعديل بنجاح ");
-          setEditData && setEditData(res);
-          dispatch(editProductAction(res));
-        }
-      });
-    } else {
-      post({ url: PRODUCTS.add, data: { name } }).then((res) => {
-        console.log("Add PRODUCTS: ", res);
-        if (!res.status) {
-          toast.success(" تم الحفظ بنجاح ");
-          dispatch(addProductAction(res));
-          // if (setProducts && products)
-          //   setProducts && setProducts([res, ...products]);
-        }
-      });
+    if (name) {
+      if (editData) {
+        put({
+          url: PRODUCTS.update,
+          data: { name },
+          params: { id: editData.id },
+        }).then((res) => {
+          console.log("Update PRODUCTS: ", res);
+          if (res?.id) {
+            toast.success(" تم التعديل بنجاح ");
+            setEditData && setEditData(res);
+            dispatch(editProductAction(res));
+          }
+        });
+      } else {
+        post({ url: PRODUCTS.add, data: { name } }).then((res) => {
+          console.log("Add PRODUCTS: ", res);
+          if (!res.status) {
+            toast.success(" تم الحفظ بنجاح ");
+            dispatch(addProductAction(res));
+            // if (setProducts && products)
+            //   setProducts && setProducts([res, ...products]);
+          }
+        });
 
-      setName("");
+        setName("");
+      }
+    } else {
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("product.productName"));
     }
   };
   return (

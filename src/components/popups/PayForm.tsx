@@ -108,6 +108,8 @@ const PayForm = ({
         }
       });
       handleOnCloseAddProduct();
+    } else {
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("payForm.totalPay"));
     }
   };
 

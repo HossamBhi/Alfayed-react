@@ -45,29 +45,34 @@ const AddEmployee = ({
   }, [editData]);
 
   const callAPI = () => {
-    if (editData) {
-      put({
-        url: EMPLOYEES.update,
-        data: { name, salary },
-        params: { id: editData.id },
-      }).then((res) => {
-        console.log("Update Employee: ", res);
-        if (res?.id) {
-          toast.success(" تم التعديل بنجاح ");
-          setEditData && setEditData(null);
-          dispatch(editEmployeeAction(res));
-        }
-      });
-    } else {
-      post({ url: EMPLOYEES.add, data: { name, salary } }).then((res) => {
-        console.log("Add Employees: ", res);
-        if (!res.status) {
-          toast.success(" تم الحفظ بنجاح ");
-          dispatch(addEmployeeAction(res));
-        }
-      });
+    if (name && salary) {
+      if (editData) {
+        put({
+          url: EMPLOYEES.update,
+          data: { name, salary },
+          params: { id: editData.id },
+        }).then((res) => {
+          console.log("Update Employee: ", res);
+          if (res?.id) {
+            toast.success(" تم التعديل بنجاح ");
+            setEditData && setEditData(null);
+            dispatch(editEmployeeAction(res));
+          }
+        });
+      } else {
+        post({ url: EMPLOYEES.add, data: { name, salary } }).then((res) => {
+          console.log("Add Employees: ", res);
+          if (!res.status) {
+            toast.success(" تم الحفظ بنجاح ");
+            dispatch(addEmployeeAction(res));
+          }
+        });
 
-      setName("");
+        setName("");
+      }
+    } else {
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("AddEmployee.name"));
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("AddEmployee.salary"));
     }
   };
 

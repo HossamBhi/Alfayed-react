@@ -43,30 +43,33 @@ const AddClient = ({
   }, [editData]);
 
   const callAPI = () => {
-    if (editData) {
-      put({
-        url: CLIENT.update,
-        data: { name },
-        params: { id: editData.id },
-      }).then((res) => {
-        console.log("Update Cleint: ", res);
-        if (res?.id) {
-          toast.success(" تم التعديل بنجاح ");
-          setEditData && setEditData(res);
-          dispatch(editClientAction(res));
-        }
-      });
-    } else {
-      post({ url: CLIENT.add, data: { name } }).then((res) => {
-        console.log("Update Cleint: ", res);
-        if (!res.status) {
-          toast.success(" تم الحفظ بنجاح ");
-          dispatch(addClientAction(res));
-        }
-      });
+    if (name) {
+      if (editData) {
+        put({
+          url: CLIENT.update,
+          data: { name },
+          params: { id: editData.id },
+        }).then((res) => {
+          console.log("Update Cleint: ", res);
+          if (res?.id) {
+            toast.success(" تم التعديل بنجاح ");
+            setEditData && setEditData(res);
+            dispatch(editClientAction(res));
+          }
+        });
+      } else {
+        post({ url: CLIENT.add, data: { name } }).then((res) => {
+          console.log("Update Cleint: ", res);
+          if (!res.status) {
+            toast.success(" تم الحفظ بنجاح ");
+            dispatch(addClientAction(res));
+          }
+        });
 
-      setName("");
-    }
+        setName("");
+      }
+    } else
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("client.clientName"));
   };
   return (
     <div>

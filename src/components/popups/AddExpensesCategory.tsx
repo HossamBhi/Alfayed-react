@@ -2,15 +2,15 @@ import { DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import { CustomButton, CustomDialog, CustomInput } from "../common";
-import { PopupButton } from ".";
-import { expenseProps } from "../../utils/types";
-import { useApi } from "../../hooks";
-import { EXPENSES_TYPE } from "../../utils/endpoints";
 import { useDispatch } from "react-redux";
-import { addExpenseTypeAction } from "../../redux/expenses";
-import { isNotEmpty } from "../../utils/validation";
 import { toast } from "react-toastify";
+import { PopupButton } from ".";
+import { useApi } from "../../hooks";
+import { addExpenseTypeAction } from "../../redux/expenses";
+import { EXPENSES_TYPE } from "../../utils/endpoints";
+import { expenseProps } from "../../utils/types";
+import { isNotEmpty } from "../../utils/validation";
+import { CustomButton, CustomDialog, CustomInput } from "../common";
 
 type AddExpensesCategoryProps = {
   onClose?: () => void;
@@ -39,6 +39,9 @@ const AddExpensesCategory = ({
   const dispatch = useDispatch();
   const callAPI = () => {
     if (!isNotEmpty(name)) {
+      toast.error(
+        "قم بملأ هذا العنصر اولا" + ", " + t("expenses.expensesCategoryName")
+      );
       return setErrors({ ...errors, name: true });
     } else {
       setErrors({ ...errors, name: false });

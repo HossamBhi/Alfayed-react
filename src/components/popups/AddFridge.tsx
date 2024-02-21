@@ -44,29 +44,33 @@ const AddFridge = ({
   }, [editData]);
 
   const callAPI = () => {
-    if (editData) {
-      put({
-        url: FRIDGES.update,
-        data: { name },
-        params: { id: editData.id },
-      }).then((res) => {
-        console.log("Update FRIDGES: ", res);
-        if (res?.id) {
-          toast.success(" تم التعديل بنجاح ");
-          setEditData && setEditData(res);
-          dispatch(editFridgeAction(res));
-        }
-      });
-    } else {
-      post({ url: FRIDGES.add, data: { name } }).then((res) => {
-        console.log("Get FRIDGES:  ", res);
-        if (!res.status) {
-          toast.success(" تم الحفظ بنجاح ");
-          dispatch(addFridgeAction(res));
-        }
-      });
+    if (name) {
+      if (editData) {
+        put({
+          url: FRIDGES.update,
+          data: { name },
+          params: { id: editData.id },
+        }).then((res) => {
+          console.log("Update FRIDGES: ", res);
+          if (res?.id) {
+            toast.success(" تم التعديل بنجاح ");
+            setEditData && setEditData(res);
+            dispatch(editFridgeAction(res));
+          }
+        });
+      } else {
+        post({ url: FRIDGES.add, data: { name } }).then((res) => {
+          console.log("Get FRIDGES:  ", res);
+          if (!res.status) {
+            toast.success(" تم الحفظ بنجاح ");
+            dispatch(addFridgeAction(res));
+          }
+        });
 
-      setName("");
+        setName("");
+      }
+    } else {
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("fridges.name"));
     }
   };
 
@@ -80,8 +84,7 @@ const AddFridge = ({
         >
           {showButtonTitle && (
             <>
-              <BsFillPlusCircleFill className="me-4" />{" "}
-              {t("fridges.addTitle")}
+              <BsFillPlusCircleFill className="me-4" /> {t("fridges.addTitle")}
             </>
           )}
         </PopupButton>

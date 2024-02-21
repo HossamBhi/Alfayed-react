@@ -6,9 +6,10 @@ const CustomDialog = ({
   onClose,
   open,
   children,
+  ...props
 }: CustomDialogProps & DialogProps) => {
   return (
-    <Dialog fullWidth onClose={onClose} open={open}>
+    <Dialog fullWidth onClose={onClose} open={open} {...props}>
       {children}
     </Dialog>
   );

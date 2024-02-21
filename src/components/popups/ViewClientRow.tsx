@@ -14,14 +14,23 @@ const ViewClientRow = ({ onClose, show, data }: ViewClientRowProps) => {
 
   return (
     <div>
-      <CustomDialog open={show} onClose={handleOnCloseAddProduct}>
-        <DialogContent className="w-full grid grid-cols-5 !p-0">
+      <CustomDialog
+        open={show}
+        onClose={handleOnCloseAddProduct}
+        PaperProps={{
+          style: { maxWidth: "90%", margin: 0 },
+        }}
+      >
+        <DialogContent className="w-full max-w-auto grid grid-cols-5 !p-0">
           <span className="col-span-5 bg-green-900 py-4 rounded-t text-center font-bold text-white text-lg">
             السائق: {data?.driverName} / التاريخ {formatDate(data?.date as any)}
           </span>
-          <div className="w-full grid col-span-5 grid-cols-5">
+          <div className="w-full grid col-span-5 grid-cols-6">
             <span className="col-span-1 bg-green-50 p-2 py-4 border font-bold text-lg">
               الصنف
+            </span>
+            <span className="col-span-1 bg-green-50 p-2 py-4 border font-bold text-lg">
+              نوع الصندوق
             </span>
             <span className="col-span-1 bg-green-50 p-2 py-4 border font-bold text-lg">
               الوزن
@@ -37,8 +46,11 @@ const ViewClientRow = ({ onClose, show, data }: ViewClientRowProps) => {
             </span>
           </div>
           {data?.productList?.map((item: productListProps) => (
-            <div className="w-full grid col-span-5 grid-cols-5" key={item.id}>
+            <div className="w-full grid col-span-5 grid-cols-6" key={item.id}>
               <span className="col-span-1 p-2 border">{item.productName}</span>
+              <span className="col-span-1 p-2 border">
+                {item.productBoxName}
+              </span>
               <span className="col-span-1 p-2 border">{item.quantity}</span>
               <span className="col-span-1 p-2 border">{item.price}</span>
               <span className="col-span-1 p-2 border">{item.total}</span>

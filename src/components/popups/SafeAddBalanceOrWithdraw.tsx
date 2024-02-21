@@ -6,22 +6,10 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { PopupButton } from ".";
 import { useApi } from "../../hooks";
-import { editClientAction } from "../../redux/clients";
-import { editEmployeeAction } from "../../redux/employees";
-import { editExpenseAction } from "../../redux/expenses";
-import { editFridgeAction } from "../../redux/fridges";
-import { editSupplierAction } from "../../redux/suppliers";
-import {
-  ACCOUNTS,
-  CLIENT,
-  EMPLOYEES,
-  EXPENSES,
-  FRIDGES,
-  SUPPLIERS,
-} from "../../utils/endpoints";
-import { profileEnums, trasactionsEnums } from "../../utils/enums";
-import { CustomButton, CustomDialog, CustomInput } from "../common";
 import { saveTotalAction } from "../../redux/accounts";
+import { ACCOUNTS } from "../../utils/endpoints";
+import { trasactionsEnums } from "../../utils/enums";
+import { CustomButton, CustomDialog, CustomInput } from "../common";
 
 type PayFormProps = {
   onClose?: () => void;
@@ -98,6 +86,8 @@ const SafeAddBalanceOrWithdraw = ({
           }
         });
       handleOnClose();
+    } else {
+      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("payForm.totalPay"));
     }
   };
 

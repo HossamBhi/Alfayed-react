@@ -67,11 +67,18 @@ const AddExpenses = ({
 
   const callAPI = () => {
     if (!isNotEmpty(name)) {
+      toast.error(
+        "قم بملأ هذا العنصر اولا" + ", " + t("expenses.expensesName")
+      );
       return setErrors({ ...errors, name: true });
     } else {
       setErrors({ ...errors, name: false });
     }
     if (!expenseType?.id) {
+      toast.error(
+        "قم بملأ هذا العنصر اولا" + ", " + t("expenses.expenseCategroy")
+      );
+
       return setErrors({ ...errors, type: true });
     } else {
       setErrors({ ...errors, type: false });
@@ -161,7 +168,6 @@ const AddExpenses = ({
               options={expensesTypes}
               getOptionLabel={(item) => item.name}
               id="type"
-              // TODO: Change it to id
               value={expensesTypes.find((item) => item.name == expenseTypeName)}
               onChange={(e, value) => {
                 if (!value?.id) {
