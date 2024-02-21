@@ -1,5 +1,6 @@
 import {
   GridColDef,
+  GridRenderCellParams,
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
@@ -11,13 +12,13 @@ import {
   CustomTable,
   DatePickerRange,
 } from "../components/common";
+import { SafeAddBalanceOrWithdraw } from "../components/popups";
 import { useApi } from "../hooks";
 import { saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
 import { ACCOUNTS } from "../utils/endpoints";
 import { getTrasactionsEnums, trasactionsEnums } from "../utils/enums";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
-import { SafeAddBalanceOrWithdraw } from "../components/popups";
 
 const filter = [
   { id: getTrasactionsEnums.all, label: "الكل" },
@@ -171,6 +172,25 @@ const Accounts = () => {
               }
             : ["notes"].includes(col.field)
             ? { ...col, width: 200 }
+            : col.field === "type"
+            ? {
+                ...col,
+                width: 150,
+                renderCell: (props: GridRenderCellParams<any, Date>) => {
+                  const { row } = props;
+                  return (
+                    <p
+                      className={`py-1 px-4 w-full text-center rounded-md text-white bg-primary`}
+                    >
+                      {row.type === "Admin_Expense"
+                        ? "ايداع من الادمن"
+                        : row.type === "Income"
+                        ? "ايداع"
+                        : "سحب"}
+                    </p>
+                  );
+                },
+              }
             : { ...col, width: 120 }
         ),
     ];
