@@ -1,4 +1,4 @@
-import { trasactionsEnums } from "./enums";
+import { clientProductStaus, trasactionsEnums } from "./enums";
 
 export type productProps = {
   productID: number;
@@ -124,6 +124,7 @@ export type productListProps = {
   price: string;
   total: string;
   isNew: boolean;
+  statusID: clientProductStaus;
 };
 
 export type clientRowProps = {

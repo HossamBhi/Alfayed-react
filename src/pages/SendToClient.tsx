@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import CarProducts from "../components/client/CarProducts";
 import { CustomButton, CustomInput } from "../components/common";
 import { AddFarm } from "../components/popups";
@@ -10,7 +11,7 @@ import { useApi } from "../hooks";
 import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
 import { CLIENT } from "../utils/endpoints";
-import { trasactionsEnums } from "../utils/enums";
+import { clientProductStaus, trasactionsEnums } from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import {
   clientRowProps,
@@ -18,7 +19,6 @@ import {
   productProps,
   supplierProps,
 } from "../utils/types";
-import { toast } from "react-toastify";
 
 const SendToClient = () => {
   const navigate = useNavigate();
@@ -85,26 +85,32 @@ const SendToClient = () => {
     }));
   };
 
-  const calculateNetQuantity: string = useMemo(() => {
-    const { productList } = values;
+  const filterdProductList = useMemo(
+    () =>
+      values.productList.filter(
+        (item) => item.statusID !== clientProductStaus.deleted
+      ),
+    [values.productList]
+  );
 
-    return productList
+  const calculateNetQuantity: string = useMemo(() => {
+    return filterdProductList
       .reduce((prev, curr) => {
         return prev + Number(curr.quantity);
       }, 0)
       .toFixed(2);
-  }, [values.productList]);
+  }, [filterdProductList]);
 
   const calculateTotal = useMemo(() => {
-    const { deliveredToDriver, productList } = values;
+    const { deliveredToDriver } = values;
 
     return (
       Number(deliveredToDriver) +
-      productList.reduce((prev, curr) => {
+      filterdProductList.reduce((prev, curr) => {
         return prev + Number(curr.total);
       }, 0)
     ).toFixed(2);
-  }, [values.productList, values.deliveredToDriver]);
+  }, [filterdProductList, values.deliveredToDriver]);
 
   const isValid = () => {
     let isTrue = true;
@@ -170,7 +176,6 @@ const SendToClient = () => {
         });
     }
   };
-
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="mb-4 flex flex-col rounded-lg border bg-white p-4">
@@ -288,14 +293,14 @@ const SendToClient = () => {
               <CustomButton
                 variant="contained"
                 color={
-                  values.productList?.length < 1
+                  filterdProductList?.length < 1
                     ? ("action" as any)
                     : id
                     ? "secondary"
                     : "primary"
                 }
                 onClick={handleSubmit}
-                disabled={values.productList?.length < 1}
+                disabled={filterdProductList?.length < 1}
               >
                 {id ? t("common.edit") : t("common.save")}
               </CustomButton>
@@ -316,29 +321,8 @@ const SendToClient = () => {
       <CarProducts
         productList={values.productList}
         setProductList={(list: productListProps) => {
-          // console.log({ list, productList: values.productList });
           setValues((vals: any) => {
-            return {
-              ...vals,
-              productList: list,
-            };
-            // if (vals.productList) {
-            //   console.log("SAVE ME AS OLD LIST TOO");
-            //   return {
-            //     ...vals,
-            //     productList: [
-            //       ...vals.productList.filter((item) => item.id != list.id),
-            //       list,
-            //     ],
-            //   };
-            // } else {
-            //   console.log("-------------------------");
-
-            //   return {
-            //     ...vals,
-            //     productList: list,
-            //   };
-            // }
+            return { ...vals, productList: list };
           });
         }}
       />

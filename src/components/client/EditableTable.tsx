@@ -22,8 +22,7 @@ import { RootState } from "../../redux/store";
 import { createDataColumns } from "../../utils/helper";
 import { CustomButton } from "../common";
 import { productListProps } from "../../utils/types";
-
-
+import { clientProductStaus } from "../../utils/enums";
 
 interface EditToolbarProps {
   setRowModesModel: (
@@ -62,6 +61,7 @@ export default function EditableTable({
           price: "",
           total: "",
           isNew: true,
+          statusID: clientProductStaus.new,
         },
       ]);
       setRowModesModel((oldModel) => ({
@@ -101,7 +101,16 @@ export default function EditableTable({
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setProductList(productList.filter((row) => row.id !== id));
+    const findIndex = productList.findIndex((row) => row.id === id);
+    console.log({findIndex})
+    const newList = productList;
+    newList[findIndex] = {
+      ...newList[findIndex],
+      statusID: clientProductStaus.deleted,
+    };
+
+    setProductList(newList);
+    // setProductList(productList.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -120,6 +129,10 @@ export default function EditableTable({
     const updatedRow = {
       ...newRow,
       isNew: false,
+      statusID:
+        newRow.statusID === clientProductStaus.new
+          ? clientProductStaus.new
+          : clientProductStaus.updated,
       productID: products.find((item) => item.name == newRow.productName)?.id,
       productBoxID: products.find((item) => item.name == newRow.productBoxName)
         ?.id,
@@ -143,7 +156,7 @@ export default function EditableTable({
     if (columns.length <= 0) return columns;
     return [
       ...columns
-        .filter((col) => col.field !== "isNew")
+        .filter((col) => !["isNew"].includes(col.field))
         .map((col) =>
           ["productName", "productBoxName"].includes(col.field)
             ? {
@@ -164,7 +177,7 @@ export default function EditableTable({
       {
         field: "actions",
         type: "actions",
-        headerName: "Actions",
+        headerName: t("table.actions"),
         width: 100,
         cellClassName: "actions",
         getActions: ({ id }: GridValueGetterParams) => {
@@ -231,7 +244,9 @@ export default function EditableTable({
           productID: false,
           productBoxID: false,
         }}
-        rows={productList}
+        rows={productList.filter(
+          (item) => item.statusID !== clientProductStaus.deleted
+        )}
         columns={customeColumns}
         editMode="row"
         rowModesModel={rowModesModel}

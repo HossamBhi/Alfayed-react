@@ -11,6 +11,7 @@ export enum trasactionsEnums {
   bouns,
   income,
 }
+
 export enum fridgeTransactionEnums {
   in = 1,
   out,
@@ -23,4 +24,11 @@ export enum getTrasactionsEnums {
   fridge,
   client,
   employee,
+}
+
+export enum clientProductStaus {
+  current = 1,
+  updated,
+  deleted,
+  new,
 }
