@@ -45,7 +45,7 @@ const AddEmployee = ({
   }, [editData]);
 
   const callAPI = () => {
-    if (name && salary) {
+    if (name ) {
       if (editData) {
         put({
           url: EMPLOYEES.update,
@@ -70,9 +70,10 @@ const AddEmployee = ({
 
         setName("");
       }
+      handleOnCloseAddProduct()
     } else {
       toast.error("قم بملأ هذا العنصر اولا" + ", " + t("AddEmployee.name"));
-      toast.error("قم بملأ هذا العنصر اولا" + ", " + t("AddEmployee.salary"));
+      // toast.error("قم بملأ هذا العنصر اولا" + ", " + t("AddEmployee.salary"));
     }
   };
 
@@ -125,12 +126,7 @@ const AddEmployee = ({
           <CustomButton onClick={handleOnCloseAddProduct}>
             {t("common.close")}
           </CustomButton>
-          <CustomButton
-            onClick={() => {
-              callAPI();
-              handleOnCloseAddProduct();
-            }}
-          >
+          <CustomButton onClick={callAPI}>
             {editData ? t("common.edit") : t("common.save")}
           </CustomButton>
         </DialogActions>

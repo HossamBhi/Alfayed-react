@@ -65,10 +65,11 @@ const AddToFridge = () => {
   const { get } = useApi();
   useEffect(() => {
     handleSelectChange("fridge", {
-      id: Number(searchParams.get("fridgeID")),
+      id: Number(searchParams.get("fridgeID")) || "",
       name: searchParams.get("fridgeName") || "",
     } as any);
   }, [searchParams.get("fridgeID")]);
+
   useEffect(() => {
     if (id != null) {
       get({ url: FRIDGES.getRecord, params: { id } }).then((res) => {
@@ -194,8 +195,9 @@ const AddToFridge = () => {
               }}
               value={
                 {
-                  id: values.fridgeID || searchParams.get("fridgeID"),
-                  name: values.fridgeName || searchParams.get("fridgeName"),
+                  id: values.fridgeID || searchParams.get("fridgeID") || "",
+                  name:
+                    values.fridgeName || searchParams.get("fridgeName") || "",
                 } as any
               }
               renderInput={(params) => (

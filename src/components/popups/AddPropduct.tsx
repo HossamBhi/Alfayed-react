@@ -64,6 +64,7 @@ const AddPropduct = ({
 
         setName("");
       }
+      handleOnCloseAddProduct();
     } else {
       toast.error("قم بملأ هذا العنصر اولا" + ", " + t("product.productName"));
     }
@@ -104,12 +105,7 @@ const AddPropduct = ({
           <CustomButton onClick={handleOnCloseAddProduct}>
             {t("common.close")}
           </CustomButton>
-          <CustomButton
-            onClick={() => {
-              callAPI();
-              handleOnCloseAddProduct();
-            }}
-          >
+          <CustomButton onClick={callAPI}>
             {editData ? t("common.edit") : t("common.save")}
           </CustomButton>
         </DialogActions>

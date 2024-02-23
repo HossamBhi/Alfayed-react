@@ -57,6 +57,7 @@ const AddClient = ({
             dispatch(editClientAction(res));
           }
         });
+        
       } else {
         post({ url: CLIENT.add, data: { name } }).then((res) => {
           console.log("Update Cleint: ", res);
@@ -68,6 +69,7 @@ const AddClient = ({
 
         setName("");
       }
+      handleOnCloseAddProduct();
     } else
       toast.error("قم بملأ هذا العنصر اولا" + ", " + t("client.clientName"));
   };
@@ -110,12 +112,7 @@ const AddClient = ({
           <CustomButton onClick={handleOnCloseAddProduct}>
             {t("common.close")}
           </CustomButton>
-          <CustomButton
-            onClick={() => {
-              callAPI();
-              handleOnCloseAddProduct();
-            }}
-          >
+          <CustomButton onClick={callAPI}>
             {editData ? t("common.edit") : t("common.save")}
           </CustomButton>
         </DialogActions>

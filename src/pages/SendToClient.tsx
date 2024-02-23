@@ -46,7 +46,7 @@ const SendToClient = () => {
   });
   const [errors, setErrors] = useState({ clientID: false, productID: false });
   const { get } = useApi();
-
+  console.log({ productList: values.productList });
   useEffect(() => {
     if (id != null) {
       get({ url: CLIENT.getRecord, params: { recordId: id } }).then((res) => {

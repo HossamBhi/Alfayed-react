@@ -69,6 +69,7 @@ const AddFridge = ({
 
         setName("");
       }
+      handleOnCloseAddProduct();
     } else {
       toast.error("قم بملأ هذا العنصر اولا" + ", " + t("fridges.name"));
     }
@@ -112,12 +113,7 @@ const AddFridge = ({
           <CustomButton onClick={handleOnCloseAddProduct}>
             {t("common.close")}
           </CustomButton>
-          <CustomButton
-            onClick={() => {
-              callAPI();
-              handleOnCloseAddProduct();
-            }}
-          >
+          <CustomButton onClick={callAPI}>
             {editData ? t("common.edit") : t("common.save")}
           </CustomButton>
         </DialogActions>

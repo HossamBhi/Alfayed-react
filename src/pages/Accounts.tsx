@@ -45,7 +45,7 @@ const Accounts = () => {
   const [endDate, setEndDate] = useState(new Date());
 
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: 100,
     page: 0,
   });
 

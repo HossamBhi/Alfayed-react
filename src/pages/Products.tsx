@@ -9,7 +9,7 @@ import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { CustomTable } from "../components/common";
 import { AddPropduct } from "../components/popups";
 import { useApi } from "../hooks";
@@ -23,7 +23,7 @@ const Products = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   // const pathname = usePathname();
-  // const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { get } = useApi();
   const productsDetails = useSelector(
     (state: RootState) => state.stock.productsDetails
@@ -157,6 +157,14 @@ const Products = () => {
           rows={productsDetails || []}
           columns={customeColumns as any}
           getRowId={(item) => item.farmRecordID}
+          initialState={{
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterValues: [searchParams.get("productName")],
+              },
+            },
+          }}
         />
       </div>
     </main>

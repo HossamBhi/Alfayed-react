@@ -68,8 +68,6 @@ const SafeAddBalanceOrWithdraw = ({
           if (res?.id) {
             toast.success(" تم الحفظ بنجاح ");
             dispatch(saveTotalAction(res.total));
-            // setEditData && setEditData(null);
-            // setLocalData(res);
           }
         });
       else
@@ -81,8 +79,6 @@ const SafeAddBalanceOrWithdraw = ({
           if (res?.id) {
             toast.success(" تم الحفظ بنجاح ");
             dispatch(saveTotalAction(res.total));
-            // setEditData && setEditData(null);
-            // setLocalData(res);
           }
         });
       handleOnClose();

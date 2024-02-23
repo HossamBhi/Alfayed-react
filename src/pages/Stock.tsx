@@ -62,15 +62,19 @@ const Stock = () => {
         width: 150,
         type: "actions",
         getActions: (params: any) => {
-          const { id } = params;
-          // TbSquareMinusFilled
+          const { id, row } = params;
+          console.log(row);
           return [
             <Tooltip key={id} title={t("common.show")}>
               <GridActionsCellItem
                 icon={<FaEye size={16} />}
                 label={t("common.show")}
                 sx={{ color: "primary.main" }}
-                onClick={() => navigate("/products")}
+                onClick={() =>
+                  navigate(
+                    `/products?productName=${row.productName}&productID=${row.productID}`
+                  )
+                }
               />
             </Tooltip>,
             <Tooltip key={"add-to-fridge"} title={t("fridges.addToTitle")}>
@@ -78,7 +82,7 @@ const Stock = () => {
                 icon={<BsFillPlusSquareFill size={16} />}
                 label={t("fridges.addToTitle")}
                 sx={{ color: "primary.main" }}
-                onClick={() => navigate("/add-to-fridge")}
+                onClick={() => navigate(`/add-to-fridge`)}
               />
             </Tooltip>,
             <Tooltip key={"zero-stock"} title={t("stock.deleteQuantity")}>
