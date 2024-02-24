@@ -103,7 +103,7 @@ const AddExpenses = ({
       }).then((res) => {
         console.log("get EXPENSES: ", res);
         if (res.status) {
-          alert("Error " + res.status + ": " + res.data);
+          // alert("Error " + res.status + ": " + res.data);
         } else {
           toast.success(" تم الحفظ بنجاح ");
           dispatch(addExpenseAction(res));

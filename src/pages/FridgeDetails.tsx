@@ -43,7 +43,7 @@ const FridgeDetails = () => {
             setDetailsData(res.fridgeRecords);
           } else {
             setDetailsData([]);
-            alert("Error " + res.status + ": " + res.data);
+            // alert("Error " + res.status + ": " + res.data);
           }
         }
       );

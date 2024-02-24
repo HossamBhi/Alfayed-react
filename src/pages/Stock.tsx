@@ -31,7 +31,7 @@ const Stock = () => {
         dispatch(saveStockAction(res));
       } else {
         // setTableData([]);
-        alert("Error " + res.status + ": " + res.data);
+        // alert("Error " + res.status + ": " + res.data);
       }
     });
   }, []);

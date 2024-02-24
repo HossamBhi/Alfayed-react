@@ -38,7 +38,7 @@ const ExpensesDetails = () => {
           setSupplierData(res?.expensesList || []);
         } else {
           setSupplierData([]);
-          alert("Error " + res.status + ": " + res.data);
+          // alert("Error " + res.status + ": " + res.data);
         }
       });
     }

@@ -63,7 +63,7 @@ const AddExpensesCategory = ({
         (res) => {
           console.log("EXPENSES_TYPE Add:  ", res);
           if (res.status) {
-            alert("Error " + res.status + ": " + res.data);
+            // alert("Error " + res.status + ": " + res.data);
           } else {
             toast.success(" تم الحفظ بنجاح ");
             dispatch(addExpenseTypeAction(res));

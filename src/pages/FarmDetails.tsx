@@ -46,7 +46,7 @@ const FarmDetails = () => {
             setSupplierData(res.farmRecords);
           } else {
             setSupplierData([]);
-            alert("Error " + res.status + ": " + res.data);
+            // alert("Error " + res.status + ": " + res.data);
           }
         }
       );
