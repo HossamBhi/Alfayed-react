@@ -63,7 +63,6 @@ const Stock = () => {
         type: "actions",
         getActions: (params: any) => {
           const { id, row } = params;
-          console.log(row);
           return [
             <Tooltip key={id} title={t("common.show")}>
               <GridActionsCellItem

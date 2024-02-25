@@ -41,7 +41,7 @@ const AddFridge = ({
 
   useEffect(() => {
     setName(editData?.name ? editData?.name : "");
-  }, [editData]);
+  }, [editData, show]);
 
   const callAPI = () => {
     if (name) {

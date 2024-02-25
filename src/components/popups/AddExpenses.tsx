@@ -63,7 +63,7 @@ const AddExpenses = ({
     setName(editData?.name ?? "");
     setExpenseType(editData?.type ?? "");
     setExpenseTypeName(editData?.expenseTypeName ?? "");
-  }, [editData]);
+  }, [editData, show]);
 
   const callAPI = () => {
     if (!isNotEmpty(name)) {

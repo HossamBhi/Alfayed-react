@@ -42,7 +42,7 @@ const AddEmployee = ({
   useEffect(() => {
     setName(editData?.name ? editData?.name : "");
     setSalary(editData?.salary ? editData?.salary : 0);
-  }, [editData]);
+  }, [editData, show]);
 
   const callAPI = () => {
     if (name ) {
