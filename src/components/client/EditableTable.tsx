@@ -102,7 +102,6 @@ export default function EditableTable({
 
   const handleDeleteClick = (id: GridRowId) => () => {
     const findIndex = productList.findIndex((row) => row.id === id);
-    console.log({findIndex})
     const newList = productList;
     newList[findIndex] = {
       ...newList[findIndex],

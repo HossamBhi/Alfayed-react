@@ -1,5 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import { FaUserTie } from "react-icons/fa6";
+import { convertNTCS } from "../../utils/helper";
 
 const ClientCard = ({ item }: any) => {
   const {
@@ -19,7 +20,7 @@ const ClientCard = ({ item }: any) => {
       </div>
 
       <div className="">
-        <p className="text-lg font-bold">{item.total}</p>
+        <p className="text-lg font-bold">{convertNTCS(item.total || 0)}</p>
 
         {/* <p>{item.date}</p> */}
       </div>

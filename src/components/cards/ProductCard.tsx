@@ -3,6 +3,7 @@ import { ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import { IconType } from "react-icons";
 import { FaEdit } from "react-icons/fa";
+import { convertNTCS } from "../../utils/helper";
 
 interface ProductCardProps {
   item: any;
@@ -69,7 +70,7 @@ const ProductCard = ({
 
       <div className="text-center">
         <p className="text-sm text-gray-400">{t("common.total")}</p>
-        <p className="text-lg font-bold">{item.total || 0}</p>
+        <p className="text-lg font-bold">{convertNTCS(item.total || 0)}</p>
       </div>
     </div>
   );

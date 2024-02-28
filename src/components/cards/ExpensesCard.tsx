@@ -4,6 +4,7 @@ import { ComponentProps } from "react";
 import { FaEdit } from "react-icons/fa";
 import { GiPayMoney } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
+import { convertNTCS } from "../../utils/helper";
 
 interface ExpensesCardProps {
   item: any;
@@ -59,7 +60,7 @@ const ExpensesCard = ({
 
       <div className="text-center">
         <p className="text-sm text-gray-400">{t("common.total")}</p>
-        <p className="text-lg font-bold">{item.totalRemaining || 0}</p>
+        <p className="text-lg font-bold">{convertNTCS(item.totalRemaining || 0)}</p>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let initialState: {
   total: string | number | null;
-  transactions: any[];
+  transactions: { [key: number | string]: any };
 } = { total: null, transactions: [] };
 
 const accounts = createSlice({
@@ -10,7 +10,7 @@ const accounts = createSlice({
   initialState,
   reducers: {
     saveTransactionsAction: (state, { payload }) => {
-      state.transactions = payload;
+      state.transactions = { ...state.transactions, ...payload };
     },
     saveTotalAction: (state, { payload }) => {
       state.total = payload;

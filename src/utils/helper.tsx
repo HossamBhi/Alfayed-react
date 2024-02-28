@@ -1,3 +1,4 @@
+import { GridRenderCellParams } from "@mui/x-data-grid";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { BsInboxes, BsInboxesFill } from "react-icons/bs";
 import { FaUserTie } from "react-icons/fa";
@@ -99,6 +100,23 @@ export const createDataColumns = (
           width: curr.indexOf("ID") > 0 ? 80 : 120,
           headerAlign: "center",
           align: "center",
+          renderCell: [
+            "total",
+            "salary",
+            "quantity",
+            "totalRemaining",
+            "remaining",
+            "paied",
+            "additionalPrice",
+            "price",
+            "netQuantity",
+            "payed",
+          ].includes(curr)
+            ? (props: GridRenderCellParams<any, Date>) => {
+                const { row } = props;
+                return <p>{row[curr] ? convertNTCS(row[curr]) : ""}</p>;
+              }
+            : undefined,
         },
       ],
     ];
@@ -129,5 +147,28 @@ export const formatDateTime = (date: Date) => {
   const day = d.getDate();
   return `${d.getFullYear()}-${
     month.toString().length === 1 ? 0 + "" + month : month
-  }-${day.toString().length === 1 ? 0 + "" + day : day} ${d.toLocaleTimeString()}`;
+  }-${
+    day.toString().length === 1 ? 0 + "" + day : day
+  } ${d.toLocaleTimeString()}`;
 };
+
+export const convertArrayToKeyObject: any = (list: any[], id: string) => ({
+  ...list.reduce((prev, current, index) => {
+    return { ...prev, ...{ [current[id]]: current } };
+  }, {}),
+});
+
+export const sortByCreatedDate = (list: any[], dateKey = "date") =>
+  list.sort(
+    (a, b) => new Date(b[dateKey]).getTime() - new Date(a[dateKey]).getTime()
+  );
+
+export const convertNTCS = (no: number | string) =>
+  String(no).includes("-")
+    ? String(no)
+        .replace("-", "")
+        .split(/(?=(?:\d{3})+$)/)
+        .join(",") + "-"
+    : String(no)
+        .split(/(?=(?:\d{3})+$)/)
+        .join(",");

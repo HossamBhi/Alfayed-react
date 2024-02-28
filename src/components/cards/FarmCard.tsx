@@ -3,6 +3,7 @@ import { ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import { GiFarmer } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
+import { convertNTCS } from "../../utils/helper";
 
 interface FarmcardProps {
   item: any;
@@ -33,7 +34,7 @@ const Farmcard = ({ item, containerStyle }: FarmcardProps) => {
 
       <div className="">
         <p className="text-sm text-gray-400">{t("common.total")}</p>
-        <p className="text-lg font-bold">{item.total}</p>
+        <p className="text-lg font-bold">{convertNTCS(item.total || 0)}</p>
 
         {/* <p>{item.date}</p> */}
       </div>

@@ -26,6 +26,7 @@ import {
   SUPPLIERS,
 } from "../utils/endpoints";
 import { getTrasactionsEnums } from "../utils/enums";
+import { convertArrayToKeyObject } from "../utils/helper";
 
 const PagesLayout = ({ children }: { children: ReactNode }) => {
   const { isLoad } = useSelector((state: RootState) => state.appSettings);
@@ -93,7 +94,9 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
       }).then((res) => {
         // console.log("ACCOUNTS.getAll: ", { res });
         if (Array.isArray(res?.responseValue)) {
-          dispatch(saveTransactionsAction(res.responseValue));
+          dispatch(
+            saveTransactionsAction(convertArrayToKeyObject(res.responseValue, "id"))
+          );
         }
       });
     } else {

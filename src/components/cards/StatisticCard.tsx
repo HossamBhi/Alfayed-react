@@ -1,4 +1,5 @@
 import { IconType } from "react-icons";
+import { convertNTCS } from "../../utils/helper";
 
 export type StatisticCardProps = {
   price: number | string | null;
@@ -22,7 +23,7 @@ const StatisticCard = ({
     >
       <div className="flex w-full flex-col">
         <p className={`text-lg font-bold md:text-2xl text-${color}-600 pb-2`}>
-          {price}
+          {convertNTCS(price || "")}
         </p>
         <p className="text-md text-gray-600 md:text-xl">{label}</p>
       </div>

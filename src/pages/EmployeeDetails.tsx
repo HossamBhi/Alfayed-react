@@ -56,7 +56,7 @@ const EmployeeDetails = () => {
     !transactions || transactions?.length <= 0
       ? []
       : createDataColumns(transactions[0], (s: string) => t("table." + s));
-      console.log({transactions})
+  console.log({ transactions });
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
       return [];

@@ -97,7 +97,6 @@ export default () => {
     removeHost,
     load = true,
   }: requestProps) => {
-    // console.log({data: data, url, userId: logedUser?.user.id});
     // console.group("Call Post Request " + API_URL + url);
     // console.log("Post data ", data);
     // console.log("Post params ", params);

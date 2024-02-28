@@ -18,7 +18,14 @@ import { saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
 import { ACCOUNTS } from "../utils/endpoints";
 import { getTrasactionsEnums, trasactionsEnums } from "../utils/enums";
-import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
+import {
+  convertArrayToKeyObject,
+  convertNTCS,
+  createDataColumns,
+  formatDate,
+  formatDateTime,
+  sortByCreatedDate,
+} from "../utils/helper";
 
 const filter = [
   { id: getTrasactionsEnums.all, label: "الكل" },
@@ -30,13 +37,14 @@ const filter = [
 ];
 const currentDate = new Date();
 const Accounts = () => {
+  const { t } = useTranslation();
+  const { post } = useApi();
+  const dispatch = useDispatch();
   const transactions = useSelector(
     (state: RootState) => state.accounts.transactions
   );
   const total = useSelector((state: RootState) => state.accounts.total);
-  const { t } = useTranslation();
-  const { post } = useApi();
-  const dispatch = useDispatch();
+
   const [showPay, setShowPay] = useState(false);
   const [payType, setPayType] = useState(trasactionsEnums.income);
   const [startDate, setStartDate] = useState(
@@ -48,6 +56,7 @@ const Accounts = () => {
     pageSize: 100,
     page: 0,
   });
+  const [lastPage, setLastPage] = useState(1);
 
   const [detailsType, setDetailsType] = useState<getTrasactionsEnums>(
     getTrasactionsEnums.all
@@ -133,21 +142,31 @@ const Accounts = () => {
         recordType: detailsType,
         from: formatDate(startDate),
         to: formatDate(endDate),
-        // ...paginationModel,
-        // currentPage: paginationModel.page,
+        pageSize: paginationModel.pageSize,
+        pageNumber: paginationModel.page + 1,
       },
     }).then((res) => {
-      console.log("ACCOUNTS.getAll: ", { res });
+      // console.log("ACCOUNTS.getAll: ", { res });
       if (Array.isArray(res?.responseValue)) {
-        dispatch(saveTransactionsAction(res.responseValue));
+        setLastPage(res.lastPage);
+        dispatch(
+          saveTransactionsAction(
+            convertArrayToKeyObject(res.responseValue, "id")
+          )
+        );
       }
     });
   }, [startDate, endDate, detailsType, paginationModel]);
 
+  const transactionsArray = useMemo(
+    () => sortByCreatedDate(Object.values(transactions || {})),
+    [transactions]
+  );
+
   const columns: GridColDef[] =
-    !transactions || transactions?.length <= 0
+    !transactionsArray || transactionsArray?.length <= 0
       ? []
-      : createDataColumns(transactions[0], (s: string) => t("table." + s));
+      : createDataColumns(transactionsArray[0], (s: string) => t("table." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -212,7 +231,7 @@ const Accounts = () => {
             {t("dashboard.total")} :
           </p>
           <p className={`text-lg font-bold md:text-2xl text-green-600`}>
-            {String(total)}
+            {convertNTCS(total || "")}
           </p>
         </div>
         <div className="flex justify-between items-center gap-4">
@@ -259,28 +278,39 @@ const Accounts = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
-          rowCount={500}
+          rowCount={lastPage * paginationModel.pageSize}
           pageSizeOptions={[100]}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           onColumnVisibilityModelChange={(val) => setVisibleColumns(val as any)}
           columnVisibilityModel={visibleColumns}
           rows={
-            transactions.filter((item) => {
+            transactionsArray.filter((item) => {
+              let result = item;
               switch (detailsType) {
                 case getTrasactionsEnums.client:
-                  return item.clientID;
+                  result = item.clientID;
+                  break;
                 case getTrasactionsEnums.expense:
-                  return item.expenseID;
+                  result = item.expenseID;
+                  break;
                 case getTrasactionsEnums.fridge:
-                  return item.fridgeID;
+                  result = item.fridgeID;
+                  break;
                 case getTrasactionsEnums.employee:
-                  return item.empID;
+                  result = item.empID;
+                  break;
                 case getTrasactionsEnums.supplier:
-                  return item.farmID;
+                  result = item.farmID;
+                  break;
                 default:
-                  return item;
+                  result = item;
+                  break;
               }
+              return result
+                ? new Date(item?.date) >= startDate &&
+                    new Date(item?.date) <= endDate
+                : false;
             }) || []
           }
           columns={customeColumns as any}
