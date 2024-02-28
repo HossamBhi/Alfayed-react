@@ -114,7 +114,7 @@ export const createDataColumns = (
           ].includes(curr)
             ? (props: GridRenderCellParams<any, Date>) => {
                 const { row } = props;
-                return <p>{row[curr] ? convertNTCS(row[curr]) : ""}</p>;
+                return <p>{row[curr] !== null ? convertNTCS(row[curr]) : ""}</p>;
               }
             : undefined,
         },

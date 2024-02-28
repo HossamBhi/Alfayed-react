@@ -2,7 +2,7 @@ import { Tooltip } from "@mui/material";
 import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { BsFillPlusCircleFill, BsFillPlusSquareFill } from "react-icons/bs";
+import { BsFillPlusCircleFill, BsFillPlusSquareFill, BsPlusCircle, BsPlusCircleFill } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,6 +84,14 @@ const Stock = () => {
                 onClick={() => navigate(`/add-to-fridge`)}
               />
             </Tooltip>,
+            <Tooltip key={"add-to-stock"} title={t("menu.addToStock")}>
+            <GridActionsCellItem
+              icon={<BsPlusCircleFill size={16} />}
+              label={t("menu.addToStock")}
+              sx={{ color: "primary.main" }}
+              onClick={() => navigate(`/add-to-stock`)}
+            />
+          </Tooltip>,
             <Tooltip key={"zero-stock"} title={t("stock.deleteQuantity")}>
               <GridActionsCellItem
                 icon={<MdClose size={18} />}
