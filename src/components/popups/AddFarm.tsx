@@ -10,6 +10,7 @@ import { addSupplierAction, editSupplierAction } from "../../redux/suppliers";
 import { SUPPLIERS } from "../../utils/endpoints";
 import { supplierProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { apiResponseStatus } from "../../utils/enums";
 
 type AddFarmProps = {
   onClose?: () => void;
@@ -51,24 +52,24 @@ const AddFarm = ({
           params: { id: editData.id },
         }).then((res) => {
           console.log("Update Supplier: ", res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
-            setEditData && setEditData(res);
-            dispatch(editSupplierAction(res));
+            setEditData && setEditData(res.responseValue);
+            dispatch(editSupplierAction(res.responseValue));
           }
         });
       } else {
         post({ url: SUPPLIERS.add, data: { name } }).then((res) => {
           console.log("Get Supplier: ", res);
-          if (!res.status) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(addSupplierAction(res));
+            dispatch(addSupplierAction(res.responseValue));
           }
         });
 
         setName("");
       }
-      handleOnCloseAddProduct()
+      handleOnCloseAddProduct();
     } else
       toast.error("قم بملأ هذا العنصر اولا" + ", " + t("AddFarm.farmName"));
   };

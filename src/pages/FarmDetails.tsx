@@ -10,14 +10,23 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { GiFarmer } from "react-icons/gi";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { UserCard } from "../components/cards";
 import { CustomTable } from "../components/common";
 import { AddFarm } from "../components/popups";
 import { useApi } from "../hooks";
+import { RootState } from "../redux/store";
+import {
+  createDataColumns,
+  formatDate,
+  formatDateTime,
+  sortByCreatedDate,
+} from "../utils/helper";
+import { supplierProps } from "../utils/types";
 import { SUPPLIERS } from "../utils/endpoints";
-import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
-import { supplierDataProps, supplierProps } from "../utils/types";
+import { apiResponseStatus } from "../utils/enums";
+import { saveSupplierDataAction } from "../redux/suppliers";
 
 const FarmDetails = () => {
   const navigate = useNavigate();
@@ -25,11 +34,23 @@ const FarmDetails = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const [showEdit, setShowEdit] = useState(false);
-  // const [id, setId] = useState<null | string>(null);
+  const dispatch = useDispatch();
   const { get } = useApi();
-  const [supplier, setSupplier] = useState<null | supplierProps>(null);
-  const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
-    null
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
+
+  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const supplierData = useMemo(
+    () =>
+      id ? sortByCreatedDate(Object.values(suppliers[id]?.offlineRecords)) : [],
+    [suppliers, id]
+  );
+
+  const [supplier, setSupplier] = useState<null | supplierProps>(
+    suppliers[id || 0]
   );
 
   useEffect(() => {
@@ -37,21 +58,25 @@ const FarmDetails = () => {
     // const ID = searchQuiry.get("id");
     if (id != null) {
       // setId(ID);
-      get({ url: SUPPLIERS.getRecordWithData, params: { recordId: id } }).then(
-        (res) => {
-          console.log("farm data get Record With Data", { res });
-          // if (Array.isArray(res)) {
-          if (!res.status) {
-            setSupplier(res);
-            setSupplierData(res.farmRecords);
-          } else {
-            setSupplierData([]);
-            // alert("Error " + res.status + ": " + res.data);
-          }
+      get({
+        url: SUPPLIERS.getRecordWithData,
+        params: {
+          recordId: id,
+          pageNumber: paginationModel.page + 1,
+          pageSize: paginationModel.pageSize,
+        },
+      }).then((res) => {
+        console.log("farm data get Record With Data", { res });
+        // if (Array.isArray(res)) {
+        if (res.responseID === apiResponseStatus.success) {
+          setLastPage(res.lastPage);
+          // setSupplier(res.responseValue);
+          dispatch(saveSupplierDataAction({ id, data: res.responseValue.farmRecords }));
+          // setSupplierData(res.responseValue.farmRecords);
         }
-      );
+      });
     }
-  }, [id]);
+  }, [id, paginationModel]);
 
   const columns: GridColDef[] =
     !supplierData || supplierData?.length <= 0
@@ -195,6 +220,9 @@ const FarmDetails = () => {
             typeId: false,
             farmRecordID: false,
           }}
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={supplierData || []}
           columns={customeColumns as any}
           getRowId={(item) => item.id}

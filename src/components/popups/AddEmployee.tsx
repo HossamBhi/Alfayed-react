@@ -10,6 +10,7 @@ import { EMPLOYEES } from "../../utils/endpoints";
 import { employeeProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
 import { toast } from "react-toastify";
+import { apiResponseStatus } from "../../utils/enums";
 
 type AddEmployeeProps = {
   onClose?: () => void;
@@ -53,18 +54,18 @@ const AddEmployee = ({
           params: { id: editData.id },
         }).then((res) => {
           console.log("Update Employee: ", res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
             setEditData && setEditData(null);
-            dispatch(editEmployeeAction(res));
+            dispatch(editEmployeeAction(res?.responseValue));
           }
         });
       } else {
         post({ url: EMPLOYEES.add, data: { name, salary } }).then((res) => {
           console.log("Add Employees: ", res);
-          if (!res.status) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(addEmployeeAction(res));
+            dispatch(addEmployeeAction(res.responseValue));
           }
         });
 

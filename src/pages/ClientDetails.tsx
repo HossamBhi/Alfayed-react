@@ -17,6 +17,7 @@ import { ViewClientRow } from "../components/popups";
 import AddClient from "../components/popups/AddClient";
 import { useApi } from "../hooks";
 import { CLIENT } from "../utils/endpoints";
+import { apiResponseStatus } from "../utils/enums";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { clientProps, clientRowProps } from "../utils/types";
 
@@ -26,30 +27,40 @@ const ClientDetails = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const [showEdit, setShowEdit] = useState(false);
-  // const [id, setId] = useState<null | string>(null);
   const { get } = useApi();
   const [client, setClient] = useState<null | clientProps>(null);
   const [clientData, setClientData] = useState<null | any[]>(null);
   const [selectedRow, setSelectedRow] = useState<undefined | clientRowProps>();
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
 
   useEffect(() => {
     if (id != null) {
-      get({ url: CLIENT.getRecordWithData, params: { clientID: id } }).then(
-        (res: any) => {
-          console.log("CLIENT.getRecordWithData", { res });
-          // if (Array.isArray(res)) {
-          if (!res.status) {
-            setClient(res);
-            setClientData(res.transactionsList);
-          } else {
-            setClientData([]);
-            toast.error("Error " + res.status + ": " + res.data);
-            // alert("Error " + res.status + ": " + res.data);
-          }
+      get({
+        url: CLIENT.getRecordWithData,
+        params: {
+          clientID: id,
+          pageSize: paginationModel.pageSize,
+          pageNumber: paginationModel.page + 1,
+        },
+      }).then((res: any) => {
+        console.log("CLIENT.getRecordWithData", { res });
+        // if (Array.isArray(res)) {
+        if (res.responseID === apiResponseStatus.success) {
+          setLastPage(res.lastPage);
+          setClient(res.responseValue);
+          setClientData(res.responseValue.transactionsList);
+        } else {
+          setClientData([]);
+          toast.error("Error " + res.status + ": " + res.data);
+          // alert("Error " + res.status + ": " + res.data);
         }
-      );
+      });
     }
-  }, [id]);
+  }, [id, paginationModel]);
 
   const columns: GridColDef[] =
     !clientData || clientData?.length <= 0
@@ -183,6 +194,9 @@ const ClientDetails = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={lastPage * paginationModel.pageSize}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={clientData || []}
           columns={customeColumns as any}
           getRowId={(item) => item.id}

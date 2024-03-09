@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { CustomButton, CustomInput, CustomSelect } from "../components/common";
 import { AddFarm, AddPropduct } from "../components/popups";
 import { AddExpensesCard } from "../components/stock";
@@ -12,10 +13,13 @@ import { RootState } from "../redux/store";
 import { saveSuppliersAction } from "../redux/suppliers";
 import { DISCOUNT_TYPES } from "../utils/appDB";
 import { SUPPLIERS } from "../utils/endpoints";
-import { trasactionsEnums } from "../utils/enums";
-import { formatDate } from "../utils/helper";
+import { apiResponseStatus, trasactionsEnums } from "../utils/enums";
+import {
+  convertArrayToKeyObject,
+  formatDate,
+  sortByCreatedDate,
+} from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
-import { toast } from "react-toastify";
 
 const AddToStock = () => {
   const navigate = useNavigate();
@@ -25,9 +29,11 @@ const AddToStock = () => {
   const [isLoad, setIsLoad] = useState(false);
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const { t } = useTranslation();
-  // const [products, setProducts] = useState<productProps[]>([]);
   const products = useSelector((state: RootState) => state.stock.products);
-
+  const suppliersArray = useMemo(
+    () => sortByCreatedDate(Object.values(suppliers || {})),
+    [suppliers]
+  );
   const { post, put } = useApi();
   const [values, setValues] = useState({
     farmsName: "",
@@ -75,11 +81,11 @@ const AddToStock = () => {
       get({ url: SUPPLIERS.getRecord, params: { recordId: id } }).then(
         (res) => {
           document.title = t("AddToStock.editProduct");
-          if (res?.farmsID) {
+          if (res.responseID === apiResponseStatus.success) {
             setValues({
               ...values,
-              ...res,
-              supplyDate: formatDate(res.supplyDate),
+              ...res.responseValue,
+              supplyDate: formatDate(res.responseValue.supplyDate),
             });
           }
         }
@@ -87,10 +93,10 @@ const AddToStock = () => {
     }
     get({ url: SUPPLIERS.getAll }).then((res) => {
       // console.log("SUPPLIERS.getAll: ", { res });
-      if (Array.isArray(res)) {
-        // setSuppliers(res);
-        dispatch(saveSuppliersAction(res));
-      } else {
+      if (res.responseID === apiResponseStatus.success) {
+        dispatch(
+          saveSuppliersAction(convertArrayToKeyObject(res.responseValue, "id"))
+        );
       }
     });
   }, [id]);
@@ -171,11 +177,13 @@ const AddToStock = () => {
             netQuantity: calculateNetQuantity,
           },
         }).then((res) => {
-          console.log("SUPPLIERS.addRecord: ", { res });
-          if (res.farmRecordID) {
+          console.log("SUPPLIERS.addRecord: ", { res: res });
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
             navigate(
-              pathname + "?" + createQueryString("id", res.farmRecordID)
+              pathname +
+                "?" +
+                createQueryString("id", res.responseValue.farmRecordID)
             );
           }
           setIsLoad(false);
@@ -191,10 +199,12 @@ const AddToStock = () => {
           },
         }).then((res) => {
           console.log("SUPPLIERS.addRecord: ", { res });
-          if (res.farmRecordID) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
             navigate(
-              pathname + "?" + createQueryString("id", res.farmRecordID)
+              pathname +
+                "?" +
+                createQueryString("id", res.responseValue.farmRecordID)
             );
           }
           setIsLoad(false);
@@ -216,7 +226,7 @@ const AddToStock = () => {
             <Autocomplete
               className="flex-1"
               clearOnEscape
-              options={suppliers || []}
+              options={suppliersArray || []}
               getOptionLabel={(item) => item.name}
               id="farms"
               onChange={(e, value) => {

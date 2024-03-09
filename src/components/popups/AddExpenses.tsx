@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddExpensesCategory, PopupButton } from ".";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
 import { toast } from "react-toastify";
+import { apiResponseStatus } from "../../utils/enums";
 
 type AddExpensesProps = {
   onClose?: () => void;
@@ -90,10 +91,10 @@ const AddExpenses = ({
         params: { id: editData.id },
       }).then((res) => {
         console.log("Update EXPENSES: ", res);
-        if (res?.id) {
+        if (res.responseID === apiResponseStatus.success) {
           toast.success(" تم التعديل بنجاح ");
-          setEditData && setEditData(res);
-          dispatch(editExpenseAction(res));
+          setEditData && setEditData(res?.responseValue);
+          dispatch(editExpenseAction(res?.responseValue));
         }
       });
     } else {
@@ -102,11 +103,9 @@ const AddExpenses = ({
         data: { name, expenseTypeId: expenseType?.id },
       }).then((res) => {
         console.log("get EXPENSES: ", res);
-        if (res.status) {
-          // alert("Error " + res.status + ": " + res.data);
-        } else {
+        if (res.responseID === apiResponseStatus.success) {
           toast.success(" تم الحفظ بنجاح ");
-          dispatch(addExpenseAction(res));
+          dispatch(addExpenseAction(res.responseValue));
         }
       });
 
@@ -118,8 +117,8 @@ const AddExpenses = ({
   useEffect(() => {
     get({ url: EXPENSES_TYPE.getAll }).then((res) => {
       console.log("EXPENSES_TYPE.getAll: ", { res });
-      if (Array.isArray(res)) {
-        dispatch(saveExpensesTypesAction(res));
+      if (res.responseID === apiResponseStatus.success) {
+        dispatch(saveExpensesTypesAction(res.responseValue));
       }
     });
   }, []);

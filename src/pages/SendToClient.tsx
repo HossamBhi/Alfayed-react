@@ -11,7 +11,11 @@ import { useApi } from "../hooks";
 import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
 import { CLIENT } from "../utils/endpoints";
-import { clientProductStaus, trasactionsEnums } from "../utils/enums";
+import {
+  apiResponseStatus,
+  clientProductStaus,
+  trasactionsEnums,
+} from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import {
   clientRowProps,
@@ -52,12 +56,13 @@ const SendToClient = () => {
       get({ url: CLIENT.getRecord, params: { recordId: id } }).then((res) => {
         console.log("CLIENT.getRecord: ", { res });
         document.title = t("client.editCar");
-        if (res?.clientID) {
+        if (res.responseID === apiResponseStatus.success) {
+          const responseValue = res.responseValue;
           setValues({
             ...values,
-            ...res,
-            payDate: formatDate(res.payDate),
-            date: formatDate(res.date),
+            ...responseValue,
+            payDate: formatDate(responseValue.payDate),
+            date: formatDate(responseValue.date),
           });
         }
       });
@@ -150,9 +155,11 @@ const SendToClient = () => {
           },
         }).then((res) => {
           console.log("CLIENT.updateRecord: ", { res });
-          if (res.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
-            navigate(pathname + "?" + createQueryString("id", res.id));
+            navigate(
+              pathname + "?" + createQueryString("id", res.responseValue.id)
+            );
           }
           setIsLoad(false);
         });
@@ -168,9 +175,11 @@ const SendToClient = () => {
             deliveredToDriver: values.deliveredToDriver || 0,
           },
         }).then((res) => {
-          if (res.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            navigate(pathname + "?" + createQueryString("id", res.id));
+            navigate(
+              pathname + "?" + createQueryString("id", res.responseValue.id)
+            );
           }
           setIsLoad(false);
         });

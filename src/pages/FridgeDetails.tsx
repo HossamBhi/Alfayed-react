@@ -19,6 +19,7 @@ import { useApi } from "../hooks";
 import { FRIDGES } from "../utils/endpoints";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { fridgeDataProps, fridgeProps } from "../utils/types";
+import { apiResponseStatus } from "../utils/enums";
 
 const FridgeDetails = () => {
   const navigate = useNavigate();
@@ -32,23 +33,34 @@ const FridgeDetails = () => {
   const [detailsData, setDetailsData] = useState<null | fridgeDataProps[]>(
     null
   );
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
 
   useEffect(() => {
     if (id !== null) {
-      get({ url: FRIDGES.getRecordWithData, params: { fridgeId: id } }).then(
-        (res) => {
-          console.log("fridge data get Record With Data", { res });
-          if (!res.status) {
-            setDetails(res);
-            setDetailsData(res.fridgeRecords);
-          } else {
-            setDetailsData([]);
-            // alert("Error " + res.status + ": " + res.data);
-          }
+      get({
+        url: FRIDGES.getRecordWithData,
+        params: {
+          fridgeId: id,
+          pageNumber: paginationModel.page + 1,
+          pageSize: paginationModel.pageSize,
+        },
+      }).then((res) => {
+        console.log("fridge data get Record With Data", { res });
+        if (res.responseID === apiResponseStatus.success) {
+          setLastPage(res.lastPage);
+          setDetails(res.responseValue);
+          setDetailsData(res.responseValue.fridgeRecords);
+        } else {
+          setDetailsData([]);
+          // alert("Error " + res.status + ": " + res.data);
         }
-      );
+      });
     }
-  }, [id]);
+  }, [id, paginationModel]);
 
   const columns: GridColDef[] =
     !detailsData || detailsData?.length <= 0
@@ -193,6 +205,9 @@ const FridgeDetails = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={detailsData || []}
           columns={customeColumns as any}
           getRowId={(item) => item.fridgeRecordID}

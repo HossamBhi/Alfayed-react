@@ -1,11 +1,3 @@
-import { useSearchParams } from "react-router-dom";
-import { ExpensesCard } from "../components/cards";
-import { CustomTable, renderCellExpand } from "../components/common";
-import { AddExpenses } from "../components/popups";
-import { useApi } from "../hooks";
-import { EXPENSES } from "../utils/endpoints";
-import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
-import { supplierDataProps, supplierProps } from "../utils/types";
 import {
   GridColDef,
   GridValueFormatterParams,
@@ -13,6 +5,15 @@ import {
 } from "@mui/x-data-grid";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
+import { ExpensesCard } from "../components/cards";
+import { CustomTable, renderCellExpand } from "../components/common";
+import { AddExpenses } from "../components/popups";
+import { useApi } from "../hooks";
+import { EXPENSES } from "../utils/endpoints";
+import { apiResponseStatus } from "../utils/enums";
+import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
+import { expenseProps, supplierDataProps } from "../utils/types";
 
 const ExpensesDetails = () => {
   const { t } = useTranslation();
@@ -21,28 +22,43 @@ const ExpensesDetails = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const { get } = useApi();
-  const [supplier, setSupplier] = useState<null | supplierProps>(null);
+  const [supplier, setSupplier] = useState<null | expenseProps>(null);
   const [supplierData, setSupplierData] = useState<null | supplierDataProps[]>(
     null
   );
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
+
   useEffect(() => {
-    // const searchQuiry = new URLSearchParams(window.location.search);
-    // const ID = searchQuiry.get("id");
     if (id != null) {
-      // setId(ID);
-      get({ url: EXPENSES.getExpensesWithData, params: { id } }).then((res) => {
+      get({
+        url: EXPENSES.getExpensesWithData,
+        params: {
+          id,
+          pageNumber: paginationModel.page + 1,
+          pageSize: paginationModel.pageSize,
+        },
+      }).then((res) => {
         console.log("EXPENSES.getExpensesWithData", { res });
         // if (Array.isArray(res)) {
-        if (!res.status) {
-          setSupplier({ ...res, totalRemaining: res.total });
-          setSupplierData(res?.expensesList || []);
+        if (res.responseID === apiResponseStatus.success) {
+          setLastPage(res.lastPage);
+
+          setSupplier({
+            ...res.responseValue,
+            totalRemaining: res?.responseValue?.total,
+          });
+          setSupplierData(res?.responseValue?.expensesList || []);
         } else {
           setSupplierData([]);
           // alert("Error " + res.status + ": " + res.data);
         }
       });
     }
-  }, [id]);
+  }, [id, paginationModel]);
 
   const columns: GridColDef[] =
     !supplierData || supplierData?.length <= 0
@@ -90,17 +106,6 @@ const ExpensesDetails = () => {
       );
   }, [columns]);
 
-  if (id === null || !supplier || !supplierData) {
-    return (
-      <main className="flex min-h-screen flex-col">
-        {/* <LinearProgress
-          sx={{ minWidth: "100%" }}
-          className="absolute top-0 rounded"
-        /> */}
-      </main>
-    );
-  }
-
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="m-0">
@@ -124,6 +129,9 @@ const ExpensesDetails = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={supplierData || []}
           columns={customeColumns as any}
           getRowId={(item) => item.expenseRecordID}

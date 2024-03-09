@@ -8,6 +8,7 @@ const CustomTable = ({ rows, slotProps, ...props }: DataGridProps) => (
         showCellVerticalBorder
         showColumnVerticalBorder
         rows={rows}
+        pageSizeOptions={[100]}
         {...{ rowLength: 5 }}
         slots={{ toolbar: GridToolbar }}
         slotProps={{

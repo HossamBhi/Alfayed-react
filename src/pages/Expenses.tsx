@@ -1,8 +1,3 @@
-import { CustomTable } from "../components/common";
-import { AddExpenses, PayForm } from "../components/popups";
-import { RootState } from "../redux/store";
-import { createDataColumns, formatDate } from "../utils/helper";
-import { supplierProps } from "../utils/types";
 import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
@@ -16,17 +11,45 @@ import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { CustomTable } from "../components/common";
+import { AddExpenses, PayForm } from "../components/popups";
+import { RootState } from "../redux/store";
 import { profileEnums } from "../utils/enums";
+import { createDataColumns, formatDate } from "../utils/helper";
+import { expenseProps } from "../utils/types";
 
 const Expenses = () => {
   const navigate = useNavigate();
   const expenses = useSelector((state: RootState) => state.expenses.expenses);
   const { t } = useTranslation();
-  const [editData, setEditData] = useState<null | supplierProps>(null);
+  const [editData, setEditData] = useState<null | expenseProps>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [showPay, setShowPay] = useState(false);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
 
-  const handleRowEdit = (row: supplierProps) => {
+  // useEffect(() => {
+  //   get({
+  //     url: SUPPLIERS.getAll,
+  //     params: {
+  //       pageNumber: paginationModel.page + 1,
+  //       pageSize: paginationModel.pageSize,
+  //     },
+  //   }).then((res) => {
+  //     console.log("SUPPLIERS.getAll: ", { res });
+  //     if (res.responseID === apiResponseStatus.success) {
+  //       setLastPage(res.lastPage);
+  //       dispatch(
+  //         saveSuppliersAction(convertArrayToKeyObject(res.responseValue, "id"))
+  //       );
+  //     }
+  //   });
+  // }, [paginationModel]);
+
+  const handleRowEdit = (row: expenseProps) => {
     setEditData(row);
     setShowEdit(true);
   };
@@ -126,6 +149,9 @@ const Expenses = () => {
       />
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={expenses || []}
           columns={customeColumns as any}
           getRowId={(item) => item.id}

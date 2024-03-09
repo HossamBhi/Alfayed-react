@@ -90,7 +90,7 @@ export const createDataColumns = (
     return [];
   }
   const keys = Object?.keys(data);
-  const result = keys.reduce((prev: any, curr) => {
+  const result = keys.filter(k => k != "offlineRecords").reduce((prev: any, curr) => {
     return [
       ...prev,
       ...[
@@ -152,7 +152,7 @@ export const formatDateTime = (date: Date) => {
   } ${d.toLocaleTimeString()}`;
 };
 
-export const convertArrayToKeyObject: any = (list: any[], id: string) => ({
+export const convertArrayToKeyObject = (list: any[], id: string) => ({
   ...list.reduce((prev, current, index) => {
     return { ...prev, ...{ [current[id]]: current } };
   }, {}),

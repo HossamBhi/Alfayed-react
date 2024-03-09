@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { PopupButton } from ".";
 import { useApi } from "../../hooks";
-import { addSupplierAction, editSupplierAction } from "../../redux/suppliers";
-import { FRIDGES, SUPPLIERS } from "../../utils/endpoints";
+import { addFridgeAction, editFridgeAction } from "../../redux/fridges";
+import { FRIDGES } from "../../utils/endpoints";
+import { apiResponseStatus } from "../../utils/enums";
 import { supplierProps } from "../../utils/types";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
-import { addFridgeAction, editFridgeAction } from "../../redux/fridges";
-import { toast } from "react-toastify";
 
 type AddFridgeProps = {
   onClose?: () => void;
@@ -52,18 +52,18 @@ const AddFridge = ({
           params: { id: editData.id },
         }).then((res) => {
           console.log("Update FRIDGES: ", res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
-            setEditData && setEditData(res);
-            dispatch(editFridgeAction(res));
+            setEditData && setEditData(res.responseValue);
+            dispatch(editFridgeAction(res.responseValue));
           }
         });
       } else {
         post({ url: FRIDGES.add, data: { name } }).then((res) => {
           console.log("Get FRIDGES:  ", res);
-          if (!res.status) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(addFridgeAction(res));
+            dispatch(addFridgeAction(res.responseValue));
           }
         });
 

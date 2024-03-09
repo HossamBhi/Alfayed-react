@@ -5,7 +5,7 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,7 @@ import { saveProductsDetailsAction } from "../redux/stock";
 import { RootState } from "../redux/store";
 import { PRODUCTS } from "../utils/endpoints";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
+import { apiResponseStatus } from "../utils/enums";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -29,10 +30,23 @@ const Products = () => {
     (state: RootState) => state.stock.productsDetails
   );
   const products = useSelector((state: RootState) => state.stock.products);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
+
   useEffect(() => {
-    get({ url: PRODUCTS.getAllDetails }).then((res) => {
-      if (Array.isArray(res)) {
-        dispatch(saveProductsDetailsAction(res));
+    get({
+      url: PRODUCTS.getAllDetails,
+      params: {
+        pageNumber: paginationModel.page + 1,
+        pageSize: paginationModel.pageSize,
+      },
+    }).then((res) => {
+      if (res.responseID === apiResponseStatus.success) {
+        setLastPage(res.lastPage);
+        dispatch(saveProductsDetailsAction(res.responseValue));
       }
     });
   }, []);
@@ -154,6 +168,9 @@ const Products = () => {
           </div>
         </div>
         <CustomTable
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={productsDetails || []}
           columns={customeColumns as any}
           getRowId={(item) => item.farmRecordID}

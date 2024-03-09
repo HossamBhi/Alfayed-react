@@ -25,7 +25,7 @@ import {
   STORE,
   SUPPLIERS,
 } from "../utils/endpoints";
-import { getTrasactionsEnums } from "../utils/enums";
+import { apiResponseStatus, getTrasactionsEnums } from "../utils/enums";
 import { convertArrayToKeyObject } from "../utils/helper";
 
 const PagesLayout = ({ children }: { children: ReactNode }) => {
@@ -42,50 +42,50 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
     if (logedUser) {
       get({ url: SUPPLIERS.getAll }).then((res) => {
         // console.log("SUPPLIERS.getAll: ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveSuppliersAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveSuppliersAction(convertArrayToKeyObject(res.responseValue, "id")));
         }
       });
       get({ url: FRIDGES.getAll }).then((res) => {
         // console.log("FRIDGES.getAll : ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveFridgesAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveFridgesAction(res.responseValue));
         }
       });
       get({ url: EXPENSES.getAll }).then((res) => {
         // console.log("EXPENSES.getAll: ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveExpensesAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveExpensesAction(res.responseValue));
         }
       });
       get({ url: CLIENT.getAll }).then((res) => {
         // console.log("CLIENT.getAll: ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveClientsAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveClientsAction(res.responseValue));
         }
       });
       get({ url: PRODUCTS.getAll }).then((res) => {
         // console.log("PRODUCTS.getAll: ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveProductsAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveProductsAction(res.responseValue));
         }
       });
       get({ url: PRODUCTS.getAllDetails }).then((res) => {
         // console.log("PRODUCTS.getAllDetails: ", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveProductsDetailsAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveProductsDetailsAction(res.responseValue));
         }
       });
       get({ url: ACCOUNTS.getTotal }).then((res) => {
         // console.log("ACCOUNTS.getTotal: ", { res });
-        if (res.id) {
-          dispatch(saveTotalAction(res.total));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveTotalAction(res.responseValue.total));
         }
       });
       get({ url: STORE.getAll }).then((res) => {
         // console.log("STORE.getAll", { res });
-        if (Array.isArray(res)) {
-          dispatch(saveStockAction(res));
+        if (res.responseID === apiResponseStatus.success) {
+          dispatch(saveStockAction(res.responseValue));
         }
       });
       post({
@@ -93,9 +93,14 @@ const PagesLayout = ({ children }: { children: ReactNode }) => {
         params: { recordType: getTrasactionsEnums.all },
       }).then((res) => {
         // console.log("ACCOUNTS.getAll: ", { res });
-        if (Array.isArray(res?.responseValue)) {
+        if (
+          res.responseID === apiResponseStatus.success &&
+          Array.isArray(res?.responseValue)
+        ) {
           dispatch(
-            saveTransactionsAction(convertArrayToKeyObject(res.responseValue, "id"))
+            saveTransactionsAction(
+              convertArrayToKeyObject(res.responseValue, "id")
+            )
           );
         }
       });

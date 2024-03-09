@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useApi } from "../hooks";
 import { saveEmployeesAction } from "../redux/employees";
 import { EMPLOYEES } from "../utils/endpoints";
-import { profileEnums } from "../utils/enums";
+import { apiResponseStatus, profileEnums } from "../utils/enums";
 
 const Employees = () => {
   const navigate = useNavigate();
@@ -33,14 +33,28 @@ const Employees = () => {
   const [showEdit, setShowEdit] = useState(false);
   const { get } = useApi();
   const dispatch = useDispatch();
+
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
+
   useEffect(() => {
-    get({ url: EMPLOYEES.getAll }).then((res) => {
+    get({
+      url: EMPLOYEES.getAll,
+      params: {
+        pageNumber: paginationModel.page + 1,
+        pageSize: paginationModel.pageSize,
+      },
+    }).then((res) => {
       console.log("Get all employees: ", res);
-      if (Array.isArray(res)) {
-        dispatch(saveEmployeesAction(res));
+      if (res.responseID === apiResponseStatus.success) {
+        setLastPage(res.lastPage);
+        dispatch(saveEmployeesAction(res.responseValue));
       }
     });
-  }, []);
+  }, [paginationModel]);
 
   const handleRowEdit = (row: employeeProps) => {
     setEditData(row);
@@ -157,6 +171,9 @@ const Employees = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={employees || []}
           columns={customeColumns as any}
           getRowId={(item) => item.id}

@@ -10,6 +10,7 @@ import { DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addProductAction, editProductAction } from "../../redux/stock";
 import { toast } from "react-toastify";
+import { apiResponseStatus } from "../../utils/enums";
 
 type AddPropductProps = {
   onClose?: () => void;
@@ -45,18 +46,18 @@ const AddPropduct = ({
           params: { id: editData.id },
         }).then((res) => {
           console.log("Update PRODUCTS: ", res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
-            setEditData && setEditData(res);
-            dispatch(editProductAction(res));
+            setEditData && setEditData(res.responseValue);
+            dispatch(editProductAction(res.responseValue));
           }
         });
       } else {
         post({ url: PRODUCTS.add, data: { name } }).then((res) => {
           console.log("Add PRODUCTS: ", res);
-          if (!res.status) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(addProductAction(res));
+            dispatch(addProductAction(res.responseValue));
             // if (setProducts && products)
             //   setProducts && setProducts([res, ...products]);
           }

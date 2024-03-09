@@ -32,3 +32,8 @@ export enum clientProductStaus {
   deleted,
   new,
 }
+
+export enum apiResponseStatus {
+  fail = 0,
+  success,
+}

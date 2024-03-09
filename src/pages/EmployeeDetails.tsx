@@ -10,7 +10,11 @@ import { CustomTable } from "../components/common";
 import { AddEmployee, PayForm } from "../components/popups";
 import { useApi } from "../hooks";
 import { ACCOUNTS } from "../utils/endpoints";
-import { getTrasactionsEnums, profileEnums } from "../utils/enums";
+import {
+  apiResponseStatus,
+  getTrasactionsEnums,
+  profileEnums,
+} from "../utils/enums";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { employeeProps } from "../utils/types";
 
@@ -45,7 +49,10 @@ const EmployeeDetails = () => {
         },
       }).then((res) => {
         // console.log("ACCOUNTS.getAll: ", { res });
-        if (Array.isArray(res?.responseValue)) {
+        if (
+          res.responseID === apiResponseStatus.success &&
+          Array.isArray(res?.responseValue)
+        ) {
           setTransactions(res.responseValue);
         }
       });
@@ -56,8 +63,8 @@ const EmployeeDetails = () => {
     !transactions || transactions?.length <= 0
       ? []
       : createDataColumns(transactions[0], (s: string) => t("table." + s));
-  console.log({ transactions });
-  const customeColumns = useMemo(() => {
+
+      const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
       return [];
     }

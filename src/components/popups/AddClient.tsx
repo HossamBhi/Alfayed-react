@@ -10,6 +10,7 @@ import { BsFillPlusCircleFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { addClientAction, editClientAction } from "../../redux/clients";
 import { toast } from "react-toastify";
+import { apiResponseStatus } from "../../utils/enums";
 
 type AddClientProps = {
   onClose?: () => void;
@@ -51,19 +52,19 @@ const AddClient = ({
           params: { id: editData.id },
         }).then((res) => {
           console.log("Update Cleint: ", res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
-            setEditData && setEditData(res);
-            dispatch(editClientAction(res));
+            setEditData && setEditData(res.responseValue);
+            dispatch(editClientAction(res.responseValue));
           }
         });
         
       } else {
         post({ url: CLIENT.add, data: { name } }).then((res) => {
           console.log("Update Cleint: ", res);
-          if (!res.status) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(addClientAction(res));
+            dispatch(addClientAction(res?.responseValue));
           }
         });
 

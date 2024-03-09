@@ -1,8 +1,12 @@
 import { Tooltip } from "@mui/material";
 import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BsFillPlusCircleFill, BsFillPlusSquareFill, BsPlusCircle, BsPlusCircleFill } from "react-icons/bs";
+import {
+  BsFillPlusCircleFill,
+  BsFillPlusSquareFill,
+  BsPlusCircleFill,
+} from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +17,7 @@ import { useApi } from "../hooks";
 import { editStockAction, saveStockAction } from "../redux/stock";
 import { RootState } from "../redux/store";
 import { STORE } from "../utils/endpoints";
+import { apiResponseStatus } from "../utils/enums";
 import { createDataColumns } from "../utils/helper";
 
 const Stock = () => {
@@ -20,18 +25,25 @@ const Stock = () => {
   const { t } = useTranslation();
   const { get, post } = useApi();
   const dispatch = useDispatch();
-  // const [tableData, setTableData] = useState<null | supplierProps[]>(null);
   const stock = useSelector((state: RootState) => state.stock.stock);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
   useEffect(() => {
-    get({ url: STORE.getAll }).then((res) => {
+    get({
+      url: STORE.getAll,
+      params: {
+        pageNumber: paginationModel.page + 1,
+        pageSize: paginationModel.pageSize,
+      },
+    }).then((res) => {
       console.log("STORE.getAll", { res });
-      // if (Array.isArray(res)) {
-      if (!res.status || Array.isArray(res)) {
-        // setTableData(res);
-        dispatch(saveStockAction(res));
-      } else {
-        // setTableData([]);
-        // alert("Error " + res.status + ": " + res.data);
+
+      if (res.responseID === apiResponseStatus.success) {
+        setLastPage(res.lastPage);
+        dispatch(saveStockAction(res.responseValue));
       }
     });
   }, []);
@@ -85,13 +97,13 @@ const Stock = () => {
               />
             </Tooltip>,
             <Tooltip key={"add-to-stock"} title={t("menu.addToStock")}>
-            <GridActionsCellItem
-              icon={<BsPlusCircleFill size={16} />}
-              label={t("menu.addToStock")}
-              sx={{ color: "primary.main" }}
-              onClick={() => navigate(`/add-to-stock`)}
-            />
-          </Tooltip>,
+              <GridActionsCellItem
+                icon={<BsPlusCircleFill size={16} />}
+                label={t("menu.addToStock")}
+                sx={{ color: "primary.main" }}
+                onClick={() => navigate(`/add-to-stock`)}
+              />
+            </Tooltip>,
             <Tooltip key={"zero-stock"} title={t("stock.deleteQuantity")}>
               <GridActionsCellItem
                 icon={<MdClose size={18} />}
@@ -102,9 +114,9 @@ const Stock = () => {
                   post({ url: STORE.setProductQtyToZero, params: { id } }).then(
                     (res) => {
                       console.log({ res });
-                      if (res.productID) {
+                      if (res.responseID === apiResponseStatus.success) {
                         toast.success(" تم الحفظ بنجاح ");
-                        dispatch(editStockAction(res));
+                        dispatch(editStockAction(res.responseValue));
                       }
                     }
                   );
@@ -130,6 +142,9 @@ const Stock = () => {
 
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           columnVisibilityModel={{
             productID: true,
           }}

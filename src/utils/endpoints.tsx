@@ -6,7 +6,7 @@ export const AUTH = {
 }
 
 export const SUPPLIERS = {
-  getAll: "GetAllFarms",
+  getAll: "GetAllFarmsOffline" , // "GetAllFarms",
   getById: "GetFarmById",
   add: "AddFarm",
   update: "UpdateFarm",

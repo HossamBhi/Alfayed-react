@@ -13,7 +13,7 @@ import { BsFillPlusCircleFill } from "react-icons/bs";
 import { PopupButton } from ".";
 import { CustomButton, CustomDialog } from "../common";
 import { ExpenseForm } from "../stock";
-import { trasactionsEnums } from "../../utils/enums";
+import { apiResponseStatus, trasactionsEnums } from "../../utils/enums";
 import { toast } from "react-toastify";
 
 type AddExpenseToStockProps = {
@@ -124,12 +124,14 @@ const AddExpenseToStock = ({
       })
         .then((res) => {
           console.log("EXPENSES.updateRecord: ", res);
-          if (res?.expenseRecordID) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
-            setEditData && setEditData(res);
+            setEditData && setEditData(res?.responseValue);
             setExpensesData(
               expensesData.map((item: any) =>
-                item?.expenseRecordID === res?.expenseRecordID ? res : item
+                item?.expenseRecordID === res?.responseValue.expenseRecordID
+                  ? res?.responseValue
+                  : item
               )
             );
           }
@@ -142,9 +144,9 @@ const AddExpenseToStock = ({
       })
         .then((res) => {
           console.log("EXPENSES.addRecord: ", res);
-          if (!res.status) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            setExpensesData([res, ...expensesData]);
+            setExpensesData([res.responseValue, ...expensesData]);
           }
         })
         .finally(() => setIsLoad(false));

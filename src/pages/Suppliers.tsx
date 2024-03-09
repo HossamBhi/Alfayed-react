@@ -1,8 +1,3 @@
-import { CustomTable } from "../components/common";
-import { AddFarm, PayForm } from "../components/popups";
-import { RootState } from "../redux/store";
-import { createDataColumns, formatDateTime } from "../utils/helper";
-import { supplierProps } from "../utils/types";
 import { Tooltip } from "@mui/material";
 import {
   GridActionsCellItem,
@@ -10,22 +5,65 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
+import { CustomTable } from "../components/common";
+import { AddFarm, PayForm } from "../components/popups";
+import { RootState } from "../redux/store";
+import {
+  convertArrayToKeyObject,
+  createDataColumns,
+  formatDateTime,
+  sortByCreatedDate,
+} from "../utils/helper";
+import { supplierProps } from "../utils/types";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdOutlineAttachMoney } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { profileEnums } from "../utils/enums";
+import { useApi } from "../hooks";
+import { saveSuppliersAction } from "../redux/suppliers";
+import { SUPPLIERS } from "../utils/endpoints";
+import { apiResponseStatus, profileEnums } from "../utils/enums";
 
 const Suppliers = () => {
   const navigate = useNavigate();
-  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const { get } = useApi();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const suppliers = useSelector((state: RootState) => state.suppliers);
+  const suppliersArray = useMemo(
+    () => sortByCreatedDate(Object.values(suppliers || {})),
+    [suppliers]
+  );
+
   const [editData, setEditData] = useState<null | supplierProps>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [showPay, setShowPay] = useState(false);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
+
+  useEffect(() => {
+    get({
+      url: SUPPLIERS.getAll,
+      params: {
+        pageNumber: paginationModel.page + 1,
+        pageSize: paginationModel.pageSize,
+      },
+    }).then((res) => {
+      console.log("SUPPLIERS.getAll: ", { res });
+      if (res.responseID === apiResponseStatus.success) {
+        setLastPage(res.lastPage);
+        dispatch(
+          saveSuppliersAction(convertArrayToKeyObject(res.responseValue, "id"))
+        );
+      }
+    });
+  }, [paginationModel]);
 
   const handleRowEdit = (row: supplierProps) => {
     setEditData(row);
@@ -33,9 +71,9 @@ const Suppliers = () => {
   };
 
   const columns: GridColDef[] =
-    !suppliers || suppliers?.length <= 0
+    !suppliersArray || suppliersArray?.length <= 0
       ? []
-      : createDataColumns(suppliers[0], (s: string) => t("table." + s));
+      : createDataColumns(suppliersArray[0], (s: string) => t("table." + s));
 
   const customeColumns = useMemo(() => {
     if (columns?.length <= 0) {
@@ -125,7 +163,10 @@ const Suppliers = () => {
       />
       <div className="grid grid-cols-1">
         <CustomTable
-          rows={suppliers || []}
+          rowCount={paginationModel.pageSize * lastPage}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          rows={suppliersArray || []}
           columns={customeColumns as any}
           getRowId={(item) => item.id}
         />

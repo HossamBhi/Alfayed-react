@@ -5,7 +5,7 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdOutlineAttachMoney } from "react-icons/md";
@@ -27,6 +27,35 @@ const Clients = () => {
   const [editData, setEditData] = useState<null | clientProps>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [showPay, setShowPay] = useState(false);
+  // const { get } = useApi();
+  
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 100,
+    page: 0,
+  });
+  const [lastPage, setLastPage] = useState(1);
+  // const suppliersArray = useMemo(
+  //   () => sortByCreatedDate(Object.values(suppliers || {})),
+  //   [suppliers]
+  // );
+
+  // useEffect(() => {
+  //   get({
+  //     url: SUPPLIERS.getAll,
+  //     params: {
+  //       pageNumber: paginationModel.page + 1,
+  //       pageSize: paginationModel.pageSize,
+  //     },
+  //   }).then((res) => {
+  //     console.log("SUPPLIERS.getAll: ", { res });
+  //     if (res.responseID === apiResponseStatus.success) {
+  //       setLastPage(res.lastPage);
+  //       dispatch(
+  //         saveSuppliersAction(convertArrayToKeyObject(res.responseValue, "id"))
+  //       );
+  //     }
+  //   });
+  // }, [paginationModel]);
 
   const handleRowEdit = (row: supplierProps) => {
     setEditData(row);
@@ -145,6 +174,9 @@ const Clients = () => {
       />
       <div className="grid grid-cols-1">
         <CustomTable
+          rowCount={lastPage * paginationModel.pageSize}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={clients || []}
           columns={customeColumns as any}
           getRowId={(item) => item.id}

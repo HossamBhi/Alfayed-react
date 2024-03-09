@@ -11,6 +11,7 @@ import { EXPENSES_TYPE } from "../../utils/endpoints";
 import { expenseProps } from "../../utils/types";
 import { isNotEmpty } from "../../utils/validation";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
+import { apiResponseStatus } from "../../utils/enums";
 
 type AddExpensesCategoryProps = {
   onClose?: () => void;
@@ -53,20 +54,18 @@ const AddExpensesCategory = ({
         params: { id: editData.id },
       }).then((res) => {
         console.log("Update Supplier: ", res);
-        if (res?.id) {
+        if (res.responseID === apiResponseStatus.success) {
           toast.success(" تم التعديل بنجاح ");
-          setEditData && setEditData(res);
+          setEditData && setEditData(res?.responseValue);
         }
       });
     } else {
       post({ url: EXPENSES_TYPE.add, data: { expenseTypeName: name } }).then(
         (res) => {
           console.log("EXPENSES_TYPE Add:  ", res);
-          if (res.status) {
-            // alert("Error " + res.status + ": " + res.data);
-          } else {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(addExpenseTypeAction(res));
+            dispatch(addExpenseTypeAction(res?.responseValue));
           }
         }
       );

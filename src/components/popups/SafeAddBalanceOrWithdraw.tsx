@@ -8,7 +8,7 @@ import { PopupButton } from ".";
 import { useApi } from "../../hooks";
 import { saveTotalAction } from "../../redux/accounts";
 import { ACCOUNTS } from "../../utils/endpoints";
-import { trasactionsEnums } from "../../utils/enums";
+import { apiResponseStatus, trasactionsEnums } from "../../utils/enums";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
 
 type PayFormProps = {
@@ -65,9 +65,9 @@ const SafeAddBalanceOrWithdraw = ({
           data: { typeID: trasactionsEnums.income, balance: total, notes },
         }).then((res) => {
           console.log(`Post Pay ${type}: `, res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(saveTotalAction(res.total));
+            dispatch(saveTotalAction(res.responseValue.total));
           }
         });
       else
@@ -76,9 +76,9 @@ const SafeAddBalanceOrWithdraw = ({
           data: { total, notes },
         }).then((res) => {
           console.log(`Post withdraw ${type}: `, res);
-          if (res?.id) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
-            dispatch(saveTotalAction(res.total));
+            dispatch(saveTotalAction(res.responseValue.total));
           }
         });
       handleOnClose();

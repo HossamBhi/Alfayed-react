@@ -17,7 +17,7 @@ import {
   FRIDGES,
   SUPPLIERS,
 } from "../../utils/endpoints";
-import { profileEnums, trasactionsEnums } from "../../utils/enums";
+import { apiResponseStatus, profileEnums, trasactionsEnums } from "../../utils/enums";
 import { CustomButton, CustomDialog, CustomInput } from "../common";
 import { toast } from "react-toastify";
 
@@ -101,10 +101,10 @@ const PayForm = ({
         params: { id: editData.id },
       }).then((res) => {
         console.log(`Post Pay ${type}: `, res);
-        if (res?.id) {
+        if (res.responseID === apiResponseStatus.success) {
           toast.success(" تم الحفظ بنجاح ");
           setEditData && setEditData(null);
-          setLocalData(res);
+          setLocalData(res.responseValue);
         }
       });
       handleOnCloseAddProduct();

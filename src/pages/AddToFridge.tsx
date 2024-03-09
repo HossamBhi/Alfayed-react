@@ -11,7 +11,11 @@ import usePathname from "../hooks/usePathname";
 import { RootState } from "../redux/store";
 import { FRIDGE_TRANSACTION_TYPES } from "../utils/appDB";
 import { FRIDGES } from "../utils/endpoints";
-import { fridgeTransactionEnums, trasactionsEnums } from "../utils/enums";
+import {
+  apiResponseStatus,
+  fridgeTransactionEnums,
+  trasactionsEnums,
+} from "../utils/enums";
 import { formatDate } from "../utils/helper";
 import { productProps, supplierProps } from "../utils/types";
 
@@ -75,8 +79,8 @@ const AddToFridge = () => {
       get({ url: FRIDGES.getRecord, params: { id } }).then((res) => {
         console.log("FRIDGES.getRecord: ", { res });
         document.title = "تعديل البراد";
-        if (res?.fridgeID) {
-          setValues({ ...values, ...res });
+        if (res.responseID === apiResponseStatus.success) {
+          setValues({ ...values, ...res.responseValue });
         }
       });
     }
@@ -144,10 +148,12 @@ const AddToFridge = () => {
           },
         }).then((res) => {
           console.log("FRIDGES.updateRecord: ", { res });
-          if (res.farmRecordID) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم التعديل بنجاح ");
             navigate(
-              pathname + "?" + createQueryString("id", res.farmRecordID)
+              pathname +
+                "?" +
+                createQueryString("id", res?.responseValue?.fridgeRecordID)
             );
           }
           setIsLoad(false);
@@ -161,10 +167,10 @@ const AddToFridge = () => {
           },
         }).then((res) => {
           console.log("FRIDGES.addRecord: ", { res });
-          if (res.farmRecordID) {
+          if (res.responseID === apiResponseStatus.success) {
             toast.success(" تم الحفظ بنجاح ");
             navigate(
-              pathname + "?" + createQueryString("id", res.farmRecordID)
+              pathname + "?" + createQueryString("id", res?.responseValue?.fridgeRecordID)
             );
           }
           setIsLoad(false);

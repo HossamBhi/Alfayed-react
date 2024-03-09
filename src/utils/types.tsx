@@ -14,6 +14,7 @@ export type supplierProps = {
   name: string;
   total: string;
   date?: Date | string;
+  offlineRecords: { [key: number | string]: supplierDataProps };
 };
 
 export type employeeProps = {

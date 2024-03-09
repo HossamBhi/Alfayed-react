@@ -17,7 +17,7 @@ import { useApi } from "../hooks";
 import { saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
 import { ACCOUNTS } from "../utils/endpoints";
-import { getTrasactionsEnums, trasactionsEnums } from "../utils/enums";
+import { apiResponseStatus, getTrasactionsEnums, trasactionsEnums } from "../utils/enums";
 import {
   convertArrayToKeyObject,
   convertNTCS,
@@ -147,7 +147,7 @@ const Accounts = () => {
       },
     }).then((res) => {
       // console.log("ACCOUNTS.getAll: ", { res });
-      if (Array.isArray(res?.responseValue)) {
+      if (res.responseID === apiResponseStatus.success && Array.isArray(res?.responseValue)) {
         setLastPage(res.lastPage);
         dispatch(
           saveTransactionsAction(
@@ -279,7 +279,6 @@ const Accounts = () => {
       <div className="grid grid-cols-1">
         <CustomTable
           rowCount={lastPage * paginationModel.pageSize}
-          pageSizeOptions={[100]}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           onColumnVisibilityModelChange={(val) => setVisibleColumns(val as any)}
