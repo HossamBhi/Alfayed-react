@@ -72,7 +72,7 @@ const ExpensesDetails = () => {
           col.field !== "farmRecordID" &&
           col.field !== "productID" &&
           col.field != "typeId" &&
-          col.field != "expenseRecordID" &&
+          // col.field != "expenseRecordID" &&
           // col.field !== "created_Date" &&
           col.field !== "expenseID"
       )

@@ -51,7 +51,7 @@ export const ar = {
     },
     "dashboard": {
       "total": "اجمالي الخزنة",
-      "products": "المنتجات",
+      "products": "مخزون المنتجات",
       "clients": "العملاء",
       "fridge": "المحطات",
       "expenses": "المصروفات",

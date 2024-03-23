@@ -20,6 +20,7 @@ import { FRIDGES } from "../utils/endpoints";
 import { createDataColumns, formatDate, formatDateTime } from "../utils/helper";
 import { fridgeDataProps, fridgeProps } from "../utils/types";
 import { apiResponseStatus } from "../utils/enums";
+import { toast } from "react-toastify";
 
 const FridgeDetails = () => {
   const navigate = useNavigate();
@@ -30,9 +31,7 @@ const FridgeDetails = () => {
   // const [id, setId] = useState<null | string>(null);
   const { get } = useApi();
   const [details, setDetails] = useState<null | fridgeProps>(null);
-  const [detailsData, setDetailsData] = useState<null | fridgeDataProps[]>(
-    null
-  );
+  const [detailsData, setDetailsData] = useState<null | fridgeDataProps[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 100,
     page: 0,
@@ -50,12 +49,14 @@ const FridgeDetails = () => {
         },
       }).then((res) => {
         console.log("fridge data get Record With Data", { res });
-        if (res.responseID === apiResponseStatus.success) {
+        if (res.responseValue) {
+          // if (res.responseID === apiResponseStatus.success) {
           setLastPage(res.lastPage);
           setDetails(res.responseValue);
           setDetailsData(res.responseValue.fridgeRecords);
         } else {
-          setDetailsData([]);
+          toast.warning(res.responseMessage);
+          // setDetailsData([]);
           // alert("Error " + res.status + ": " + res.data);
         }
       });
