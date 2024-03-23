@@ -34,10 +34,9 @@ const Suppliers = () => {
   const { t } = useTranslation();
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const suppliersArray = useMemo(
-    () => sortByCreatedDate(Object.values(suppliers || {})),
+    () => sortByCreatedDate(Object.values(suppliers || {}), "created_Date"),
     [suppliers]
   );
-
   const [editData, setEditData] = useState<null | supplierProps>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [showPay, setShowPay] = useState(false);
@@ -55,7 +54,7 @@ const Suppliers = () => {
         pageSize: paginationModel.pageSize,
       },
     }).then((res) => {
-      console.log("SUPPLIERS.getAll: ", { res });
+      // console.log("SUPPLIERS.getAll: ", { res });
       if (res.responseID === apiResponseStatus.success) {
         setLastPage(res.lastPage);
         dispatch(
