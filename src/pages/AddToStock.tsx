@@ -31,7 +31,7 @@ const AddToStock = () => {
   const { t } = useTranslation();
   const products = useSelector((state: RootState) => state.stock.products);
   const suppliersArray = useMemo(
-    () => sortByCreatedDate(Object.values(suppliers || {})),
+    () => sortByCreatedDate(Object.values(suppliers || {}), "created_Date"),
     [suppliers]
   );
   const { post, put } = useApi();

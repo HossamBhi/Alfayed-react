@@ -14,7 +14,7 @@ const FarmsAndFarmers = () => {
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const navigate = useNavigate();
   const suppliersArray = useMemo(
-    () => sortByCreatedDate(Object.values(suppliers || {})),
+    () => sortByCreatedDate(Object.values(suppliers || {}), "created_Date"),
     [suppliers]
   );
   return (

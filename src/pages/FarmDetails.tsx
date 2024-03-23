@@ -45,7 +45,7 @@ const FarmDetails = () => {
   const suppliers = useSelector((state: RootState) => state.suppliers);
   const supplierData = useMemo(
     () =>
-      id ? sortByCreatedDate(Object.values(suppliers[id]?.offlineRecords)) : [],
+      id ? sortByCreatedDate(Object.values(suppliers[id]?.offlineRecords), "created_Date") : [],
     [suppliers, id]
   );
 
