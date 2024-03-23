@@ -72,6 +72,7 @@ const ExpensesDetails = () => {
           col.field !== "farmRecordID" &&
           col.field !== "productID" &&
           col.field != "typeId" &&
+          col.field != "expenseRecordID" &&
           // col.field !== "created_Date" &&
           col.field !== "expenseID"
       )
@@ -105,11 +106,12 @@ const ExpensesDetails = () => {
           : col
       );
   }, [columns]);
+  if (!supplier) return <></>;
 
   return (
     <main className="flex min-h-screen flex-col p-4">
       <div className="m-0">
-        {id != null && (
+        {supplier && (
           <ExpensesCard
             item={supplier}
             containerStyle={"bg-white hover:bg-white mt-0"}
@@ -118,24 +120,28 @@ const ExpensesDetails = () => {
             // onClick={() => setShowEdit(true)}
           />
         )}
-        <AddExpenses
-          hideShowBtn={true}
-          editData={supplier}
-          setEditData={(data) => setSupplier(data)}
-          show={showEdit}
-          onClose={() => setShowEdit(false)}
-        />
+        {supplier && (
+          <AddExpenses
+            hideShowBtn={true}
+            editData={supplier}
+            setEditData={(data) => setSupplier(data)}
+            show={showEdit}
+            onClose={() => setShowEdit(false)}
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1">
-        <CustomTable
-          rowCount={paginationModel.pageSize * lastPage}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          rows={supplierData || []}
-          columns={customeColumns as any}
-          getRowId={(item) => item.expenseRecordID}
-        />
+        {supplierData && (
+          <CustomTable
+            rowCount={paginationModel.pageSize * lastPage}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            rows={supplierData || []}
+            columns={customeColumns as any}
+            getRowId={(item) => item.expenseRecordID}
+          />
+        )}
       </div>
     </main>
   );

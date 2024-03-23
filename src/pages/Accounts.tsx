@@ -14,10 +14,14 @@ import {
 } from "../components/common";
 import { SafeAddBalanceOrWithdraw } from "../components/popups";
 import { useApi } from "../hooks";
-import { saveTransactionsAction } from "../redux/accounts";
+import { saveTotalAction, saveTransactionsAction } from "../redux/accounts";
 import { RootState } from "../redux/store";
 import { ACCOUNTS } from "../utils/endpoints";
-import { apiResponseStatus, getTrasactionsEnums, trasactionsEnums } from "../utils/enums";
+import {
+  apiResponseStatus,
+  getTrasactionsEnums,
+  trasactionsEnums,
+} from "../utils/enums";
 import {
   convertArrayToKeyObject,
   convertNTCS,
@@ -26,6 +30,7 @@ import {
   formatDateTime,
   sortByCreatedDate,
 } from "../utils/helper";
+import usePathname from "../hooks/usePathname";
 
 const filter = [
   { id: getTrasactionsEnums.all, label: "الكل" },
@@ -38,13 +43,13 @@ const filter = [
 const currentDate = new Date();
 const Accounts = () => {
   const { t } = useTranslation();
-  const { post } = useApi();
+  const { post, get } = useApi();
   const dispatch = useDispatch();
   const transactions = useSelector(
     (state: RootState) => state.accounts.transactions
   );
   const total = useSelector((state: RootState) => state.accounts.total);
-
+  const pathname = usePathname();
   const [showPay, setShowPay] = useState(false);
   const [payType, setPayType] = useState(trasactionsEnums.income);
   const [startDate, setStartDate] = useState(
@@ -75,7 +80,14 @@ const Accounts = () => {
     empName: true,
     clientName: true,
   });
-
+  useEffect(() => {
+    get({ url: ACCOUNTS.getTotal }).then((res) => {
+      console.log("ACCOUNTS.getTotal: ", { res });
+      if (res.responseID === apiResponseStatus.success) {
+        dispatch(saveTotalAction(res.responseValue.total));
+      }
+    });
+  }, [pathname]);
   useEffect(() => {
     switch (detailsType) {
       case getTrasactionsEnums.client:
@@ -147,7 +159,10 @@ const Accounts = () => {
       },
     }).then((res) => {
       // console.log("ACCOUNTS.getAll: ", { res });
-      if (res.responseID === apiResponseStatus.success && Array.isArray(res?.responseValue)) {
+      if (
+        res.responseID === apiResponseStatus.success &&
+        Array.isArray(res?.responseValue)
+      ) {
         setLastPage(res.lastPage);
         dispatch(
           saveTransactionsAction(
