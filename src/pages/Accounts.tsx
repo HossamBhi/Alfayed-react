@@ -80,6 +80,31 @@ const Accounts = () => {
     empName: true,
     clientName: true,
   });
+  const callSafeData = () =>
+    post({
+      url: ACCOUNTS.getAll,
+      params: {
+        recordType: detailsType,
+        from: formatDate(startDate),
+        to: formatDate(endDate),
+        pageSize: paginationModel.pageSize,
+        pageNumber: paginationModel.page + 1,
+      },
+    }).then((res) => {
+      // console.log("ACCOUNTS.getAll: ", { res });
+      if (
+        res.responseID === apiResponseStatus.success &&
+        Array.isArray(res?.responseValue)
+      ) {
+        setLastPage(res.lastPage);
+        dispatch(
+          saveTransactionsAction(
+            convertArrayToKeyObject(res.responseValue, "id")
+          )
+        );
+      }
+    });
+
   useEffect(() => {
     get({ url: ACCOUNTS.getTotal }).then((res) => {
       console.log("ACCOUNTS.getTotal: ", { res });
@@ -148,29 +173,7 @@ const Accounts = () => {
   }, [detailsType]);
 
   useEffect(() => {
-    post({
-      url: ACCOUNTS.getAll,
-      params: {
-        recordType: detailsType,
-        from: formatDate(startDate),
-        to: formatDate(endDate),
-        pageSize: paginationModel.pageSize,
-        pageNumber: paginationModel.page + 1,
-      },
-    }).then((res) => {
-      // console.log("ACCOUNTS.getAll: ", { res });
-      if (
-        res.responseID === apiResponseStatus.success &&
-        Array.isArray(res?.responseValue)
-      ) {
-        setLastPage(res.lastPage);
-        dispatch(
-          saveTransactionsAction(
-            convertArrayToKeyObject(res.responseValue, "id")
-          )
-        );
-      }
-    });
+    callSafeData();
   }, [startDate, endDate, detailsType, paginationModel]);
 
   const transactionsArray = useMemo(
@@ -236,7 +239,10 @@ const Accounts = () => {
         hideShowBtn
         // setEditData={(data) => setEditData(data)}
         show={showPay}
-        onClose={() => setShowPay(false)}
+        onClose={() => {
+          callSafeData();
+          setShowPay(false);
+        }}
         onShowClick={() => setShowPay(true)}
         type={payType}
       />
